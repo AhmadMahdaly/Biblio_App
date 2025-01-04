@@ -1,6 +1,6 @@
 import 'package:biblio/components/height.dart';
 import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/screens/onboard_screen.dart';
+import 'package:biblio/widgets/one_time_onboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const OnboardScreen(),
+          builder: (context) => const OneTimeOnboard(),
         ),
       );
     });
