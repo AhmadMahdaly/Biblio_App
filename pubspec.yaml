@@ -16,6 +16,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.0.16
   shared_preferences: ^2.3.5
+  icons_launcher: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -45,3 +46,10 @@ flutter:
       fonts:
         - asset: assets/fonts/Nunito-Regular.ttf
   
+icons_launcher:
+  image_path: "assets/icons/logo.png"
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
