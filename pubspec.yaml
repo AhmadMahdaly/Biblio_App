@@ -38,8 +38,10 @@ flutter:
     - family: Avenir Arabic
       fonts:
         - asset: assets/fonts/Avenir-Regular.otf
+        - asset: assets/fonts/Avenir-Medium.otf
+          weight: 700
+
     - family: Nunito
       fonts:
         - asset: assets/fonts/Nunito-Regular.ttf
-  #         weight: 700
   
