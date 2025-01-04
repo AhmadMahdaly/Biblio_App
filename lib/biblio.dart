@@ -1,4 +1,7 @@
 import 'package:biblio/constants/colors_constants.dart';
+import 'package:biblio/screens/home_page_screen.dart';
+import 'package:biblio/screens/login/login_screen.dart';
+import 'package:biblio/screens/onboard_screen.dart';
 import 'package:biblio/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +27,13 @@ class Biblio extends StatelessWidget {
                 fontFamily: 'Avenir Arabic',
               ),
         ),
-        home: const SplashScreen(),
+        routes: {
+          SplashScreen.id: (context) => const SplashScreen(),
+          OnboardScreen.id: (context) => const OnboardScreen(),
+          HomePage.id: (context) => const HomePage(),
+          LoginScreen.id: (context) => const LoginScreen(),
+        },
+        initialRoute: SplashScreen.id,
       ),
     );
   }

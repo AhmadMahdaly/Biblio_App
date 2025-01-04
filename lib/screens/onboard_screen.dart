@@ -2,13 +2,14 @@ import 'package:biblio/components/custom_button.dart';
 import 'package:biblio/components/height.dart';
 import 'package:biblio/components/width.dart';
 import 'package:biblio/constants/colors_constants.dart';
+import 'package:biblio/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OnboardScreen extends StatelessWidget {
   const OnboardScreen({super.key});
-
+  static String id = 'OnboardScreen';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,8 +56,11 @@ class OnboardScreen extends StatelessWidget {
             ),
           ),
           const H(h: 4),
-          const CustomButton(
+          CustomButton(
             text: 'تسجيل الدخول',
+            onTap: () {
+              Navigator.pushNamed(context, LoginScreen.id);
+            },
           ),
           const CustomBorderBotton(
             text: 'حساب جديد',

@@ -1,6 +1,6 @@
 import 'package:biblio/components/height.dart';
 import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/widgets/one_time_onboard.dart';
+import 'package:biblio/screens/onboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 // this splash screen for my app //
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
-
+  static String id = 'SplashScreen';
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const OneTimeOnboard(),
+          builder: (context) => const OnboardScreen(),
         ),
       );
     });

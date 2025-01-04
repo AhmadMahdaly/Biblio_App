@@ -23,7 +23,7 @@ class CustomTextformfield extends StatelessWidget {
       obscureText: obscureText,
       textDirection: TextDirection.rtl,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(24.sp),
+        // contentPadding: EdgeInsets.all(20.sp),
         hintText: text,
         hintStyle: TextStyle(
           fontSize: 14.sp,
