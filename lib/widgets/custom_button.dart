@@ -13,45 +13,45 @@ class CustomButton extends StatelessWidget {
   final bool isActive;
   @override
   Widget build(BuildContext context) {
-    return isActive? Container(
-      alignment: Alignment.center,
-      width: double.infinity,
-      height: 56.sp,
-      decoration: ShapeDecoration(
-        color: kMainColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.sp),
-        ),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w800,
-        ),
-      ),
-    ):
-     Container(
-      alignment: Alignment.center,
-      width: double.infinity,
-      height: 56.sp,
-      decoration: ShapeDecoration(
-        color: kDisableButtonColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.sp),
-        ),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: kTextShadowColor,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w800,
-        ),
-      ),
-    )
-    ;
+    return isActive
+        ? Container(
+            alignment: Alignment.center,
+            width: double.infinity,
+            height: 56.sp,
+            decoration: ShapeDecoration(
+              color: kMainColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.sp),
+              ),
+            ),
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          )
+        : Container(
+            alignment: Alignment.center,
+            width: double.infinity,
+            height: 56.sp,
+            decoration: ShapeDecoration(
+              color: kDisableButtonColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.sp),
+              ),
+            ),
+            child: Text(
+              text,
+              style: TextStyle(
+                color: kTextShadowColor,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          );
   }
 }
 

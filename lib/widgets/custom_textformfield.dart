@@ -2,8 +2,8 @@ import 'package:biblio/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomInput extends StatelessWidget {
-  const CustomInput({
+class CustomTextformfield extends StatelessWidget {
+  const CustomTextformfield({
     required this.text,
     this.keyboardType,
     this.obscureText = false,

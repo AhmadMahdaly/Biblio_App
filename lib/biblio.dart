@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,7 +13,6 @@ class Biblio extends StatelessWidget {
       ),
       minTextAdapt: true,
       child: MaterialApp(
-      
         home: Scaffold(),
       ),
     );
