@@ -10,15 +10,19 @@ class CustomTextformfield extends StatelessWidget {
     super.key,
     this.onChanged,
     this.icon = const SizedBox(),
+    this.validator,
   });
   final String text;
   final TextInputType? keyboardType;
   final bool obscureText;
   final void Function(String)? onChanged;
   final Widget icon;
+  final String? Function(String?)? validator;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: validator,
       onChanged: onChanged,
       obscureText: obscureText,
       textDirection: TextDirection.rtl,

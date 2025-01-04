@@ -57,17 +57,18 @@ class OnboardScreen extends StatelessWidget {
           ),
           const H(h: 4),
           CustomButton(
+            padding: 16,
             text: 'تسجيل الدخول',
             onTap: () {
               Navigator.pushNamed(context, LoginScreen.id);
             },
           ),
           const CustomBorderBotton(
+            padding: 16,
             text: 'حساب جديد',
           ),
           Text(
             'الدخول كزائر',
-            textAlign: TextAlign.center,
             style: TextStyle(
               color: const Color(0xFF3E5879),
               fontSize: 14.sp,

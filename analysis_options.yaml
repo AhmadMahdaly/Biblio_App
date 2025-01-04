@@ -1,5 +1,6 @@
 analyzer:
   errors:
+    document_ignores: ignore
     inference_failure_on_instance_creation: ignore
     lines_longer_than_80_chars: ignore
     use_build_context_synchronously: ignore

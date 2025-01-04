@@ -2,12 +2,13 @@ import 'package:biblio/components/custom_button.dart';
 import 'package:biblio/components/custom_textformfield.dart';
 import 'package:biblio/components/height.dart';
 import 'package:biblio/constants/colors_constants.dart';
+import 'package:biblio/screens/login/verification_code_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ForgetPassword extends StatelessWidget {
-  const ForgetPassword({super.key});
+class ForgetPasswordPage extends StatelessWidget {
+  const ForgetPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,7 @@ class ForgetPassword extends StatelessWidget {
             child: Column(
               spacing: 16.sp,
               children: [
+                /// Header
                 const H(h: 90),
                 SvgPicture.asset(
                   'assets/svg/logo.svg',
@@ -45,6 +47,8 @@ class ForgetPassword extends StatelessWidget {
                   ),
                 ),
                 const H(h: 16),
+
+                /// Email
                 Row(
                   children: [
                     Text(
@@ -61,8 +65,20 @@ class ForgetPassword extends StatelessWidget {
                   text: 'البريد الإلكتروني',
                 ),
                 const H(h: 10),
-                const CustomButton(
-                  isActive: false,
+
+                /// Button
+                CustomButton(
+                  // isActive: false,
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const VerificationCodePage();
+                        },
+                      ),
+                    );
+                  },
                   text: 'إرسال الرمز',
                 ),
               ],

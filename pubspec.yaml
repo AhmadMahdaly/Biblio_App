@@ -18,6 +18,7 @@ dependencies:
   shared_preferences: ^2.3.5
   icons_launcher: ^3.0.0
   easy_localization: ^3.0.7
+  flutter_verification_code: ^1.1.7
 
 dev_dependencies:
   flutter_test:

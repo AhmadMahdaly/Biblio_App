@@ -8,18 +8,20 @@ class CustomButton extends StatelessWidget {
     this.isActive = true,
     this.onTap,
     super.key,
+    this.padding = 0,
   });
 
   final String text;
   final bool isActive;
   final void Function()? onTap;
+  final int padding;
   @override
   Widget build(BuildContext context) {
     return isActive
         ? InkWell(
             onTap: onTap,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16.sp),
+              margin: EdgeInsets.symmetric(horizontal: padding.sp),
               alignment: Alignment.center,
               width: double.infinity,
               height: 56.sp,
@@ -42,7 +44,7 @@ class CustomButton extends StatelessWidget {
         : InkWell(
             onTap: onTap,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16.sp),
+              margin: EdgeInsets.symmetric(horizontal: padding.sp),
               alignment: Alignment.center,
               width: double.infinity,
               height: 56.sp,
@@ -68,6 +70,7 @@ class CustomButton extends StatelessWidget {
 class CustomBorderBotton extends StatelessWidget {
   const CustomBorderBotton({
     required this.text,
+    this.padding = 0,
     this.borderColor = kMainColor,
     super.key,
     this.onTap,
@@ -76,13 +79,14 @@ class CustomBorderBotton extends StatelessWidget {
   final Color borderColor;
   final void Function()? onTap;
   final String text;
+  final int padding;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.sp),
+        margin: EdgeInsets.symmetric(horizontal: padding.sp),
         alignment: Alignment.center,
         width: double.infinity,
         height: 56.sp,
