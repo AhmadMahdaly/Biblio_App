@@ -94,7 +94,8 @@ class CustomBorderBotton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
+            fontSize: 16.sp,
             color: kMainColor,
             fontWeight: FontWeight.w800,
           ),

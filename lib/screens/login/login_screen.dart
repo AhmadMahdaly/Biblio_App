@@ -2,6 +2,7 @@ import 'package:biblio/components/custom_button.dart';
 import 'package:biblio/components/custom_textformfield.dart';
 import 'package:biblio/components/height.dart';
 import 'package:biblio/constants/colors_constants.dart';
+import 'package:biblio/screens/login/forget_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -65,6 +66,7 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
                 CustomTextformfield(
+                  obscureText: true,
                   text: 'كلمة المرور',
                   icon: Icon(
                     Icons.remove_red_eye_rounded,
@@ -74,14 +76,26 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      'نسيت كلمة المرور؟',
-                      style: TextStyle(
-                        color: const Color(0xFF3E5879),
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        decoration: TextDecoration.underline,
-                        decorationColor: kMainColor,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const ForgetPassword();
+                            },
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'نسيت كلمة المرور؟',
+                        style: TextStyle(
+                          color: const Color(0xFF3E5879),
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          decoration: TextDecoration.underline,
+                          decorationColor: kMainColor,
+                        ),
                       ),
                     ),
                   ],
