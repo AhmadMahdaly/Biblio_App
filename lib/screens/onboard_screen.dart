@@ -2,7 +2,9 @@ import 'package:biblio/components/custom_button.dart';
 import 'package:biblio/components/height.dart';
 import 'package:biblio/components/width.dart';
 import 'package:biblio/constants/colors_constants.dart';
+import 'package:biblio/screens/home_page_screen.dart';
 import 'package:biblio/screens/login/login_screen.dart';
+import 'package:biblio/screens/login/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +18,7 @@ class OnboardScreen extends StatelessWidget {
       body: Column(
         spacing: 12.sp,
         children: [
+          /// Image header
           SizedBox(
             height: 410.sp,
             child: Image.asset(
@@ -24,6 +27,8 @@ class OnboardScreen extends StatelessWidget {
               width: double.infinity,
             ),
           ),
+
+          /// Title Text
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -42,6 +47,8 @@ class OnboardScreen extends StatelessWidget {
               ),
             ],
           ),
+
+          /// Desc text
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.sp),
             child: Text(
@@ -56,6 +63,8 @@ class OnboardScreen extends StatelessWidget {
             ),
           ),
           const H(h: 4),
+
+          /// Login
           CustomButton(
             padding: 16,
             text: 'تسجيل الدخول',
@@ -63,19 +72,31 @@ class OnboardScreen extends StatelessWidget {
               Navigator.pushNamed(context, LoginScreen.id);
             },
           ),
-          const CustomBorderBotton(
+
+          /// Sign up
+          CustomBorderBotton(
             padding: 16,
             text: 'حساب جديد',
+            onTap: () {
+              Navigator.pushNamed(context, SignUpScreen.id);
+            },
           ),
-          Text(
-            'الدخول كزائر',
-            style: TextStyle(
-              color: const Color(0xFF3E5879),
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w800,
-              decoration: TextDecoration.underline,
-              decorationColor: kMainColor,
-              height: 1.35.sp,
+
+          /// To HomePage as visitor
+          InkWell(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, HomePage.id);
+            },
+            child: Text(
+              'الدخول كزائر',
+              style: TextStyle(
+                color: const Color(0xFF3E5879),
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w800,
+                decoration: TextDecoration.underline,
+                decorationColor: kMainColor,
+                height: 1.35.sp,
+              ),
             ),
           ),
           // width: MediaQuery.of(context).size.width,

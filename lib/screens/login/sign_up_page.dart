@@ -2,23 +2,23 @@ import 'package:biblio/components/custom_button.dart';
 import 'package:biblio/components/custom_textformfield.dart';
 import 'package:biblio/components/height.dart';
 import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/screens/login/forget_password_screen.dart';
-import 'package:biblio/screens/login/sign_up_page.dart';
+import 'package:biblio/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-  static String id = 'LoginScreen';
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+  static String id = 'SignUpScreen';
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final formKey = GlobalKey<FormState>();
   String? email;
+  String? name;
   String? password;
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Form(
               key: formKey,
               child: Column(
-                spacing: 16.sp,
+                spacing: 12.sp,
                 children: [
                   /// Header
                   const H(h: 90),
@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 115.sp,
                   ),
                   Text(
-                    'تسجيل الدخول',
+                    'إنشاء حساب جديد',
                     style: TextStyle(
                       color: kMainColor,
                       fontSize: 20.sp,
@@ -51,6 +51,30 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const H(h: 16),
+
+                  /// Name
+                  Row(
+                    children: [
+                      Text(
+                        'الاسم',
+                        style: TextStyle(
+                          color: kHeader1Color,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  CustomTextformfield(
+                    text: 'الاسم',
+                    keyboardType: TextInputType.name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'هذا الحقل مطلوب';
+                      }
+                      return null;
+                    },
+                  ),
 
                   /// Email
                   Row(
@@ -104,77 +128,56 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  /// Forget password
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const ForgetPasswordPage();
-                              },
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'نسيت كلمة المرور؟',
-                          style: TextStyle(
-                            color: const Color(0xFF3E5879),
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                            decorationColor: kMainColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   const H(h: 10),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: Column(
+        spacing: 12.sp,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          /// Sign up Button
+          CustomButton(
+            text: 'إنشاء الحساب',
+            padding: 16,
+            onTap: () {
+              if (formKey.currentState!.validate()) {}
+            },
+          ),
 
-                  /// Login Button
-                  CustomButton(
-                    text: 'تسجيل الدخول',
-                    onTap: () {
-                      if (formKey.currentState!.validate()) {}
-                    },
+          /// Login
+          InkWell(
+            onTap: () {
+              Navigator.popAndPushNamed(context, LoginScreen.id);
+            },
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'لديك حساب بالفعل؟ ',
+                    style: TextStyle(
+                      color: kHeader1Color,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-
-                  /// Sign Up
-                  InkWell(
-                    onTap: () {
-                      Navigator.popAndPushNamed(context, SignUpScreen.id);
-                    },
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'ليس لديك حساب؟ ',
-                            style: TextStyle(
-                              color: kHeader1Color,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'أنشىء حسابك الآن',
-                            style: TextStyle(
-                              color: const Color(0xFF3E5879),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
+                  TextSpan(
+                    text: 'تسجيل الدخول',
+                    style: TextStyle(
+                      color: const Color(0xFF3E5879),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-        ),
+          const H(h: 16),
+        ],
       ),
     );
   }

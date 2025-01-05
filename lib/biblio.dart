@@ -1,6 +1,7 @@
 import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/home_page_screen.dart';
 import 'package:biblio/screens/login/login_screen.dart';
+import 'package:biblio/screens/login/sign_up_page.dart';
 import 'package:biblio/screens/onboard_screen.dart';
 import 'package:biblio/screens/splash_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -43,8 +44,9 @@ class Biblio extends StatelessWidget {
         routes: {
           SplashScreen.id: (context) => const SplashScreen(),
           OnboardScreen.id: (context) => const OnboardScreen(),
-          HomePage.id: (context) => const HomePage(),
           LoginScreen.id: (context) => const LoginScreen(),
+          SignUpScreen.id: (context) => const SignUpScreen(),
+          HomePage.id: (context) => const HomePage(),
         },
         initialRoute: SplashScreen.id,
       ),
