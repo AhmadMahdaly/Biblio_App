@@ -45,7 +45,7 @@ class VerificationCodePage extends StatelessWidget {
                   ),
                 ),
                 const H(h: 16),
-                CustomVerificationCode(),
+                const CustomVerificationCode(),
                 const H(h: 10),
 
                 /// Button

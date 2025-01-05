@@ -1,5 +1,5 @@
 import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/screens/login/login_screen.dart';
+import 'package:biblio/screens/login/new_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
@@ -27,9 +27,13 @@ class _CustomVerificationCodeState extends State<CustomVerificationCode> {
           _code = value;
         });
 
-        Navigator.pushReplacementNamed(
+        Navigator.pushReplacement(
           context,
-          LoginScreen.id,
+          MaterialPageRoute(
+            builder: (context) {
+              return const NewPasswordPage();
+            },
+          ),
         );
       },
       onEditing: (bool value) {
