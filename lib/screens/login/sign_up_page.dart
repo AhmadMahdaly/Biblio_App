@@ -3,6 +3,7 @@ import 'package:biblio/components/custom_textformfield.dart';
 import 'package:biblio/components/height.dart';
 import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/login_screen.dart';
+import 'package:biblio/screens/select_your_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -144,7 +145,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
             text: 'إنشاء الحساب',
             padding: 16,
             onTap: () {
-              if (formKey.currentState!.validate()) {}
+              if (formKey.currentState!.validate()) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const SelectYourLocationScreen();
+                    },
+                  ),
+                );
+              }
             },
           ),
 
