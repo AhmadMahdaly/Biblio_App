@@ -83,13 +83,14 @@ class SelectYourLocationScreen extends StatelessWidget {
           vertical: 24.sp,
         ),
         child: CustomButton(
-            text: 'ابدأ التصفح',
-            onTap: () {
-              Navigator.pushReplacementNamed(
-                context,
-                HomePage.id,
-              );
-            }),
+          text: 'ابدأ التصفح',
+          onTap: () {
+            Navigator.pushReplacementNamed(
+              context,
+              HomePage.id,
+            );
+          },
+        ),
       ),
     );
   }
