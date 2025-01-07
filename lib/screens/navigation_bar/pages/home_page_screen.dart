@@ -37,24 +37,27 @@ class HomePage extends StatelessWidget {
 
             /// Books Categories
             SliverToBoxAdapter(
-              child: Row(
-                children: [
-                  const TitleHeaderHome(
-                    text: 'فئات الكتب',
-                  ),
-                  const Spacer(),
-                  Text(
-                    'عرض الكل',
-                    style: TextStyle(
-                      color: const Color(0xFFA4CFC3),
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w800,
-                      decoration: TextDecoration.underline,
-                      decorationColor: const Color(0xFFA4CFC3),
+              child: Padding(
+                padding: EdgeInsets.only(top: 8.sp),
+                child: Row(
+                  children: [
+                    const TitleHeaderHome(
+                      text: 'فئات الكتب',
                     ),
-                  ),
-                  const W(w: 16),
-                ],
+                    const Spacer(),
+                    Text(
+                      'عرض الكل',
+                      style: TextStyle(
+                        color: const Color(0xFFA4CFC3),
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w800,
+                        decoration: TextDecoration.underline,
+                        decorationColor: const Color(0xFFA4CFC3),
+                      ),
+                    ),
+                    const W(w: 16),
+                  ],
+                ),
               ),
             ),
 

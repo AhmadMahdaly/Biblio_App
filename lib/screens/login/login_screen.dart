@@ -3,9 +3,9 @@ import 'package:biblio/components/custom_textformfield.dart';
 import 'package:biblio/components/height.dart';
 import 'package:biblio/components/show_snackbar.dart';
 import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/screens/navigation_bar/pages/home_page_screen.dart';
-import 'package:biblio/widgets/login/forget_password_screen.dart';
 import 'package:biblio/screens/login/register_page.dart';
+import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
+import 'package:biblio/widgets/login/forget_password_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -176,7 +176,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                             // showSnackBar(context, 'تم التسجيل');
 
-                            await Navigator.pushNamed(context, HomePage.id);
+                            await Navigator.pushNamed(
+                              context,
+                              NavigationBarApp.id,
+                            );
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'user-not-found') {
                               showSnackBar(
