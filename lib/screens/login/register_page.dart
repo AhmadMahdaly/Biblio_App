@@ -26,6 +26,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? name;
   String? password;
   bool isInAsyncCall = false;
+  bool isShowPassword = true;
+
   @override
   Widget build(BuildContext context) {
     /// Loading progress
@@ -146,15 +148,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                         return null;
                       },
-                      obscureText: true,
                       text: 'كلمة المرور',
                       onChanged: (data) {
                         password = data;
                       },
-                      icon: Icon(
-                        Icons.remove_red_eye_rounded,
-                        size: 24.sp,
+                      icon: IconButton(
+                        onPressed: () => setState(() {
+                          isShowPassword = !isShowPassword;
+                        }),
+                        icon: isShowPassword
+                            ? Icon(
+                                Icons.visibility_off_outlined,
+                                size: 24.sp,
+                                color: kHeader1Color,
+                              )
+                            : Icon(
+                                Icons.visibility_outlined,
+                                size: 24.sp,
+                                color: kHeader1Color,
+                              ),
                       ),
+                      obscureText: isShowPassword,
                     ),
 
                     const H(h: 10),

@@ -26,6 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
   String? email;
   String? password;
   bool isInAsyncCall = false;
+  bool isShowPassword = true;
+
   @override
   Widget build(BuildContext context) {
     /// Loading progress
@@ -122,12 +124,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         return null;
                       },
-                      obscureText: true,
                       text: 'كلمة المرور',
-                      icon: Icon(
-                        Icons.remove_red_eye_rounded,
-                        size: 24.sp,
+                      icon: IconButton(
+                        onPressed: () => setState(() {
+                          isShowPassword = !isShowPassword;
+                        }),
+                        icon: isShowPassword
+                            ? Icon(
+                                Icons.visibility_off_outlined,
+                                size: 24.sp,
+                                color: kHeader1Color,
+                              )
+                            : Icon(
+                                Icons.visibility_outlined,
+                                size: 24.sp,
+                                color: kHeader1Color,
+                              ),
                       ),
+                      obscureText: isShowPassword,
                     ),
 
                     /// Forget password
