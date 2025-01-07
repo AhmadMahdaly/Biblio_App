@@ -2,7 +2,7 @@ import 'package:biblio/components/custom_button.dart';
 import 'package:biblio/components/custom_textformfield.dart';
 import 'package:biblio/components/height.dart';
 import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/screens/login/verification_code_screen.dart';
+import 'package:biblio/widgets/login/verification_code_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';

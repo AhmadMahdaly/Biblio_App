@@ -3,7 +3,7 @@ import 'package:biblio/components/height.dart';
 import 'package:biblio/components/width.dart';
 import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/login_screen.dart';
-import 'package:biblio/screens/login/sign_up_page.dart';
+import 'package:biblio/screens/login/register_page.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

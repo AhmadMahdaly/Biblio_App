@@ -1,10 +1,10 @@
 import 'package:biblio/components/height.dart';
 import 'package:biblio/components/width.dart';
-import 'package:biblio/screens/home/category_listview.dart';
-import 'package:biblio/screens/home/home_banner.dart';
-import 'package:biblio/screens/home/new_books_listview.dart';
-import 'package:biblio/screens/home/search_textfield.dart';
-import 'package:biblio/screens/home/title_header_home.dart';
+import 'package:biblio/widgets/home/category_listview.dart';
+import 'package:biblio/widgets/home/home_banner.dart';
+import 'package:biblio/widgets/home/new_books_listview.dart';
+import 'package:biblio/widgets/home/search_textfield.dart';
+import 'package:biblio/widgets/home/title_header_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';

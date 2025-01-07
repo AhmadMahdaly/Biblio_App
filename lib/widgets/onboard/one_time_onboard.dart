@@ -1,4 +1,4 @@
-import 'package:biblio/screens/home_page_screen.dart';
+import 'package:biblio/screens/navigation_bar/pages/home_page_screen.dart';
 import 'package:biblio/screens/onboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

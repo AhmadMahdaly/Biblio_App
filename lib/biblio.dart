@@ -1,7 +1,7 @@
 import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/screens/home_page_screen.dart';
+import 'package:biblio/screens/navigation_bar/pages/home_page_screen.dart';
 import 'package:biblio/screens/login/login_screen.dart';
-import 'package:biblio/screens/login/sign_up_page.dart';
+import 'package:biblio/screens/login/register_page.dart';
 import 'package:biblio/screens/onboard_screen.dart';
 import 'package:biblio/screens/splash_screen.dart';
 import 'package:easy_localization/easy_localization.dart';

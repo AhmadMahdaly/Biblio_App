@@ -1,7 +1,7 @@
 import 'package:biblio/components/custom_button.dart';
 import 'package:biblio/components/height.dart';
 import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/screens/home_page_screen.dart';
+import 'package:biblio/screens/navigation_bar/pages/home_page_screen.dart';
 import 'package:biblio/widgets/country_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
