@@ -189,7 +189,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       'تم التسجيل',
                     );
 
-                    await Navigator.push(
+                    await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) {

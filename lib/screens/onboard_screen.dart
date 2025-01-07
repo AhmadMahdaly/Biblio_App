@@ -1,5 +1,4 @@
 import 'package:biblio/components/custom_button.dart';
-import 'package:biblio/components/height.dart';
 import 'package:biblio/components/width.dart';
 import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/login_screen.dart';
@@ -62,14 +61,13 @@ class OnboardScreen extends StatelessWidget {
               ),
             ),
           ),
-          const H(h: 4),
 
           /// Login
           CustomButton(
             padding: 16,
             text: 'تسجيل الدخول',
             onTap: () {
-              Navigator.pushNamed(context, LoginScreen.id);
+              Navigator.pushReplacementNamed(context, LoginScreen.id);
             },
           ),
 
@@ -78,7 +76,7 @@ class OnboardScreen extends StatelessWidget {
             padding: 16,
             text: 'حساب جديد',
             onTap: () {
-              Navigator.pushNamed(context, SignUpScreen.id);
+              Navigator.pushReplacementNamed(context, SignUpScreen.id);
             },
           ),
 

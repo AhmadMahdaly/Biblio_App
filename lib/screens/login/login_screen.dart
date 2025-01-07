@@ -176,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                             // showSnackBar(context, 'تم التسجيل');
 
-                            await Navigator.pushNamed(
+                            await Navigator.pushReplacementNamed(
                               context,
                               NavigationBarApp.id,
                             );
