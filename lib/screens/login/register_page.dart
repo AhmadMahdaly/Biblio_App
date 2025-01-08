@@ -1,3 +1,4 @@
+import 'package:biblio/components/app_indicator.dart';
 import 'package:biblio/components/custom_button.dart';
 import 'package:biblio/components/custom_textformfield.dart';
 import 'package:biblio/components/height.dart';
@@ -5,10 +6,10 @@ import 'package:biblio/components/show_snackbar.dart';
 import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
+import 'package:biblio/services/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -25,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? email;
   String? name;
   String? password;
+  String? image;
   bool isInAsyncCall = false;
   bool isShowPassword = true;
 
@@ -37,11 +39,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       blur: 0.2,
 
       /// Spin indicator: wave
-      progressIndicator: const Center(
-        child: SpinKitWave(
-          color: kMainColor,
-        ),
-      ),
+      progressIndicator: const AppIndicator(),
+
       child: Scaffold(
         body: SingleChildScrollView(
           child: Center(
@@ -193,11 +192,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   isInAsyncCall = true;
                   setState(() {});
                   try {
-                    // final UserCredential userCredential =
-                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                    final userCredential = await FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
                       email: email!,
                       password: password!,
                     );
+                    final userId = userCredential.user!.uid;
+                    await addUser(userId, name!, email!, password!);
                     showSnackBar(
                       context,
                       'تم التسجيل',
