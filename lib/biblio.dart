@@ -22,35 +22,50 @@ class Biblio extends StatelessWidget {
       ),
       minTextAdapt: true,
 
-      /// MaterialApp
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-
-        /// Localizations
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-
-        /// Theme
-        theme: ThemeData(
-          scaffoldBackgroundColor: kScaffoldBackgroundColor,
-          textTheme: Theme.of(
-            context,
-          ).textTheme.apply(
-                fontFamily: 'Avenir Arabic',
-              ),
-        ),
-
-        /// Routes
-        routes: {
-          SplashScreen.id: (context) => const SplashScreen(),
-          OnboardScreen.id: (context) => const OnboardScreen(),
-          LoginScreen.id: (context) => const LoginScreen(),
-          RegisterScreen.id: (context) => const RegisterScreen(),
-          NavigationBarApp.id: (context) => const NavigationBarApp(),
-          HomePage.id: (context) => const HomePage(),
+      /// Remove focus from any input element
+      child: GestureDetector(
+        onTap: () {
+          final currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            currentFocus.unfocus();
+          }
         },
-        initialRoute: SplashScreen.id,
+
+        /// MaterialApp
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Biblio',
+
+          /// Localizations
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+
+          /// Theme
+          theme: ThemeData(
+            appBarTheme: const AppBarTheme(
+              color: kScaffoldBackgroundColor,
+            ),
+            scaffoldBackgroundColor: kScaffoldBackgroundColor,
+            textTheme: Theme.of(
+              context,
+            ).textTheme.apply(
+                  fontFamily: 'Avenir Arabic',
+                ),
+          ),
+
+          /// Routes
+          routes: {
+            SplashScreen.id: (context) => const SplashScreen(),
+            OnboardScreen.id: (context) => const OnboardScreen(),
+            LoginScreen.id: (context) => const LoginScreen(),
+            RegisterScreen.id: (context) => const RegisterScreen(),
+            NavigationBarApp.id: (context) => const NavigationBarApp(),
+            HomePage.id: (context) => const HomePage(),
+          },
+          initialRoute: SplashScreen.id,
+        ),
       ),
     );
   }

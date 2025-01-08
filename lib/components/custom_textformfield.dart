@@ -25,7 +25,6 @@ class CustomTextformfield extends StatelessWidget {
       validator: validator,
       onChanged: onChanged,
       obscureText: obscureText,
-      textDirection: TextDirection.rtl,
       decoration: InputDecoration(
         // contentPadding: EdgeInsets.all(20.sp),
         hintText: text,

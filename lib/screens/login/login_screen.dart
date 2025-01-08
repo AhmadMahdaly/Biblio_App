@@ -214,6 +214,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 'يوجد مشكلة في الإتصال بالانترنت، حاول مرة أخرى.',
                               );
+                            } else if (e.code == 'invalid-credential') {
+                              showSnackBar(
+                                context,
+                                'هناك مشكلة في البريد الإلكتروني أو كلمة السر، أو أن الحساب غير مسجل.',
+                              );
                             } else {
                               showSnackBar(
                                 context,
