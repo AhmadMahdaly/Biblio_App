@@ -20,9 +20,10 @@ class NewBooksListview extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               margin: EdgeInsets.symmetric(horizontal: 8.sp),
               width: 140.sp,
-              height: 200.sp,
+              height: 220.sp,
               decoration: BoxDecoration(
                 image: const DecorationImage(
+                  scale: 0.9,
                   fit: BoxFit.none,
 
                   /// Book Cover

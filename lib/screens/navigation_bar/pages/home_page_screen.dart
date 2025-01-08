@@ -1,5 +1,6 @@
 import 'package:biblio/components/height.dart';
 import 'package:biblio/components/width.dart';
+import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/widgets/home/category_listview.dart';
 import 'package:biblio/widgets/home/home_banner.dart';
 import 'package:biblio/widgets/home/new_books_listview.dart';
@@ -38,7 +39,7 @@ class HomePage extends StatelessWidget {
             /// Books Categories
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.only(top: 8.sp),
+                padding: EdgeInsets.symmetric(vertical: 8.sp),
                 child: Row(
                   children: [
                     const TitleHeaderHome(
@@ -72,16 +73,30 @@ class HomePage extends StatelessWidget {
 
             /// New books title
             SliverToBoxAdapter(
-              child: Row(
-                children: [
-                  const TitleHeaderHome(
-                    text: 'أحدث الكتب',
-                  ),
-                  SvgPicture.asset(
-                    'assets/svg/logo.svg',
-                    height: 18.5.sp,
-                  ),
-                ],
+              child: Padding(
+                padding: EdgeInsets.only(
+                  right: 16.sp,
+                  left: 16.sp,
+                  top: 16.sp,
+                  bottom: 12.sp,
+                ),
+                child: Row(
+                  spacing: 10.sp,
+                  children: [
+                    Text(
+                      'أحدث الكتب',
+                      style: TextStyle(
+                        color: kMainColor,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    SvgPicture.asset(
+                      'assets/svg/logo.svg',
+                      height: 18.5.sp,
+                    ),
+                  ],
+                ),
               ),
             ),
 
@@ -89,9 +104,12 @@ class HomePage extends StatelessWidget {
             SliverToBoxAdapter(
               child: SizedBox(
                 width: 140.sp,
-                height: 275.sp,
+                height: 280.sp,
                 child: const NewBooksListview(),
               ),
+            ),
+            const SliverToBoxAdapter(
+              child: H(h: 16),
             ),
           ],
         ),

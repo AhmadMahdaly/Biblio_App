@@ -13,7 +13,7 @@ class SearchTextfield extends StatelessWidget {
       decoration: InputDecoration(
         hintText: 'ابحث هنا “مائة عام من العزلة”',
         hintStyle: TextStyle(
-          color: const Color(0xFFA7A7A7),
+          color: const Color(0xFF969697),
           fontSize: 12.sp,
           fontWeight: FontWeight.w300,
         ),
@@ -23,15 +23,21 @@ class SearchTextfield extends StatelessWidget {
           width: 32.sp,
           height: 32.sp,
           decoration: BoxDecoration(
-            color: Colors.white,
+            // color: Colors.white,
             borderRadius: BorderRadius.circular(
               8.sp,
             ),
           ),
-          child: SvgPicture.asset('assets/svg/Magnifier.svg'),
+          child: SvgPicture.asset(
+            'assets/svg/Magnifier.svg',
+            colorFilter: const ColorFilter.mode(
+              Color(0xFF213555),
+              BlendMode.srcIn,
+            ),
+          ),
         ),
         filled: true,
-        fillColor: const Color(0xFFF4F4F4),
+        fillColor: const Color(0xFFECECEC),
         contentPadding: EdgeInsets.all(5.sp),
         border: border(),
         enabledBorder: border(),

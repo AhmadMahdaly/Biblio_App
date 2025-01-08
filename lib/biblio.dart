@@ -1,8 +1,9 @@
 import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
-import 'package:biblio/screens/navigation_bar/pages/home_page_screen.dart';
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/login/register_page.dart';
+import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
+import 'package:biblio/screens/navigation_bar/pages/add_page.dart';
+import 'package:biblio/screens/navigation_bar/pages/home_page_screen.dart';
 import 'package:biblio/screens/onboard_screen.dart';
 import 'package:biblio/screens/splash_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -46,6 +47,9 @@ class Biblio extends StatelessWidget {
           theme: ThemeData(
             appBarTheme: const AppBarTheme(
               color: kScaffoldBackgroundColor,
+              iconTheme: IconThemeData(
+                color: kMainColor,
+              ),
             ),
             scaffoldBackgroundColor: kScaffoldBackgroundColor,
             textTheme: Theme.of(
@@ -63,6 +67,7 @@ class Biblio extends StatelessWidget {
             RegisterScreen.id: (context) => const RegisterScreen(),
             NavigationBarApp.id: (context) => const NavigationBarApp(),
             HomePage.id: (context) => const HomePage(),
+            AddPage.id: (context) => const AddPage(),
           },
           initialRoute: SplashScreen.id,
         ),

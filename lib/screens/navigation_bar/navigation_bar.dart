@@ -20,9 +20,6 @@ class NavigationBarApp extends StatefulWidget {
 }
 
 class NavigationBarAppState extends State<NavigationBarApp> {
-  int _selectedIndex = 0;
-//خاص بألوان ال
-// NAVIGATION_BAR
   int _currentIndex = 0;
 
   List<Widget> pages = [
@@ -32,11 +29,9 @@ class NavigationBarAppState extends State<NavigationBarApp> {
     const MyLiberaryPage(),
     const MorePage(),
   ];
-  void _onItemTapped(
-    int index,
-  ) {
+
+  void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
       _currentIndex = index;
     });
   }
@@ -110,95 +105,121 @@ class NavigationBarAppState extends State<NavigationBarApp> {
         return shouldExit!;
       },
       child: Scaffold(
-        body: pages.elementAt(_selectedIndex),
-        bottomNavigationBar: CustomFadeInUp(
-          duration: 500,
-          child: BottomNavigationBar(
-            landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
-            backgroundColor: Colors.white,
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-            selectedItemColor: kMainColor,
-            unselectedItemColor: kHeader1Color,
-            selectedLabelStyle: TextStyle(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.bold,
-            ),
-            unselectedLabelStyle: TextStyle(
-              color: kHeader1Color,
-              fontSize: 10.sp,
-              fontWeight: FontWeight.w400,
-            ),
-            elevation: 50,
-            iconSize: 24.sp,
-            type: BottomNavigationBarType.fixed,
-            items: [
-              /// Explore button
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/svg/explore.svg',
-                  width: _currentIndex == 0 ? 26.sp : 24.sp,
-                  colorFilter: ColorFilter.mode(
-                    _currentIndex == 0 ? kMainColor : kHeader1Color,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'اكتشف',
-              ),
+        body: pages.elementAt(_currentIndex),
+        bottomNavigationBar:
+            _currentIndex == 2 // إخفاء الشريط في الصفحة الثالثة
+                ? null
+                : CustomFadeInUp(
+                    duration: 500,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        BottomNavigationBar(
+                          landscapeLayout:
+                              BottomNavigationBarLandscapeLayout.linear,
+                          backgroundColor: Colors.white,
+                          currentIndex: _currentIndex,
+                          onTap: _onItemTapped,
+                          selectedItemColor: kMainColor,
+                          unselectedItemColor: kTextColor,
+                          selectedLabelStyle: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            color: kTextColor,
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          elevation: 50,
+                          iconSize: 24.sp,
+                          type: BottomNavigationBarType.fixed,
+                          items: [
+                            /// Explore button
+                            BottomNavigationBarItem(
+                              icon: SvgPicture.asset(
+                                'assets/svg/explore.svg',
+                                width: _currentIndex == 0 ? 28.sp : 24.sp,
+                                colorFilter: ColorFilter.mode(
+                                  _currentIndex == 0 ? kMainColor : kTextColor,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              label: 'اكتشف',
+                            ),
 
-              /// Order button
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/svg/Chat.svg',
-                  width: _currentIndex == 1 ? 26.sp : 24.sp,
-                  colorFilter: ColorFilter.mode(
-                    _currentIndex == 1 ? kMainColor : kHeader1Color,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'الطلبات',
-              ),
+                            /// Order button
+                            BottomNavigationBarItem(
+                              icon: SvgPicture.asset(
+                                'assets/svg/Chat.svg',
+                                width: _currentIndex == 1 ? 28.sp : 24.sp,
+                                colorFilter: ColorFilter.mode(
+                                  _currentIndex == 1 ? kMainColor : kTextColor,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              label: 'الطلبات',
+                            ),
 
-              BottomNavigationBarItem(
-                icon: CircleAvatar(
-                  radius: 24.sp,
-                  backgroundColor: kMainColor,
-                  child: SvgPicture.asset(
-                    'assets/svg/add.svg',
-                    width: 28.sp,
-                    colorFilter: const ColorFilter.mode(
-                      Colors.white,
-                      BlendMode.srcIn,
+                            BottomNavigationBarItem(
+                              icon: CircleAvatar(
+                                radius: 15.sp,
+                                backgroundColor: Colors.white,
+                              ),
+                              label: '',
+                            ),
+                            BottomNavigationBarItem(
+                              icon: SvgPicture.asset(
+                                'assets/svg/ph_books.svg',
+                                width: _currentIndex == 3 ? 28.sp : 24.sp,
+                                colorFilter: ColorFilter.mode(
+                                  _currentIndex == 3 ? kMainColor : kTextColor,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              label: 'مكتبتي',
+                            ),
+                            BottomNavigationBarItem(
+                              icon: SvgPicture.asset(
+                                'assets/svg/more.svg',
+                                width: _currentIndex == 4 ? 28.sp : 24.sp,
+                                colorFilter: ColorFilter.mode(
+                                  _currentIndex == 4 ? kMainColor : kTextColor,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              label: 'المزيد',
+                            ),
+                          ],
+                        ),
+                        Positioned(
+                          top: -16, // تحريك العنصر للخروج من الإطار
+                          left: MediaQuery.of(context).size.width / 2 -
+                              32, // منتصف الشاشة
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(320.sp),
+                            onTap: () {
+                              setState(() {
+                                _currentIndex = 2; // تحديث المؤشر عند النقر
+                              });
+                            },
+                            child: CircleAvatar(
+                              radius: 32.sp,
+                              backgroundColor: kMainColor,
+                              child: SvgPicture.asset(
+                                'assets/svg/add.svg',
+                                width: 32.sp,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/svg/ph_books.svg',
-                  width: _currentIndex == 3 ? 26.sp : 24.sp,
-                  colorFilter: ColorFilter.mode(
-                    _currentIndex == 3 ? kMainColor : kHeader1Color,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'مكتبتي',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/svg/more.svg',
-                  width: _currentIndex == 4 ? 26.sp : 24.sp,
-                  colorFilter: ColorFilter.mode(
-                    _currentIndex == 4 ? kMainColor : kHeader1Color,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'المزيد',
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

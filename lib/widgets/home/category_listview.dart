@@ -19,7 +19,7 @@ class CategoryListview extends StatelessWidget {
           height: 80.sp,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.sp),
-            color: const Color(0xFFF7F7F7),
+            color: const Color(0xFFECECEC),
           ),
           child: Column(
             children: [
