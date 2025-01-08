@@ -1,4 +1,5 @@
 import 'package:biblio/components/width.dart';
+import 'package:biblio/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -12,14 +13,14 @@ class NewBooksListview extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
         return Column(
-          spacing: 3.sp,
+          spacing: 4.sp,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               alignment: Alignment.bottomCenter,
               margin: EdgeInsets.symmetric(horizontal: 8.sp),
               width: 140.sp,
-              height: 220.sp,
+              height: 200.sp,
               decoration: BoxDecoration(
                 image: const DecorationImage(
                   fit: BoxFit.none,
@@ -42,7 +43,7 @@ class NewBooksListview extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12.sp),
                     ),
-                    width: 95.sp,
+                    width: 100.sp,
                     height: 24.sp,
                     child: Row(
                       children: [
@@ -50,18 +51,22 @@ class NewBooksListview extends StatelessWidget {
 
                         /// User image
                         CircleAvatar(
-                          backgroundColor: Colors.black,
+                          backgroundColor: kMainColor,
                           radius: 10.sp,
                         ),
                         const W(w: 3),
 
                         /// User Name
-                        Text(
-                          'منى محمد',
-                          style: TextStyle(
-                            color: const Color(0xFF3A3A3A),
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w400,
+                        SizedBox(
+                          width: 70.sp,
+                          child: Text(
+                            'منى محمد',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: const Color(0xFF3A3A3A),
+                              fontSize: 10.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ],
@@ -74,12 +79,16 @@ class NewBooksListview extends StatelessWidget {
             /// Book Name
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.sp),
-              child: Text(
-                'الجنرال في متاهته',
-                style: TextStyle(
-                  color: const Color(0xFF333333),
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w500,
+              child: SizedBox(
+                width: 140.sp,
+                child: Text(
+                  'الجنرال في متاهته',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color(0xFF333333),
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
@@ -87,12 +96,16 @@ class NewBooksListview extends StatelessWidget {
             /// Writter Name
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.sp),
-              child: Text(
-                'غابرييل غارسيا ماركيز',
-                style: TextStyle(
-                  color: const Color(0xFF969697),
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
+              child: SizedBox(
+                width: 140.sp,
+                child: Text(
+                  'غابرييل غارسيا ماركيز',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color(0xFF969697),
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),

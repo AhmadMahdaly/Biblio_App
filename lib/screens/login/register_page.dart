@@ -12,15 +12,15 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
   static String id = 'SignUpScreen';
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final formKey = GlobalKey<FormState>();
   String? email;
   String? name;
@@ -220,18 +220,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     } else if (e.code == 'email-already-in-use') {
                       showSnackBar(
                         context,
-                        'يوجد مشكلة في البريد الإلكتروني أو كلمة المرور.',
+                        'يوجد خطأ في البريد الإلكتروني أو كلمة السر.',
+                      );
+                    } else if (e.code == 'invalid-email') {
+                      showSnackBar(
+                        context,
+                        'البريد الإلكتروني غير صالح.',
+                      );
+                    } else if (e.code == 'network-request-failed') {
+                      showSnackBar(
+                        context,
+                        'يوجد مشكلة في الإتصال بالانترنت، حاول مرة أخرى.',
+                      );
+                    } else {
+                      showSnackBar(
+                        context,
+                        'يوجد مشكلة حالياً، حاول في وقت آخر.',
                       );
                     }
+                    isInAsyncCall = false;
+                    setState(() {});
                     // ignore: avoid_catches_without_on_clauses
                   } catch (e) {
                     showSnackBar(
                       context,
-                      e.toString(),
+                      'يوجد مشكلة حالياً، حاول في وقت آخر.',
                     );
                   }
-                  isInAsyncCall = false;
-                  setState(() {});
                 }
               },
             ),

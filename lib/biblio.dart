@@ -46,7 +46,7 @@ class Biblio extends StatelessWidget {
           SplashScreen.id: (context) => const SplashScreen(),
           OnboardScreen.id: (context) => const OnboardScreen(),
           LoginScreen.id: (context) => const LoginScreen(),
-          SignUpScreen.id: (context) => const SignUpScreen(),
+          RegisterScreen.id: (context) => const RegisterScreen(),
           NavigationBarApp.id: (context) => const NavigationBarApp(),
           HomePage.id: (context) => const HomePage(),
         },

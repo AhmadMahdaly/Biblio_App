@@ -1,4 +1,5 @@
 import 'package:biblio/components/custom_button.dart';
+import 'package:biblio/components/height.dart';
 import 'package:biblio/components/width.dart';
 import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/login_screen.dart';
@@ -14,18 +15,25 @@ class OnboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        spacing: 12.sp,
-        children: [
+      body:
+
           /// Image header
           SizedBox(
-            height: 410.sp,
-            child: Image.asset(
-              'assets/images/onboared_view.png',
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
-          ),
+        // height: 410.sp,
+        child: Image.asset(
+          'assets/images/onboared_view_2 copy.png',
+          filterQuality: FilterQuality.high,
+          fit: BoxFit.cover,
+          width: double.infinity,
+        ),
+      ),
+
+      // width: MediaQuery.of(context).size.width,
+
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const H(h: 16),
 
           /// Title Text
           Row(
@@ -39,13 +47,14 @@ class OnboardScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const W(w: 10),
+              const W(w: 8),
               SvgPicture.asset(
                 'assets/svg/logo.svg',
                 height: 20.sp,
               ),
             ],
           ),
+          const H(h: 8),
 
           /// Desc text
           Padding(
@@ -61,6 +70,7 @@ class OnboardScreen extends StatelessWidget {
               ),
             ),
           ),
+          const H(h: 16),
 
           /// Login
           CustomButton(
@@ -70,15 +80,17 @@ class OnboardScreen extends StatelessWidget {
               Navigator.pushReplacementNamed(context, LoginScreen.id);
             },
           ),
+          const H(h: 10),
 
           /// Sign up
           CustomBorderBotton(
             padding: 16,
             text: 'حساب جديد',
             onTap: () {
-              Navigator.pushReplacementNamed(context, SignUpScreen.id);
+              Navigator.pushReplacementNamed(context, RegisterScreen.id);
             },
           ),
+          const H(h: 10),
 
           /// To HomePage as visitor
           InkWell(
@@ -94,6 +106,7 @@ class OnboardScreen extends StatelessWidget {
             },
             child: Text(
               'الدخول كزائر',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: const Color(0xFF3E5879),
                 fontSize: 14.sp,
@@ -104,7 +117,7 @@ class OnboardScreen extends StatelessWidget {
               ),
             ),
           ),
-          // width: MediaQuery.of(context).size.width,
+          const H(h: 16),
         ],
       ),
     );

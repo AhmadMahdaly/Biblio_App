@@ -202,15 +202,30 @@ class _LoginScreenState extends State<LoginScreen> {
                               );
                             } else if (e.code == 'wrong-password') {
                               showSnackBar(
+                                  context, 'كلمة المرور خاطئة، حاول مرة أخرى.');
+                            }
+                            if (e.code == 'invalid-email') {
+                              showSnackBar(
                                 context,
-                                'يوجد مشكلة في البريد الإلكتروني أو كلمة المرور.',
+                                'البريد الإلكتروني غير صالح.',
+                              );
+                            } else if (e.code == 'network-request-failed') {
+                              showSnackBar(
+                                context,
+                                'يوجد مشكلة في الإتصال بالانترنت، حاول مرة أخرى.',
+                              );
+                            } else {
+                              showSnackBar(
+                                context,
+                                'يوجد مشكلة حالياً، حاول في وقت آخر.',
                               );
                             }
+
                             // ignore: avoid_catches_without_on_clauses
                           } catch (e) {
                             showSnackBar(
                               context,
-                              e.toString(),
+                              'يوجد مشكلة حالياً، حاول في وقت آخر.',
                             );
                           }
                           isInAsyncCall = false;
@@ -222,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     /// Sign Up
                     InkWell(
                       onTap: () {
-                        Navigator.popAndPushNamed(context, SignUpScreen.id);
+                        Navigator.popAndPushNamed(context, RegisterScreen.id);
                       },
                       child: Text.rich(
                         TextSpan(
