@@ -1,3 +1,4 @@
+import 'package:biblio/services/image_picker.dart';
 import 'package:biblio/widgets/more_page/user_name.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,12 @@ class MorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(child: UserName()),
+      body: Column(
+        children: [
+          Center(child: UserName()),
+          SizedBox(height: 300, child: UploadImageScreen())
+        ],
+      ),
     );
   }
 }
