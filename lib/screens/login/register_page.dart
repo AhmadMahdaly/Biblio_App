@@ -6,8 +6,6 @@ import 'package:biblio/components/show_snackbar.dart';
 import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
-import 'package:biblio/services/user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -192,13 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   isInAsyncCall = true;
                   setState(() {});
                   try {
-                    final userCredential = await FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                      email: email!,
-                      password: password!,
-                    );
-                    final userId = userCredential.user!.uid;
-                    await addUser(userId, name!, email!, password!);
+                    ///
                     showSnackBar(
                       context,
                       'تم التسجيل',
@@ -212,40 +204,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                     );
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'weak-password') {
-                      showSnackBar(
-                        context,
-                        'كلمة المرور ضعيفة.',
-                      );
-                    } else if (e.code == 'email-already-in-use') {
-                      showSnackBar(
-                        context,
-                        'يوجد خطأ في البريد الإلكتروني أو كلمة السر.',
-                      );
-                    } else if (e.code == 'invalid-email') {
-                      showSnackBar(
-                        context,
-                        'البريد الإلكتروني غير صالح.',
-                      );
-                    } else if (e.code == 'network-request-failed') {
-                      showSnackBar(
-                        context,
-                        'يوجد مشكلة في الإتصال بالانترنت، حاول مرة أخرى.',
-                      );
-                    } else {
-                      showSnackBar(
-                        context,
-                        'يوجد مشكلة حالياً، حاول في وقت آخر.',
-                      );
-                    }
-                    isInAsyncCall = false;
-                    setState(() {});
+
                     // ignore: avoid_catches_without_on_clauses
                   } catch (e) {
+                    isInAsyncCall = false;
+                    setState(() {});
                     showSnackBar(
                       context,
-                      'يوجد مشكلة حالياً، حاول في وقت آخر.',
+                      e.toString(),
                     );
                   }
                 }

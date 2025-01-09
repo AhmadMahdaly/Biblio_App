@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MyLiberaryPage extends StatelessWidget {
-  const MyLiberaryPage({super.key});
+class MyLibraryPage extends StatelessWidget {
+  const MyLibraryPage({super.key});
 
   @override
   Widget build(BuildContext context) {

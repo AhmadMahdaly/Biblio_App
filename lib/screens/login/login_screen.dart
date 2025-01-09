@@ -6,7 +6,6 @@ import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/register_page.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/widgets/login/forget_password_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -182,55 +181,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           isInAsyncCall = true;
                           setState(() {});
                           try {
-                            // final UserCredential userCredential =
-                            await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                              email: email!,
-                              password: password!,
-                            );
-                            // showSnackBar(context, 'تم التسجيل');
-
                             await Navigator.pushReplacementNamed(
                               context,
                               NavigationBarApp.id,
                             );
-                          } on FirebaseAuthException catch (e) {
-                            if (e.code == 'user-not-found') {
-                              showSnackBar(
-                                context,
-                                'المستخدم غير موجود. يرجى التسجيل.',
-                              );
-                            } else if (e.code == 'wrong-password') {
-                              showSnackBar(
-                                  context, 'كلمة المرور خاطئة، حاول مرة أخرى.');
-                            }
-                            if (e.code == 'invalid-email') {
-                              showSnackBar(
-                                context,
-                                'البريد الإلكتروني غير صالح.',
-                              );
-                            } else if (e.code == 'network-request-failed') {
-                              showSnackBar(
-                                context,
-                                'يوجد مشكلة في الإتصال بالانترنت، حاول مرة أخرى.',
-                              );
-                            } else if (e.code == 'invalid-credential') {
-                              showSnackBar(
-                                context,
-                                'هناك مشكلة في البريد الإلكتروني أو كلمة السر، أو أن الحساب غير مسجل.',
-                              );
-                            } else {
-                              showSnackBar(
-                                context,
-                                'يوجد مشكلة حالياً، حاول في وقت آخر.',
-                              );
-                            }
-
                             // ignore: avoid_catches_without_on_clauses
                           } catch (e) {
                             showSnackBar(
                               context,
-                              'يوجد مشكلة حالياً، حاول في وقت آخر.',
+                              e.toString(),
                             );
                           }
                           isInAsyncCall = false;
