@@ -26,6 +26,7 @@ dependencies:
   mobkit_dashed_border: ^0.0.7
   image_picker: ^1.1.2
   supabase_flutter: ^2.8.3
+  flutter_dotenv: ^5.2.1
   
 
 dev_dependencies:
@@ -44,6 +45,7 @@ flutter:
     - assets/translations/
     - assets/svg/
     - assets/icons/
+    - .env
 
   fonts:
     - family: Avenir Arabic
