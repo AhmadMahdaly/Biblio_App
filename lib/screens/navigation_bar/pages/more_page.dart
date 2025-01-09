@@ -7,8 +7,11 @@ class MorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Column(
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      ),
+      body: const Column(
         children: [
           Center(child: UserName()),
           SizedBox(height: 300, child: UploadImageScreen())

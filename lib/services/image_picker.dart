@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:biblio/components/app_indicator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -37,7 +38,9 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
         // حفظ رابط الصورة في Firestore
         await saveImageUrl(userId, imageUrl);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Image uploaded successfully')),
+          const SnackBar(
+            content: Text('Image uploaded successfully'),
+          ),
         );
       }
     }
@@ -50,20 +53,21 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Upload Image')),
+      appBar: AppBar(title: const Text('Upload Image')),
       body: Center(
         child: _isLoading
-            ? CircularProgressIndicator()
+            ? const AppIndicator()
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _image != null
-                      ? Image.file(_image!, height: 200, width: 200)
-                      : Text('No image selected'),
-                  SizedBox(height: 20),
+                  if (_image != null)
+                    Image.file(_image!, height: 200, width: 200)
+                  else
+                    const Text('No image selected'),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _pickAndUploadImage,
-                    child: Text('Pick and Upload Image'),
+                    child: const Text('Pick and Upload Image'),
                   ),
                 ],
               ),
@@ -75,7 +79,8 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
 Future<File?> pickImage() async {
   final ImagePicker picker = ImagePicker();
   final XFile? pickedFile = await picker.pickImage(
-      source: ImageSource.gallery); // يمكن تغيير المصدر إلى ImageSource.camera
+    source: ImageSource.gallery,
+  ); // يمكن تغيير المصدر إلى ImageSource.camera
   if (pickedFile != null) {
     return File(pickedFile.path);
   }
