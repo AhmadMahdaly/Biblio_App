@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -20,11 +21,21 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final SupabaseClient supabase = Supabase.instance.client;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   final formKey = GlobalKey<FormState>();
   String? email;
   String? name;
   String? password;
-  String? image;
+
   bool isInAsyncCall = false;
   bool isShowPassword = true;
 
@@ -112,10 +123,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                     ),
                     CustomTextformfield(
+                      controller: emailController,
                       text: 'البريد الإلكتروني',
-                      onChanged: (data) {
-                        email = data;
-                      },
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -139,6 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                     ),
                     CustomTextformfield(
+                      controller: passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'هذا الحقل مطلوب';
@@ -146,9 +156,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return null;
                       },
                       text: 'كلمة المرور',
-                      onChanged: (data) {
-                        password = data;
-                      },
                       icon: IconButton(
                         onPressed: () => setState(() {
                           isShowPassword = !isShowPassword;
@@ -187,15 +194,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: 16,
               onTap: () async {
                 if (formKey.currentState!.validate()) {
-                  isInAsyncCall = true;
-                  setState(() {});
+                  setState(() {
+                    isInAsyncCall = true;
+                  });
+
                   try {
-                    ///
+                    await supabase.auth.signUp(
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                    );
                     showSnackBar(
                       context,
                       'تم التسجيل',
                     );
-
+                    setState(() {
+                      isInAsyncCall = false;
+                    });
                     await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -207,12 +221,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     // ignore: avoid_catches_without_on_clauses
                   } catch (e) {
-                    isInAsyncCall = false;
-                    setState(() {});
                     showSnackBar(
-                      context,
-                      e.toString(),
+                      context, 'أوبس، هناك خطأ في التسجيل!',
+                      // e.toString(),
                     );
+                    setState(() {
+                      isInAsyncCall = false;
+                    });
                   }
                 }
               },

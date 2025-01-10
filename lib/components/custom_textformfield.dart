@@ -12,6 +12,7 @@ class CustomTextformfield extends StatelessWidget {
     this.icon = const SizedBox(),
     this.validator,
     this.contentPadding = 12,
+    this.controller,
   });
   final String text;
   final TextInputType? keyboardType;
@@ -20,9 +21,11 @@ class CustomTextformfield extends StatelessWidget {
   final Widget icon;
   final String? Function(String?)? validator;
   final int contentPadding;
+  final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator,
       onChanged: onChanged,
