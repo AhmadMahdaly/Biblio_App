@@ -24,6 +24,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final SupabaseClient supabase = Supabase.instance.client;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final userNameController = TextEditingController();
+
+  String? userId; // ID المستخدم لتحديده بعد التسجيل
+  String? userName, email, password;
   @override
   void dispose() {
     emailController.dispose();
@@ -32,9 +36,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   final formKey = GlobalKey<FormState>();
-  String? email;
-  String? name;
-  String? password;
 
   bool isInAsyncCall = false;
   bool isShowPassword = true;
@@ -97,10 +98,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     CustomTextformfield(
                       text: 'الاسم',
+                      controller: userNameController,
                       keyboardType: TextInputType.name,
-                      onChanged: (data) {
-                        name = data;
-                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'هذا الحقل مطلوب';
@@ -125,6 +124,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     CustomTextformfield(
                       controller: emailController,
                       text: 'البريد الإلكتروني',
+                      onChanged: (data) {
+                        email = data;
+                      },
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -193,22 +195,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
               text: 'إنشاء الحساب',
               padding: 16,
               onTap: () async {
+                final email = emailController.text;
+                final userName = userNameController.text;
                 if (formKey.currentState!.validate()) {
                   setState(() {
                     isInAsyncCall = true;
                   });
 
                   try {
-                    await supabase.auth.signUp(
-                      email: emailController.text.trim(),
-                      password: passwordController.text.trim(),
-                    );
+                    final response = await supabase.auth.signUp(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim(),
+                        data: {'name': userName});
+                    if (response.user != null) {
+                      // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
+                      await supabase.from('users').insert({
+                        'id': response.user?.id, // ربط المستخدم باستخدام UID
+                        'username': userName,
+                        'email': email,
+                      });
+                    }
                     showSnackBar(
                       context,
                       'تم التسجيل',
                     );
                     setState(() {
                       isInAsyncCall = false;
+                      userId = response.user!.id;
                     });
                     await Navigator.pushReplacement(
                       context,
@@ -221,9 +234,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     // ignore: avoid_catches_without_on_clauses
                   } catch (e) {
+                    print(e.toString());
                     showSnackBar(
-                      context, 'أوبس، هناك خطأ في التسجيل!',
-                      // e.toString(),
+                      context,
+                      // 'أوبس، هناك خطأ في التسجيل!',
+                      e.toString(),
                     );
                     setState(() {
                       isInAsyncCall = false;

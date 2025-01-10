@@ -25,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final SupabaseClient supabase = Supabase.instance.client;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  String? userId; // ID المستخدم لتحديده بعد التسجيل
 
   final formKey = GlobalKey<FormState>();
   String? email;
@@ -184,12 +185,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
 
                           try {
-                            await supabase.auth.signInWithPassword(
+                            final response =
+                                await supabase.auth.signInWithPassword(
                               email: emailController.text.trim(),
                               password: passwordController.text.trim(),
                             );
                             setState(() {
                               isInAsyncCall = false;
+                              userId = response.user!.id;
                               Navigator.pushReplacementNamed(
                                 context,
                                 NavigationBarApp.id,
