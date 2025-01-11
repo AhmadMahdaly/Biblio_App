@@ -13,7 +13,7 @@ class _CountryDropdownState extends State<CountryDropdown> {
   String? _selectedCountry; // لتخزين الدولة المختارة
 
   // قائمة الدول
-  List<String> _countries = [
+  final List<String> _countries = [
     'مصر',
     'السعودية',
     'الإمارات',

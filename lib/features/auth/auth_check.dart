@@ -26,14 +26,13 @@ this page sets up a listener on the user's auth state using onAuthStateChange. *
         _user = supabase.auth.currentUser;
       });
     }
-
-    supabase.auth.onAuthStateChange.listen((event) {
-      if (mounted) {
+    if (mounted) {
+      supabase.auth.onAuthStateChange.listen((event) {
         setState(() {
           _user = event.session?.user;
         });
-      }
-    });
+      });
+    }
   }
 
   final SupabaseClient supabase = Supabase.instance.client;

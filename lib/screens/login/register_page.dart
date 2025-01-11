@@ -27,7 +27,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final userNameController = TextEditingController();
 
   String? userId; // ID المستخدم لتحديده بعد التسجيل
-  String? userName, email, password;
+  String? userName;
+  String? email;
+  String? password;
   @override
   void dispose() {
     emailController.dispose();
@@ -201,9 +203,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   try {
                     final response = await supabase.auth.signUp(
-                        email: emailController.text.trim(),
-                        password: passwordController.text.trim(),
-                        data: {'name': userName});
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                      data: {'name': userName},
+                    );
                     if (response.user != null) {
                       // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
                       await supabase.from('users').insert({
@@ -231,7 +234,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     // ignore: avoid_catches_without_on_clauses
                   } catch (e) {
-                    print(e.toString());
                     showSnackBar(
                       context,
                       // 'أوبس، هناك خطأ في التسجيل!',
