@@ -124,9 +124,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     CustomTextformfield(
                       controller: emailController,
                       text: 'البريد الإلكتروني',
-                      onChanged: (data) {
-                        email = data;
-                      },
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {

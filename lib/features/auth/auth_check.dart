@@ -3,14 +3,14 @@ import 'package:biblio/screens/onboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthPage extends StatefulWidget {
-  const AuthPage({super.key});
+class AuthCheck extends StatefulWidget {
+  const AuthCheck({super.key});
 
   @override
-  State<AuthPage> createState() => _AuthPageState();
+  State<AuthCheck> createState() => _AuthCheckState();
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _AuthCheckState extends State<AuthCheck> {
   /*Retrieve the current user and assign the value to the _user variable. Notice that
 this page sets up a listener on the user's auth state using onAuthStateChange. */
   User? _user;

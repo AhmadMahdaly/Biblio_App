@@ -1,6 +1,6 @@
 import 'package:biblio/components/height.dart';
 import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/features/auth/auth_page.dart';
+import 'package:biblio/features/auth/auth_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const AuthPage(),
+          builder: (context) => const AuthCheck(),
         ),
       );
     });
