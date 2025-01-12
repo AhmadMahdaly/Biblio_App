@@ -243,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                             showSnackBar(
                               context,
-                              'أوبس، هناك خطأ في تسجيل الدخول!\n$e',
+                              'أوبس، هناك خطأ في تسجيل الدخول! ربما يكون هناك مشكلة في الإتصال.\n$e',
                             );
                           }
                         }

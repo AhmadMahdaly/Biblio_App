@@ -275,7 +275,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     });
                     showSnackBar(
                       context,
-                      'أوبس، هناك خطأ في التسجيل!\n$e',
+                      'أوبس، هناك خطأ في التسجيل! ربما يكون هناك مشكلة في الإتصال.\n$e',
                     );
                   }
                 }

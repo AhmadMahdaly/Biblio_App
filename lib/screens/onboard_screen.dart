@@ -21,15 +21,12 @@ class OnboardScreen extends StatelessWidget {
           SizedBox(
         // height: 410.sp,
         child: Image.asset(
-          'assets/images/onboared_view_2 copy.png',
+          'assets/images/onboared_view_2.png',
           filterQuality: FilterQuality.high,
           fit: BoxFit.cover,
-          width: double.infinity,
+          width: MediaQuery.of(context).size.width,
         ),
       ),
-
-      // width: MediaQuery.of(context).size.width,
-
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
