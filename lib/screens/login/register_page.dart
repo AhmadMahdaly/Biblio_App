@@ -25,11 +25,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final userNameController = TextEditingController();
-
-  String? userId; // ID المستخدم لتحديده بعد التسجيل
+// ID المستخدم لتحديده بعد التسجيل
+  String? userId;
   String? userName;
   String? email;
   String? password;
+  final formKey = GlobalKey<FormState>();
+  bool isInAsyncCall = false;
+  bool isShowPassword = true;
+
+  ///
   @override
   void dispose() {
     emailController.dispose();
@@ -37,10 +42,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  final formKey = GlobalKey<FormState>();
-
-  bool isInAsyncCall = false;
-  bool isShowPassword = true;
+  /// Sign Up
+  Future<AuthResponse> signUp(String userName) {
+    return supabase.auth.signUp(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+      data: {'name': userName},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,9 +167,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                       text: 'كلمة المرور',
                       icon: IconButton(
-                        onPressed: () => setState(() {
-                          isShowPassword = !isShowPassword;
-                        }),
+                        onPressed: () => setState(
+                          () {
+                            isShowPassword = !isShowPassword;
+                          },
+                        ),
                         icon: isShowPassword
                             ? Icon(
                                 Icons.visibility_off_outlined,
@@ -202,11 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   });
 
                   try {
-                    final response = await supabase.auth.signUp(
-                      email: emailController.text.trim(),
-                      password: passwordController.text.trim(),
-                      data: {'name': userName},
-                    );
+                    final response = await signUp(userName);
                     if (response.user != null) {
                       // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
                       await supabase.from('users').insert({
@@ -231,17 +238,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                     );
-
-                    // ignore: avoid_catches_without_on_clauses
-                  } catch (e) {
-                    showSnackBar(
-                      context,
-                      // 'أوبس، هناك خطأ في التسجيل!',
-                      e.toString(),
-                    );
+                  } on AuthException catch (error) {
                     setState(() {
                       isInAsyncCall = false;
                     });
+                    if (error.message == 'Invalid login credentials') {
+                      showSnackBar(
+                        context,
+                        'بيانات تسجيل الدخول غير صحيحة',
+                      );
+                    } else if (error.message == 'Email is not valid') {
+                      showSnackBar(
+                        context,
+                        'البريد الإلكتروني غير صالح',
+                      );
+                    } else if (error.message == 'Password is not valid') {
+                      showSnackBar(
+                        context,
+                        'كلمة المرور غير صالحة',
+                      );
+                    } else if (error.message == 'User not found') {
+                      showSnackBar(
+                        context,
+                        'المستخدم غير موجود',
+                      );
+                    } else if (error.message ==
+                        'Password should be at least 6 characters') {
+                      showSnackBar(
+                        context,
+                        'كلمة المرور ضعيفة',
+                      );
+                    }
+                  } catch (e) {
+                    setState(() {
+                      isInAsyncCall = false;
+                    });
+                    showSnackBar(
+                      context,
+                      'أوبس، هناك خطأ في التسجيل!\n$e',
+                    );
                   }
                 }
               },

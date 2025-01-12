@@ -1,10 +1,7 @@
-import 'package:biblio/components/app_indicator.dart';
 import 'package:biblio/components/custom_button.dart';
-import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/onboard_screen.dart';
-import 'package:biblio/services/fetch_user_name.dart';
+import 'package:biblio/widgets/more/show_user_name.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MorePage extends StatefulWidget {
@@ -27,37 +24,13 @@ class _MorePageState extends State<MorePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FutureBuilder<dynamic>(
-            future: fetchUserName(context),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const AppIndicator();
-              } else if (snapshot.hasError) {
-                return const Text('');
-                // خطأ: ${snapshot.error}
-              } else {
-                final userName = snapshot.data;
-                return Padding(
-                  padding: EdgeInsets.all(16.sp),
-                  child: Text(
-                    'أهلًـا $userName!',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      color: kMainColor,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                );
-              }
-            },
-          ),
+          const ShowUserName(),
           CustomButton(
             padding: 16,
             text: 'تسجيل الخروج',
             onTap: () async {
               await supabase.auth.signOut();
-
-              await Navigator.pushNamed(
+              await Navigator.popAndPushNamed(
                 context,
                 OnboardScreen.id,
               );

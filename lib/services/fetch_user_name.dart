@@ -1,4 +1,3 @@
-import 'package:biblio/components/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -27,10 +26,6 @@ Future<void> fetchUserName(BuildContext context) async {
 
     return response['username'];
   } catch (e) {
-    showSnackBar(
-      context,
-      'أوبس، هناك خطأ في تسجيل الدخول!',
-      // e.toString(),
-    );
+    // e.toString(),
   }
 }

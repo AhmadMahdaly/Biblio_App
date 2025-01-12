@@ -25,13 +25,24 @@ class _LoginScreenState extends State<LoginScreen> {
   final SupabaseClient supabase = Supabase.instance.client;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  String? userId; // ID المستخدم لتحديده بعد التسجيل
 
+  /// ID المستخدم لتحديده بعد التسجيل
+  String? userId;
+
+  ///
   final formKey = GlobalKey<FormState>();
   String? email;
   String? password;
   bool isInAsyncCall = false;
   bool isShowPassword = true;
+
+  ///
+  Future<AuthResponse> signIn() {
+    return supabase.auth.signInWithPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -185,11 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
 
                           try {
-                            final response =
-                                await supabase.auth.signInWithPassword(
-                              email: emailController.text.trim(),
-                              password: passwordController.text.trim(),
-                            );
+                            final response = await signIn();
                             setState(() {
                               isInAsyncCall = false;
                               userId = response.user!.id;
@@ -198,17 +205,46 @@ class _LoginScreenState extends State<LoginScreen> {
                                 NavigationBarApp.id,
                               );
                             });
-
-                            // ignore: avoid_catches_without_on_clauses
+                          } on AuthException catch (error) {
+                            setState(() {
+                              isInAsyncCall = false;
+                            });
+                            if (error.message == 'Invalid login credentials') {
+                              showSnackBar(
+                                context,
+                                'بيانات تسجيل الدخول غير صحيحة',
+                              );
+                            } else if (error.message == 'Email is not valid') {
+                              showSnackBar(
+                                context,
+                                'البريد الإلكتروني غير صالح',
+                              );
+                            } else if (error.message ==
+                                'Password is not valid') {
+                              showSnackBar(
+                                context,
+                                'كلمة المرور غير صالحة',
+                              );
+                            } else if (error.message == 'User not found') {
+                              showSnackBar(
+                                context,
+                                'المستخدم غير موجود',
+                              );
+                            } else if (error.message ==
+                                'Password should be at least 6 characters') {
+                              showSnackBar(
+                                context,
+                                'كلمة المرور ضعيفة',
+                              );
+                            }
                           } catch (e) {
                             setState(() {
                               isInAsyncCall = false;
-                              showSnackBar(
-                                context,
-                                'أوبس، هناك خطأ في تسجيل الدخول!',
-                                // e.toString(),
-                              );
                             });
+                            showSnackBar(
+                              context,
+                              'أوبس، هناك خطأ في تسجيل الدخول!\n$e',
+                            );
                           }
                         }
                       },

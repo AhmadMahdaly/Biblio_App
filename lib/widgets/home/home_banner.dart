@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:biblio/components/width.dart';
 import 'package:biblio/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -53,14 +54,22 @@ class HomeBanner extends StatelessWidget {
                 ],
               ),
               Align(
-                child: Text(
-                  'تمتلك الكثير من الكتب وترغب في عرضها للتبادل أو للبيع؟',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w800,
-                  ),
+                child: AnimatedTextKit(
+                  totalRepeatCount: 1,
+                  isRepeatingAnimation: false,
+                  displayFullTextOnTap: true,
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                      'تمتلك الكثير من الكتب وترغب في عرضها للتبادل أو للبيع؟',
+                      textAlign: TextAlign.center,
+                      textStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w800,
+                      ),
+                      speed: const Duration(milliseconds: 50),
+                    ),
+                  ],
                 ),
               ),
               Align(
