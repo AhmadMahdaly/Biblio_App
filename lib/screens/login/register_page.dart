@@ -1,11 +1,11 @@
-import 'package:biblio/components/app_indicator.dart';
-import 'package:biblio/components/custom_button.dart';
-import 'package:biblio/components/custom_textformfield.dart';
-import 'package:biblio/components/height.dart';
-import 'package:biblio/components/show_snackbar.dart';
-import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
+import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/custom_button.dart';
+import 'package:biblio/utils/components/custom_textformfield.dart';
+import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';

@@ -1,10 +1,10 @@
-import 'package:biblio/components/custom_button.dart';
-import 'package:biblio/components/custom_textformfield.dart';
-import 'package:biblio/components/height.dart';
-import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
-import 'package:biblio/widgets/add_book/add_book_image.dart';
-import 'package:biblio/widgets/add_book/title_form_add_book.dart';
+import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/add_book_image.dart';
+import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/title_form_add_book.dart';
+import 'package:biblio/utils/components/custom_button.dart';
+import 'package:biblio/utils/components/custom_textformfield.dart';
+import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

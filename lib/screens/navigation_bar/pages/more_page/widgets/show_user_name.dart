@@ -1,6 +1,6 @@
-import 'package:biblio/components/app_indicator.dart';
-import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/services/fetch_user_name.dart';
+import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

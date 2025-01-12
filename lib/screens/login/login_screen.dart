@@ -1,11 +1,11 @@
-import 'package:biblio/components/custom_button.dart';
-import 'package:biblio/components/custom_textformfield.dart';
-import 'package:biblio/components/height.dart';
-import 'package:biblio/components/show_snackbar.dart';
-import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/register_page.dart';
+import 'package:biblio/screens/login/widgets/forget_password_screen.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
-import 'package:biblio/widgets/login/forget_password_screen.dart';
+import 'package:biblio/utils/components/custom_button.dart';
+import 'package:biblio/utils/components/custom_textformfield.dart';
+import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

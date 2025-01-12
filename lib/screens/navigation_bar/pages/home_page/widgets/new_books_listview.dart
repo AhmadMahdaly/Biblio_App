@@ -1,5 +1,5 @@
-import 'package:biblio/components/width.dart';
-import 'package:biblio/constants/colors_constants.dart';
+import 'package:biblio/utils/components/width.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

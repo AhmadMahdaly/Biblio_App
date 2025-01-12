@@ -1,5 +1,5 @@
-import 'package:biblio/components/height.dart';
-import 'package:biblio/constants/colors_constants.dart';
+import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:biblio/widgets/custom_verification_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

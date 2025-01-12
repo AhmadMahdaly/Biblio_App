@@ -1,6 +1,6 @@
-import 'package:biblio/components/height.dart';
-import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/features/auth/auth_check.dart';
+import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     // This is setting the time for disappeare //
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 4), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

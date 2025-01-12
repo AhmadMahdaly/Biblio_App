@@ -1,6 +1,6 @@
-import 'package:biblio/components/custom_button.dart';
+import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/show_user_name.dart';
 import 'package:biblio/screens/onboard_screen.dart';
-import 'package:biblio/widgets/more/show_user_name.dart';
+import 'package:biblio/utils/components/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
