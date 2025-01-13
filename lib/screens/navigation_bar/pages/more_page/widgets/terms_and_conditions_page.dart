@@ -36,8 +36,8 @@ class TermsAndConditionsPage extends StatelessWidget {
             color: kTextColor,
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
-            height: 1,
-            letterSpacing: 0.14,
+            height: 1.sp,
+            letterSpacing: 0.14.sp,
           ),
         ),
       ),
@@ -45,13 +45,17 @@ class TermsAndConditionsPage extends StatelessWidget {
         itemCount: terms.length,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.sp,
+              vertical: 5.sp,
+            ),
             child: Card(
+              color: const Color(0xFFFCFCFC),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.sp),
                 child: Text(
                   terms[index],
-                  style: const TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
               ),
             ),

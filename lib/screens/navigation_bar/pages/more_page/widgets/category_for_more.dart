@@ -18,7 +18,7 @@ class CategoryForMore extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.sp),
       width: MediaQuery.of(context).size.width,
-      height: 48,
+      height: 48.sp,
       decoration: ShapeDecoration(
         color: const Color(0xFFFCFCFC),
         shape: RoundedRectangleBorder(
@@ -53,8 +53,8 @@ class CategoryForMore extends StatelessWidget {
                 color: kTextColor,
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
-                height: 1,
-                letterSpacing: 0.14,
+                height: 1.sp,
+                letterSpacing: 0.14.sp,
               ),
             ),
           ],

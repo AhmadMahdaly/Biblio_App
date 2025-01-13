@@ -1,3 +1,6 @@
+import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/category_for_more.dart';
+import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/faq_page.dart';
+import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/terms_and_conditions_page.dart';
 import 'package:biblio/screens/onboard_screen.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/custom_button.dart';
@@ -32,6 +35,35 @@ class MoreWithoutLogin extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, OnboardScreen.id);
               },
             ),
+          ),
+
+          CategoryForMore(
+            text: 'الأسئلة الشائعة',
+            icon: Icons.live_help_outlined,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const FAQPage();
+                  },
+                ),
+              );
+            },
+          ),
+          CategoryForMore(
+            text: 'الشروط والأحكام',
+            icon: Icons.text_snippet_outlined,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const TermsAndConditionsPage();
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),

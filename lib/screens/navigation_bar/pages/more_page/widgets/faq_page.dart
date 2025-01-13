@@ -87,8 +87,8 @@ class FAQPage extends StatelessWidget {
             color: kTextColor,
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
-            height: 1,
-            letterSpacing: 0.14,
+            height: 1.sp,
+            letterSpacing: 0.14.sp,
           ),
         ),
       ),
@@ -107,7 +107,10 @@ class FAQPage extends StatelessWidget {
             ),
             children: [
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.symmetric(
+                  vertical: 5.sp,
+                  horizontal: 16.sp,
+                ),
                 child: Text(
                   faqList[index]['answer']!,
                   style: const TextStyle(

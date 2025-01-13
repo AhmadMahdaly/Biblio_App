@@ -1,7 +1,5 @@
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/title_form_add_book.dart';
-// ignore: unused_import
-import 'package:biblio/screens/onboard_screen.dart';
 import 'package:biblio/services/delete_user.dart';
 import 'package:biblio/services/upload_user_image.dart';
 import 'package:biblio/utils/components/app_indicator.dart';

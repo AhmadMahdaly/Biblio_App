@@ -1,3 +1,4 @@
+import 'package:biblio/screens/navigation_bar/pages/more_page/personal_info_setting.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/category_for_more.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/faq_page.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/personal_card.dart';
@@ -20,6 +21,20 @@ class MoreWithLogin extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const PersonalCard(),
+          CategoryForMore(
+            text: 'البيانات الشخصية',
+            icon: Icons.mode_edit_outline_outlined,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const PersonalInfoSetting();
+                  },
+                ),
+              );
+            },
+          ),
           CategoryForMore(
             text: 'الأسئلة الشائعة',
             icon: Icons.live_help_outlined,

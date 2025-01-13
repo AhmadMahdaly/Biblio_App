@@ -1,4 +1,3 @@
-import 'package:biblio/screens/navigation_bar/pages/more_page/personal_info_setting.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/get_user_image.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/show_email.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/show_user_name.dart';
@@ -47,26 +46,6 @@ class PersonalCard extends StatelessWidget {
                   /// Email
                   const ShowEmail(),
                 ],
-              ),
-              const Spacer(),
-
-              /// Setting
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const PersonalInfoSetting();
-                      },
-                    ),
-                  );
-                },
-                icon: Icon(
-                  Icons.settings,
-                  size: 16.sp,
-                  color: kMainColor,
-                ),
               ),
             ],
           ),
