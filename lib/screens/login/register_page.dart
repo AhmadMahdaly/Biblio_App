@@ -1,17 +1,16 @@
-import 'package:biblio/components/app_indicator.dart';
-import 'package:biblio/components/custom_button.dart';
-import 'package:biblio/components/custom_textformfield.dart';
-import 'package:biblio/components/height.dart';
-import 'package:biblio/components/show_snackbar.dart';
-import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
-import 'package:biblio/services/user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/custom_button.dart';
+import 'package:biblio/utils/components/custom_textformfield.dart';
+import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -22,13 +21,35 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final formKey = GlobalKey<FormState>();
+  final SupabaseClient supabase = Supabase.instance.client;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final userNameController = TextEditingController();
+// ID المستخدم لتحديده بعد التسجيل
+  String? userId;
+  String? userName;
   String? email;
-  String? name;
   String? password;
-  String? image;
+  final formKey = GlobalKey<FormState>();
   bool isInAsyncCall = false;
   bool isShowPassword = true;
+
+  ///
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  /// Sign Up
+  Future<AuthResponse> signUp(String userName) {
+    return supabase.auth.signUp(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+      data: {'name': userName},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +109,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     CustomTextformfield(
                       text: 'الاسم',
+                      controller: userNameController,
                       keyboardType: TextInputType.name,
-                      onChanged: (data) {
-                        name = data;
-                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'هذا الحقل مطلوب';
@@ -114,10 +133,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                     ),
                     CustomTextformfield(
+                      controller: emailController,
                       text: 'البريد الإلكتروني',
-                      onChanged: (data) {
-                        email = data;
-                      },
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -141,6 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                     ),
                     CustomTextformfield(
+                      controller: passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'هذا الحقل مطلوب';
@@ -148,13 +166,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return null;
                       },
                       text: 'كلمة المرور',
-                      onChanged: (data) {
-                        password = data;
-                      },
                       icon: IconButton(
-                        onPressed: () => setState(() {
-                          isShowPassword = !isShowPassword;
-                        }),
+                        onPressed: () => setState(
+                          () {
+                            isShowPassword = !isShowPassword;
+                          },
+                        ),
                         icon: isShowPassword
                             ? Icon(
                                 Icons.visibility_off_outlined,
@@ -188,22 +205,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
               text: 'إنشاء الحساب',
               padding: 16,
               onTap: () async {
+                final email = emailController.text;
+                final userName = userNameController.text;
                 if (formKey.currentState!.validate()) {
-                  isInAsyncCall = true;
-                  setState(() {});
+                  setState(() {
+                    isInAsyncCall = true;
+                  });
+
                   try {
-                    final userCredential = await FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                      email: email!,
-                      password: password!,
-                    );
-                    final userId = userCredential.user!.uid;
-                    await addUser(userId, name!, email!, password!);
+                    final response = await signUp(userName);
+                    if (response.user != null) {
+                      // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
+                      await supabase.from('users').insert({
+                        // ربط المستخدم باستخدام UID
+                        'id': response.user?.id,
+                        'username': userName,
+                        'email': email,
+                        'password': password,
+                      });
+                    }
                     showSnackBar(
                       context,
                       'تم التسجيل',
                     );
-
+                    setState(() {
+                      isInAsyncCall = false;
+                      userId = response.user!.id;
+                    });
                     await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -212,40 +240,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                     );
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'weak-password') {
+                  } on AuthException catch (error) {
+                    setState(() {
+                      isInAsyncCall = false;
+                    });
+                    if (error.message == 'Invalid login credentials') {
                       showSnackBar(
                         context,
-                        'كلمة المرور ضعيفة.',
+                        'بيانات تسجيل الدخول غير صحيحة',
                       );
-                    } else if (e.code == 'email-already-in-use') {
+                    } else if (error.message == 'Email is not valid') {
                       showSnackBar(
                         context,
-                        'يوجد خطأ في البريد الإلكتروني أو كلمة السر.',
+                        'البريد الإلكتروني غير صالح',
                       );
-                    } else if (e.code == 'invalid-email') {
+                    } else if (error.message == 'Password is not valid') {
                       showSnackBar(
                         context,
-                        'البريد الإلكتروني غير صالح.',
+                        'كلمة المرور غير صالحة',
                       );
-                    } else if (e.code == 'network-request-failed') {
+                    } else if (error.message == 'User not found') {
                       showSnackBar(
                         context,
-                        'يوجد مشكلة في الإتصال بالانترنت، حاول مرة أخرى.',
+                        'المستخدم غير موجود',
                       );
-                    } else {
+                    } else if (error.message ==
+                        'Password should be at least 6 characters') {
                       showSnackBar(
                         context,
-                        'يوجد مشكلة حالياً، حاول في وقت آخر.',
+                        'كلمة المرور ضعيفة',
                       );
                     }
-                    isInAsyncCall = false;
-                    setState(() {});
-                    // ignore: avoid_catches_without_on_clauses
                   } catch (e) {
+                    setState(() {
+                      isInAsyncCall = false;
+                    });
                     showSnackBar(
                       context,
-                      'يوجد مشكلة حالياً، حاول في وقت آخر.',
+                      'أوبس، هناك خطأ في التسجيل! ربما يكون هناك مشكلة في الإتصال.\n$e',
                     );
                   }
                 }

@@ -1,17 +1,17 @@
-import 'package:biblio/components/custom_button.dart';
-import 'package:biblio/components/custom_textformfield.dart';
-import 'package:biblio/components/height.dart';
-import 'package:biblio/components/show_snackbar.dart';
-import 'package:biblio/constants/colors_constants.dart';
 import 'package:biblio/screens/login/register_page.dart';
+import 'package:biblio/screens/login/widgets/forget_password_screen.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
-import 'package:biblio/widgets/login/forget_password_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:biblio/utils/components/custom_button.dart';
+import 'package:biblio/utils/components/custom_textformfield.dart';
+import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,11 +22,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final SupabaseClient supabase = Supabase.instance.client;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  /// ID المستخدم لتحديده بعد التسجيل
+  String? userId;
+
+  ///
   final formKey = GlobalKey<FormState>();
   String? email;
   String? password;
   bool isInAsyncCall = false;
   bool isShowPassword = true;
+
+  ///
+  Future<AuthResponse> signIn() {
+    return supabase.auth.signInWithPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     CustomTextformfield(
+                      controller: emailController,
                       text: 'البريد الإلكتروني',
-                      onChanged: (data) {
-                        email = data;
-                      },
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -115,9 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     CustomTextformfield(
-                      onChanged: (data) {
-                        password = data;
-                      },
+                      controller: passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'هذا الحقل مطلوب';
@@ -179,62 +191,61 @@ class _LoginScreenState extends State<LoginScreen> {
                       text: 'تسجيل الدخول',
                       onTap: () async {
                         if (formKey.currentState!.validate()) {
-                          isInAsyncCall = true;
-                          setState(() {});
+                          setState(() {
+                            isInAsyncCall = true;
+                          });
+
                           try {
-                            // final UserCredential userCredential =
-                            await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                              email: email!,
-                              password: password!,
-                            );
-                            // showSnackBar(context, 'تم التسجيل');
-
-                            await Navigator.pushReplacementNamed(
-                              context,
-                              NavigationBarApp.id,
-                            );
-                          } on FirebaseAuthException catch (e) {
-                            if (e.code == 'user-not-found') {
-                              showSnackBar(
+                            final response = await signIn();
+                            setState(() {
+                              isInAsyncCall = false;
+                              userId = response.user!.id;
+                              Navigator.pushReplacementNamed(
                                 context,
-                                'المستخدم غير موجود. يرجى التسجيل.',
+                                NavigationBarApp.id,
                               );
-                            } else if (e.code == 'wrong-password') {
-                              showSnackBar(
-                                  context, 'كلمة المرور خاطئة، حاول مرة أخرى.');
-                            }
-                            if (e.code == 'invalid-email') {
+                            });
+                          } on AuthException catch (error) {
+                            setState(() {
+                              isInAsyncCall = false;
+                            });
+                            if (error.message == 'Invalid login credentials') {
                               showSnackBar(
                                 context,
-                                'البريد الإلكتروني غير صالح.',
+                                'بيانات تسجيل الدخول غير صحيحة',
                               );
-                            } else if (e.code == 'network-request-failed') {
+                            } else if (error.message == 'Email is not valid') {
                               showSnackBar(
                                 context,
-                                'يوجد مشكلة في الإتصال بالانترنت، حاول مرة أخرى.',
+                                'البريد الإلكتروني غير صالح',
                               );
-                            } else if (e.code == 'invalid-credential') {
+                            } else if (error.message ==
+                                'Password is not valid') {
                               showSnackBar(
                                 context,
-                                'هناك مشكلة في البريد الإلكتروني أو كلمة السر، أو أن الحساب غير مسجل.',
+                                'كلمة المرور غير صالحة',
                               );
-                            } else {
+                            } else if (error.message == 'User not found') {
                               showSnackBar(
                                 context,
-                                'يوجد مشكلة حالياً، حاول في وقت آخر.',
+                                'المستخدم غير موجود',
+                              );
+                            } else if (error.message ==
+                                'Password should be at least 6 characters') {
+                              showSnackBar(
+                                context,
+                                'كلمة المرور ضعيفة',
                               );
                             }
-
-                            // ignore: avoid_catches_without_on_clauses
                           } catch (e) {
+                            setState(() {
+                              isInAsyncCall = false;
+                            });
                             showSnackBar(
                               context,
-                              'يوجد مشكلة حالياً، حاول في وقت آخر.',
+                              'أوبس، هناك خطأ في تسجيل الدخول! ربما يكون هناك مشكلة في الإتصال.\n$e',
                             );
                           }
-                          isInAsyncCall = false;
-                          setState(() {});
                         }
                       },
                     ),

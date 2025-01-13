@@ -1,4 +1,4 @@
-import 'package:biblio/constants/colors_constants.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -6,14 +6,14 @@ class CountryDropdown extends StatefulWidget {
   const CountryDropdown({super.key});
 
   @override
-  _CountryDropdownState createState() => _CountryDropdownState();
+  State<CountryDropdown> createState() => _CountryDropdownState();
 }
 
 class _CountryDropdownState extends State<CountryDropdown> {
   String? _selectedCountry; // لتخزين الدولة المختارة
 
   // قائمة الدول
-  List<String> _countries = [
+  final List<String> _countries = [
     'مصر',
     'السعودية',
     'الإمارات',

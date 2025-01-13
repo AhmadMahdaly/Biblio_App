@@ -1,10 +1,10 @@
 import 'package:biblio/animations/animate_do.dart';
-import 'package:biblio/constants/colors_constants.dart';
-import 'package:biblio/screens/navigation_bar/pages/add_page.dart';
-import 'package:biblio/screens/navigation_bar/pages/home_page_screen.dart';
-import 'package:biblio/screens/navigation_bar/pages/more_page.dart';
-import 'package:biblio/screens/navigation_bar/pages/my_liberary_page.dart';
-import 'package:biblio/screens/navigation_bar/pages/order_page.dart';
+import 'package:biblio/screens/navigation_bar/pages/add_book_page/add_page.dart';
+import 'package:biblio/screens/navigation_bar/pages/home_page/home_page_screen.dart';
+import 'package:biblio/screens/navigation_bar/pages/more_page/more_page.dart';
+import 'package:biblio/screens/navigation_bar/pages/my_lib_page/my_library_page.dart';
+import 'package:biblio/screens/navigation_bar/pages/orders_page/order_page.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,7 +26,7 @@ class NavigationBarAppState extends State<NavigationBarApp> {
     const HomePage(),
     const OrderPage(),
     const AddPage(),
-    const MyLiberaryPage(),
+    const MyLibraryPage(),
     const MorePage(),
   ];
 
