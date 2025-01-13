@@ -1,4 +1,5 @@
 import 'package:biblio/screens/login/login_screen.dart';
+import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/terms_and_conditions_page.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
@@ -33,6 +34,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final formKey = GlobalKey<FormState>();
   bool isInAsyncCall = false;
   bool isShowPassword = true;
+  bool _isAgreed = false;
+  bool enabled = false;
 
   ///
   @override
@@ -190,6 +193,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: isShowPassword,
                     ),
 
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _isAgreed,
+                          onChanged: (value) {
+                            setState(() {
+                              enabled = value ?? false;
+                              _isAgreed = value ?? false;
+                            });
+                          },
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const TermsAndConditionsPage(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'أوافق على الشروط والأحكام',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     const H(h: 10),
                   ],
                 ),
@@ -205,86 +241,89 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             /// Sign up Button
             CustomButton(
+              isActive: enabled,
               text: 'إنشاء الحساب',
               padding: 16,
-              onTap: () async {
-                final email = emailController.text;
-                final userName = userNameController.text;
-                if (formKey.currentState!.validate()) {
-                  setState(() {
-                    isInAsyncCall = true;
-                  });
+              onTap: _isAgreed
+                  ? () async {
+                      final email = emailController.text;
+                      final userName = userNameController.text;
+                      if (formKey.currentState!.validate()) {
+                        setState(() {
+                          isInAsyncCall = true;
+                        });
 
-                  try {
-                    final response = await signUp(userName);
-                    if (response.user != null) {
-                      // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
-                      await supabase.from('users').insert({
-                        // ربط المستخدم باستخدام UID
-                        'id': response.user?.id,
-                        'username': userName,
-                        'email': email,
-                        'password': password,
-                      });
+                        try {
+                          final response = await signUp(userName);
+                          if (response.user != null) {
+                            // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
+                            await supabase.from('users').insert({
+                              // ربط المستخدم باستخدام UID
+                              'id': response.user?.id,
+                              'username': userName,
+                              'email': email,
+                              'password': password,
+                            });
+                          }
+                          showSnackBar(
+                            context,
+                            'تم التسجيل',
+                          );
+                          setState(() {
+                            isInAsyncCall = false;
+                            userId = response.user!.id;
+                          });
+                          await Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const SelectYourLocationScreen();
+                              },
+                            ),
+                          );
+                        } on AuthException catch (error) {
+                          setState(() {
+                            isInAsyncCall = false;
+                          });
+                          if (error.message == 'Invalid login credentials') {
+                            showSnackBar(
+                              context,
+                              'بيانات تسجيل الدخول غير صحيحة',
+                            );
+                          } else if (error.message == 'Email is not valid') {
+                            showSnackBar(
+                              context,
+                              'البريد الإلكتروني غير صالح',
+                            );
+                          } else if (error.message == 'Password is not valid') {
+                            showSnackBar(
+                              context,
+                              'كلمة المرور غير صالحة',
+                            );
+                          } else if (error.message == 'User not found') {
+                            showSnackBar(
+                              context,
+                              'المستخدم غير موجود',
+                            );
+                          } else if (error.message ==
+                              'Password should be at least 6 characters') {
+                            showSnackBar(
+                              context,
+                              'كلمة المرور ضعيفة',
+                            );
+                          }
+                        } catch (e) {
+                          setState(() {
+                            isInAsyncCall = false;
+                          });
+                          showSnackBar(
+                            context,
+                            'أوبس، هناك خطأ في التسجيل! ربما يكون هناك مشكلة في الإتصال.\n$e',
+                          );
+                        }
+                      }
                     }
-                    showSnackBar(
-                      context,
-                      'تم التسجيل',
-                    );
-                    setState(() {
-                      isInAsyncCall = false;
-                      userId = response.user!.id;
-                    });
-                    await Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const SelectYourLocationScreen();
-                        },
-                      ),
-                    );
-                  } on AuthException catch (error) {
-                    setState(() {
-                      isInAsyncCall = false;
-                    });
-                    if (error.message == 'Invalid login credentials') {
-                      showSnackBar(
-                        context,
-                        'بيانات تسجيل الدخول غير صحيحة',
-                      );
-                    } else if (error.message == 'Email is not valid') {
-                      showSnackBar(
-                        context,
-                        'البريد الإلكتروني غير صالح',
-                      );
-                    } else if (error.message == 'Password is not valid') {
-                      showSnackBar(
-                        context,
-                        'كلمة المرور غير صالحة',
-                      );
-                    } else if (error.message == 'User not found') {
-                      showSnackBar(
-                        context,
-                        'المستخدم غير موجود',
-                      );
-                    } else if (error.message ==
-                        'Password should be at least 6 characters') {
-                      showSnackBar(
-                        context,
-                        'كلمة المرور ضعيفة',
-                      );
-                    }
-                  } catch (e) {
-                    setState(() {
-                      isInAsyncCall = false;
-                    });
-                    showSnackBar(
-                      context,
-                      'أوبس، هناك خطأ في التسجيل! ربما يكون هناك مشكلة في الإتصال.\n$e',
-                    );
-                  }
-                }
-              },
+                  : () {},
             ),
 
             /// Login
