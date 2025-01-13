@@ -217,9 +217,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (response.user != null) {
                       // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
                       await supabase.from('users').insert({
-                        'id': response.user?.id, // ربط المستخدم باستخدام UID
+                        // ربط المستخدم باستخدام UID
+                        'id': response.user?.id,
                         'username': userName,
                         'email': email,
+                        'password': password,
                       });
                     }
                     showSnackBar(
