@@ -9,7 +9,7 @@ class CustomTextformfield extends StatelessWidget {
     this.obscureText = false,
     super.key,
     this.onChanged,
-    this.icon = const SizedBox(),
+    this.icon,
     this.validator,
     this.contentPadding = 12,
     this.controller,
@@ -18,7 +18,7 @@ class CustomTextformfield extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final void Function(String)? onChanged;
-  final Widget icon;
+  final Widget? icon;
   final String? Function(String?)? validator;
   final int contentPadding;
   final TextEditingController? controller;
