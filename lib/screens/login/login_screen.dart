@@ -1,6 +1,7 @@
 import 'package:biblio/screens/login/register_page.dart';
 import 'package:biblio/screens/login/widgets/forget_password_screen.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
+import 'package:biblio/utils/components/app_regex.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
@@ -108,8 +109,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       text: 'البريد الإلكتروني',
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'هذا الحقل مطلوب';
+                        if (!AppRegex.isEmailValid(
+                          emailController.text,
+                        )) {
+                          return 'هذا البريد الإلكتروني غير صالح';
                         }
                         return null;
                       },
@@ -131,8 +134,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     CustomTextformfield(
                       controller: passwordController,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'هذا الحقل مطلوب';
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.length < 6) {
+                          return 'كلمة المرور غير صالحة';
                         }
                         return null;
                       },

@@ -2,6 +2,7 @@ import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/terms_and_conditions_page.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/app_regex.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
@@ -143,8 +144,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       text: 'البريد الإلكتروني',
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'هذا الحقل مطلوب';
+                        if (!AppRegex.isEmailValid(
+                          emailController.text,
+                        )) {
+                          return 'هذا البريد الإلكتروني غير صالح';
                         }
                         return null;
                       },
@@ -166,8 +169,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     CustomTextformfield(
                       controller: passwordController,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'هذا الحقل مطلوب';
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.length < 6) {
+                          return 'كلمة المرور غير صالحة';
                         }
                         return null;
                       },
