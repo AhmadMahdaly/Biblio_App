@@ -14,7 +14,6 @@ class SignOutButton extends StatefulWidget {
 
 class _SignOutButtonState extends State<SignOutButton> {
   final SupabaseClient supabase = Supabase.instance.client;
-  String? userId; // ID المستخدم لتحديده بعد تسجيل الدخول
 
   @override
   Widget build(BuildContext context) {
