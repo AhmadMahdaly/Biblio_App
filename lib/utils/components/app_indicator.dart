@@ -14,7 +14,7 @@ class AppIndicator extends StatelessWidget {
     return Center(
       child: SpinKitWave(
         size: size.sp,
-        color: kMainColor,
+        color: kMainColor.withAlpha(25),
       ),
     );
   }

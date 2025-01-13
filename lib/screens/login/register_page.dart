@@ -47,7 +47,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return supabase.auth.signUp(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
-      data: {'name': userName},
+      data: {
+        'name': userName,
+        'password': password,
+      },
     );
   }
 
