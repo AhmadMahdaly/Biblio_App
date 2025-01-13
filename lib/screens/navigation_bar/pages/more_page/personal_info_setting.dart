@@ -1,5 +1,8 @@
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/title_form_add_book.dart';
+// ignore: unused_import
+import 'package:biblio/screens/onboard_screen.dart';
+import 'package:biblio/services/delete_user.dart';
 import 'package:biblio/services/upload_user_image.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
@@ -88,12 +91,13 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
       await supabase
           .from('users')
           .update({'username': newName}).eq('id', user.id);
-      await supabase
-          .from('users')
-          .update({'email': newEmail}).eq('id', user.id);
-      await supabase
-          .from('users')
-          .update({'password': newPassword}).eq('id', user.id);
+      await Supabase.instance.client.auth.updateUser(
+        UserAttributes(
+          email: newEmail,
+          password: newPassword,
+        ),
+      );
+
       setState(() {
         isInAsyncCall = true;
       });
@@ -131,6 +135,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
 
       child: Scaffold(
         appBar: AppBar(
+          /// Title
           title: Text(
             'تعديل البيانات الشخصية',
             style: TextStyle(
@@ -140,6 +145,8 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
               height: 1.71,
             ),
           ),
+
+          /// Leading
           leading: IconButton(
             onPressed: () {
               Navigator.pushAndRemoveUntil(
@@ -163,6 +170,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
           ),
           child: ListView(
             children: [
+              /// Upload user image
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -183,16 +191,22 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                 thickness: 1.sp,
                 height: 16.sp,
               ),
+
+              /// Name
               const TitleFormAddBook(title: 'الاسم'),
               CustomTextformfield(
                 controller: _nameController,
                 text: 'الاسم',
               ),
+
+              /// Email
               const TitleFormAddBook(title: 'البريد الإلكتروني'),
               CustomTextformfield(
                 controller: _emailController,
                 text: 'البريد الإلكتروني',
               ),
+
+              /// Password
               const TitleFormAddBook(title: 'كلمة المرور'),
               CustomTextformfield(
                 controller: _passwordController,
@@ -217,9 +231,17 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                 ),
                 obscureText: isShowPassword,
               ),
+
+              /// Delete Account
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 24.sp),
+                child: const DeleteUser(),
+              ),
             ],
           ),
         ),
+
+        /// Save
         bottomNavigationBar: Padding(
           padding: EdgeInsets.symmetric(vertical: 24.sp),
           child: CustomButton(
