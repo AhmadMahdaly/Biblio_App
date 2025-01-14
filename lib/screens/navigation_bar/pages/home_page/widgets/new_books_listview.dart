@@ -25,7 +25,7 @@ class _NewBooksListviewState extends State<NewBooksListview> {
       padding: EdgeInsets.symmetric(horizontal: 8.sp),
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
-        return BookItem(
+        return HomeBookItem(
           book: book,
         );
       },

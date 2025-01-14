@@ -4,8 +4,8 @@ import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class BookItem extends StatelessWidget {
-  const BookItem({
+class HomeBookItem extends StatelessWidget {
+  const HomeBookItem({
     required this.book,
     super.key,
   });

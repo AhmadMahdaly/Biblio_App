@@ -1,6 +1,7 @@
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/get_user_image.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/show_email.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/show_user_name.dart';
+import 'package:biblio/screens/navigation_bar/pages/my_lib_page/my_library_page.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class PersonalCard extends StatelessWidget {
       alignment: Alignment.center,
       margin: EdgeInsets.all(16.sp),
       width: MediaQuery.of(context).size.width,
-      height: 98,
+      height: 102,
       decoration: BoxDecoration(
         color: const Color(0xFFF7F7F7),
         borderRadius: borderRadius(),
@@ -92,11 +93,20 @@ class PersonalCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(12.sp),
-                child: RotatedBox(
-                  quarterTurns: 2,
-                  child: Icon(
+              RotatedBox(
+                quarterTurns: 2,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const MyLibraryPage();
+                        },
+                      ),
+                    );
+                  },
+                  icon: Icon(
                     Icons.arrow_back_rounded,
                     size: 16.sp,
                     color: kMainColor,
