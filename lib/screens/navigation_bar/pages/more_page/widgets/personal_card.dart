@@ -20,7 +20,7 @@ class PersonalCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: 102,
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F7F7),
+        color: const Color(0xFFECECEC),
         borderRadius: borderRadius(),
       ),
       child: Column(

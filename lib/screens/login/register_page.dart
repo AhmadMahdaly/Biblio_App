@@ -1,4 +1,5 @@
 import 'package:biblio/screens/login/login_screen.dart';
+import 'package:biblio/screens/login/services/sign_up.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/terms_and_conditions_page.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
@@ -23,7 +24,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final SupabaseClient supabase = Supabase.instance.client;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final userNameController = TextEditingController();
@@ -44,18 +44,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
-  }
-
-  /// Sign Up
-  Future<AuthResponse> signUp(String userName) {
-    return supabase.auth.signUp(
-      email: emailController.text.trim(),
-      password: passwordController.text.trim(),
-      data: {
-        'name': userName,
-        'password': password,
-      },
-    );
   }
 
   @override
@@ -201,6 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Row(
                       children: [
                         Checkbox(
+                          activeColor: kMainColor,
                           value: _isAgreed,
                           onChanged: (value) {
                             setState(() {
@@ -224,7 +213,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               'أوافق على الشروط والأحكام',
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
-                                color: Colors.blue,
+                                decorationColor: kMainColor,
+                                color: kMainColor,
                               ),
                             ),
                           ),
@@ -253,13 +243,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ? () async {
                       final email = emailController.text;
                       final userName = userNameController.text;
+                      final password = passwordController.text;
                       if (formKey.currentState!.validate()) {
                         setState(() {
                           isInAsyncCall = true;
                         });
 
                         try {
-                          final response = await signUp(userName);
+                          final response = await signUp(
+                            userName,
+                            password,
+                            emailController,
+                            passwordController,
+                          );
                           if (response.user != null) {
                             // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
                             await supabase.from('users').insert({
@@ -269,15 +265,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               'email': email,
                               'password': password,
                             });
+                            userId = response.user!.id;
                           }
+                          setState(() {
+                            isInAsyncCall = false;
+                          });
                           showSnackBar(
                             context,
                             'تم التسجيل',
                           );
-                          setState(() {
-                            isInAsyncCall = false;
-                            userId = response.user!.id;
-                          });
+
                           await Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

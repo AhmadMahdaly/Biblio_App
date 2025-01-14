@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextformfield extends StatelessWidget {
   const CustomTextformfield({
-    required this.text,
+    this.text,
     this.keyboardType,
     this.obscureText = false,
     super.key,
@@ -14,7 +14,7 @@ class CustomTextformfield extends StatelessWidget {
     this.contentPadding = 12,
     this.controller,
   });
-  final String text;
+  final String? text;
   final TextInputType? keyboardType;
   final bool obscureText;
   final void Function(String)? onChanged;

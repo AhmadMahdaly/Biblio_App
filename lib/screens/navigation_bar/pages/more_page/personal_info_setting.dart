@@ -7,7 +7,6 @@ import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -27,15 +26,6 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
   bool isInAsyncCall = false;
   bool isShowPassword = true;
 
-  ///
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
   Future<void> _updateUserData() async {
     final supabase = Supabase.instance.client;
     final user = supabase.auth.currentUser;
@@ -44,49 +34,82 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
     });
     if (user == null) {
       setState(() {
-        isInAsyncCall = true;
+        isInAsyncCall = false;
       });
-      if (kDebugMode) {
-        print('المستخدم غير مسجل الدخول.');
-      }
+      showSnackBar(context, 'المستخدم غير موجود');
       return;
     }
 
     var newName = _nameController.text.trim();
     var newEmail = _emailController.text.trim();
     var newPassword = _passwordController.text.trim();
+
+    ///
     if (newName.isEmpty || newName == null) {
       final response = await supabase
-          .from('users') // اسم الجدول
-          .select('username') // العمود المطلوب
-          .eq('id', user.id) // البحث باستخدام معرف المستخدم
-          .single(); // استرجاع صف واحد فقط
+          .from('users')
 
+          /// اسم الجدول
+          .select('username')
+
+          /// العمود المطلوب
+          .eq('id', user.id)
+
+          /// البحث باستخدام معرف المستخدم
+          .single();
+
+      /// استرجاع صف واحد فقط
+
+      final name = response['username'] as String;
+      if (name != null) {
+        _nameController.text = name;
+
+        /// عرض الاسم الحالي في TextField
+      }
       newName = response['username'] as String;
     }
+
+    ///
     if (newEmail.isEmpty || newEmail == null) {
       final response = await supabase
-          .from('users') // اسم الجدول
-          .select('email') // العمود المطلوب
-          .eq('id', user.id) // البحث باستخدام معرف المستخدم
-          .single(); // استرجاع صف واحد فقط
+          .from('users')
+
+          /// اسم الجدول
+          .select('email')
+
+          /// العمود المطلوب
+          .eq('id', user.id)
+
+          /// البحث باستخدام معرف المستخدم
+          .single();
+
+      /// استرجاع صف واحد فقط
 
       newEmail = response['email'] as String;
     }
+
+    ///
     if (newPassword.isEmpty || newPassword == null) {
       final response = await supabase
-          .from('users') // اسم الجدول
-          .select('password') // العمود المطلوب
-          .eq('id', user.id) // البحث باستخدام معرف المستخدم
-          .single(); // استرجاع صف واحد فقط
+          .from('users')
+
+          /// اسم الجدول
+          .select('password')
+
+          /// العمود المطلوب
+          .eq('id', user.id)
+
+          /// البحث باستخدام معرف المستخدم
+          .single();
+
+      /// استرجاع صف واحد فقط
 
       newPassword = response['password'] as String;
     }
 
     try {
-      // تحديث الاسم في قاعدة البيانات
-      // final response =
-      await supabase
+      /// تحديث الاسم في قاعدة البيانات
+      final response = await supabase
           .from('users')
           .update({'username': newName}).eq('id', user.id);
       await Supabase.instance.client.auth.updateUser(
@@ -97,11 +120,11 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
       );
 
       setState(() {
-        isInAsyncCall = true;
+        isInAsyncCall = false;
       });
-      // if (response.error != null) {
-      //   throw Exception('خطأ أثناء تحديث الاسم: ${response.error!.message}');
-      // }
+      if (response == null) {
+        showSnackBar(context, 'خطأ أثناء التحديث');
+      }
       showSnackBar(context, 'تم الحفظ');
       await Navigator.pushAndRemoveUntil(
         context,
@@ -111,14 +134,21 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
         (route) => false,
       );
     } catch (e) {
-      if (kDebugMode) {
-        print('حدث خطأ: $e');
-      }
       setState(() {
-        isInAsyncCall = true;
+        isInAsyncCall = false;
       });
-      showSnackBar(context, 'هناك خطأ، من فضلك راجع البيانات!');
+
+      showSnackBar(context, '/n$eهناك حدث خطأ، من فضلك راجع البيانات!');
     }
+  }
+
+  ///
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -194,7 +224,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
               const TitleFormAddBook(title: 'الاسم'),
               CustomTextformfield(
                 controller: _nameController,
-                text: 'الاسم',
+                text: _nameController.text,
               ),
 
               /// Email
@@ -208,7 +238,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
               const TitleFormAddBook(title: 'كلمة المرور'),
               CustomTextformfield(
                 controller: _passwordController,
-                text: '*********',
+                // text: '*********',
                 icon: IconButton(
                   onPressed: () => setState(
                     () {

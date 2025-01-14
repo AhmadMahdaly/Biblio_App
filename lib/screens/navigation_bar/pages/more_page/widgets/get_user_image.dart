@@ -13,14 +13,7 @@ class GetUserImage extends StatefulWidget {
 }
 
 class _GetUserImageState extends State<GetUserImage> {
-  @override
-  void initState() {
-    super.initState();
-    getUserPhoto(); // استرجاع الصورة عند تحميل الصفحة
-  }
-
   final int size = 32;
-
   final int indicatorSize = 10;
 
   @override
@@ -33,7 +26,7 @@ class _GetUserImageState extends State<GetUserImage> {
             backgroundColor: kDisableButtonColor,
             radius: size / 2.sp,
             child: FutureBuilder<String?>(
-              future: getUserPhoto(),
+              future: getUserPhoto(context),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(

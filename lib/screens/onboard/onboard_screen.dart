@@ -1,6 +1,5 @@
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/login/register_page.dart';
-import 'package:biblio/screens/select_your_location_screen.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/width.dart';
@@ -90,30 +89,7 @@ class OnboardScreen extends StatelessWidget {
           const H(h: 10),
 
           /// To HomePage as visitor
-          InkWell(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const SelectYourLocationScreen();
-                  },
-                ),
-              );
-            },
-            child: Text(
-              'الدخول كزائر',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: const Color(0xFF3E5879),
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w800,
-                decoration: TextDecoration.underline,
-                decorationColor: kMainColor,
-                height: 1.35.sp,
-              ),
-            ),
-          ),
+          // const SignAsVisitor(),
           const H(h: 16),
         ],
       ),

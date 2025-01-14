@@ -1,5 +1,5 @@
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
-import 'package:biblio/screens/onboard_screen.dart';
+import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

@@ -48,3 +48,4 @@ app.*.map.json
 android/app/google-services.json
 api_key.dart
 .env
+delete_user.dart

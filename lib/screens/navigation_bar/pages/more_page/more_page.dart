@@ -11,11 +11,11 @@ class MorePage extends StatefulWidget {
 }
 
 class _MorePageState extends State<MorePage> {
-  final supabase = Supabase.instance.client;
-
   @override
   Widget build(BuildContext context) {
-    final user = supabase.auth.currentUser;
-    return user == null ? const MoreWithoutLogin() : const MoreWithLogin();
+    final user = Supabase.instance.client.auth.currentUser;
+    return user == null || user.isAnonymous
+        ? const MoreWithoutLogin()
+        : const MoreWithLogin();
   }
 }

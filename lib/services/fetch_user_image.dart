@@ -1,40 +1,43 @@
-import 'package:flutter/foundation.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
+import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 ///
 /// Get user photo
-Future<String?> getUserPhoto() async {
+Future<String?> getUserPhoto(BuildContext context) async {
   final supabase = Supabase.instance.client;
 
   final user = supabase.auth.currentUser;
   if (user == null) {
-    if (kDebugMode) {
-      print('المستخدم غير مسجل الدخول.');
-    }
+    showSnackBar(context, 'يوجد صعوبة في الوصول للمستخدم المُسجل.');
+
     return null;
   }
 
   try {
-    // استرجاع رابط الصورة من قاعدة البيانات
+    /// استرجاع رابط الصورة من قاعدة البيانات
     final response = await supabase
         .from('users')
-        .select('image') // تحديد الحقل المطلوب
-        .eq('id', user.id)
-        .single(); // جلب سجل واحد فقط
+        .select('image')
 
-    // التحقق من وجود بيانات
+        /// تحديد الحقل المطلوب
+        .eq('id', user.id)
+        .single();
+
+    /// جلب سجل واحد فقط
+
+    /// التحقق من وجود بيانات
     if (response['image'] == null) {
-      throw Exception('لم يتم العثور على الصورة للمستخدم.');
+      showSnackBar(context, 'لم يتم العثور على الصورة للمستخدم.');
     }
 
-    // استخراج رابط الصورة
+    /// استخراج رابط الصورة
     final photoUrl = response['image'] as String;
 
     return photoUrl;
   } catch (e) {
-    if (kDebugMode) {
-      print('حدث خطأ: $e');
-    }
+    // showSnackBar(context, 'جاري العمل على حفظ الصورة!');
+// 'حدث خطأ: $e'
     return null;
   }
 }

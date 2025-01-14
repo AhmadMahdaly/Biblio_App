@@ -1,7 +1,7 @@
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/category_for_more.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/faq_page.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/terms_and_conditions_page.dart';
-import 'package:biblio/screens/onboard_screen.dart';
+import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:flutter/material.dart';

@@ -2,7 +2,7 @@ import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/login/register_page.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/add_page.dart';
-import 'package:biblio/screens/onboard_screen.dart';
+import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/screens/splash_screen.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:easy_localization/easy_localization.dart';

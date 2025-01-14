@@ -142,6 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         return null;
                       },
                       text: 'كلمة المرور',
+
+                      /// Check show password
                       icon: IconButton(
                         onPressed: () => setState(() {
                           isShowPassword = !isShowPassword;
