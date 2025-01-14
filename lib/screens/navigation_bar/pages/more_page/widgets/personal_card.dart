@@ -18,23 +18,26 @@ class PersonalCard extends StatelessWidget {
       alignment: Alignment.center,
       margin: EdgeInsets.all(16.sp),
       width: MediaQuery.of(context).size.width,
-      height: 102,
+      height: 120.sp,
       decoration: BoxDecoration(
         color: const Color(0xFFECECEC),
         borderRadius: borderRadius(),
       ),
       child: Column(
+        spacing: 6.sp,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ///
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.all(8.sp),
+                padding: EdgeInsets.symmetric(horizontal: 12.sp),
 
                 /// User Image
-                child: const GetUserImage(),
+                child: const SizedBox(
+                  child: GetUserImage(),
+                ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,68 +55,60 @@ class PersonalCard extends StatelessWidget {
           ),
           Divider(
             thickness: 0.5.sp,
-            height: 0,
+            height: 4.sp,
             indent: 12.sp,
             endIndent: 12.sp,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              /// Qty of Books
-              Container(
-                width: 91,
-                height: 24,
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(
-                  right: 12.sp,
-                  left: 12.sp,
-                ),
-                decoration: BoxDecoration(
-                  color: kMainColor,
-                  borderRadius: borderRadius(),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 5.sp,
-                  children: [
-                    Icon(
-                      Icons.menu_book_outlined,
-                      color: Colors.white,
-                      size: 16.sp,
-                    ),
-                    Text(
-                      '2 كتاب',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w500,
-                        height: 1.30,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              RotatedBox(
-                quarterTurns: 2,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const MyLibraryPage();
-                        },
-                      ),
-                    );
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const MyLibraryPage();
                   },
-                  icon: Icon(
-                    Icons.arrow_back_rounded,
-                    size: 16.sp,
+                ),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                /// Qty of Books
+                Container(
+                  width: 100.sp,
+                  height: 24.sp,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(
+                    right: 12.sp,
+                    left: 12.sp,
+                  ),
+                  decoration: BoxDecoration(
                     color: kMainColor,
+                    borderRadius: borderRadius(),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 5.sp,
+                    children: [
+                      Icon(
+                        Icons.menu_book_outlined,
+                        color: Colors.white,
+                        size: 16.sp,
+                      ),
+                      Text(
+                        '2 كتاب',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          height: 1.30,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

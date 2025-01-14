@@ -1,4 +1,4 @@
-import 'package:biblio/screens/navigation_bar/pages/add_book_page/add_page.dart';
+import 'package:biblio/screens/navigation_bar/pages/add_book_page/add_book.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,6 @@ class EmptyLibrary extends StatelessWidget {
               color: kTextColor,
               fontSize: 16.sp,
               fontWeight: FontWeight.w500,
-              height: 1.50.sp,
             ),
           ),
           CustomButton(
@@ -32,7 +31,7 @@ class EmptyLibrary extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddPage(),
+                  builder: (context) => const AddBook(),
                 ),
               );
             },

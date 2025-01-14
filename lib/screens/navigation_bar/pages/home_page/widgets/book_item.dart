@@ -23,7 +23,7 @@ class HomeBookItem extends StatelessWidget {
           height: 220.sp,
           decoration: BoxDecoration(
             image: DecorationImage(
-              scale: 0.9,
+              scale: 0.9.sp,
               fit: BoxFit.none,
 
               /// Book Cover

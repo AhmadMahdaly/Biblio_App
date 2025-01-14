@@ -1,3 +1,4 @@
+import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/width.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class CategoryForMore extends StatelessWidget {
             width: 0.50.sp,
             color: const Color(0xFFF7F7F7),
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: borderRadius(),
         ),
         shadows: const [
           BoxShadow(
@@ -54,7 +55,6 @@ class CategoryForMore extends StatelessWidget {
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
                 height: 1.sp,
-                letterSpacing: 0.14.sp,
               ),
             ),
           ],

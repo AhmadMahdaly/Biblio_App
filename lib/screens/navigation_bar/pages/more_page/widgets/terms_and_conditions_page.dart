@@ -37,7 +37,6 @@ class TermsAndConditionsPage extends StatelessWidget {
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
             height: 1.sp,
-            letterSpacing: 0.14.sp,
           ),
         ),
       ),

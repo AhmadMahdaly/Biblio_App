@@ -12,7 +12,7 @@ class ShowUserName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 20.sp,
+      height: 25.sp,
       child: FutureBuilder<dynamic>(
         future: fetchUserName(context),
         builder: (context, snapshot) {

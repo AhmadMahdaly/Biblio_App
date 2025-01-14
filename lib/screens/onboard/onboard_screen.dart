@@ -62,7 +62,6 @@ class OnboardScreen extends StatelessWidget {
                 color: kTextColor,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
-                height: 1.5.sp,
               ),
             ),
           ),

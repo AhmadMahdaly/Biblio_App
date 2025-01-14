@@ -13,7 +13,7 @@ class GetUserImage extends StatefulWidget {
 }
 
 class _GetUserImageState extends State<GetUserImage> {
-  final int size = 32;
+  final int size = 50;
   final int indicatorSize = 10;
 
   @override
@@ -49,6 +49,8 @@ class _GetUserImageState extends State<GetUserImage> {
 
                 return Center(
                   child: Container(
+                    width: size.sp,
+                    height: size.sp,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(320),

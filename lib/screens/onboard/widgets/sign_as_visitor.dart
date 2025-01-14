@@ -30,7 +30,6 @@ class SignAsVisitor extends StatelessWidget {
           fontWeight: FontWeight.w800,
           decoration: TextDecoration.underline,
           decorationColor: kMainColor,
-          height: 1.35.sp,
         ),
       ),
     );

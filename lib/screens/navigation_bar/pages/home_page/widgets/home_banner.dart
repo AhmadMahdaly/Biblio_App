@@ -89,7 +89,6 @@ class HomeBanner extends StatelessWidget {
                       color: kMainColor,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      letterSpacing: 0.10,
                     ),
                   ),
                 ),
