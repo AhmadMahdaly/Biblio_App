@@ -1,7 +1,10 @@
 import 'package:biblio/screens/navigation_bar/pages/home_page/widgets/book_item.dart';
+import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NewBooksListview extends StatefulWidget {
@@ -22,10 +25,24 @@ class _NewBooksListviewState extends State<NewBooksListview> {
     _fetchBooks();
   }
 
+  final userImage = Supabase.instance.client
+      .from('users')
+      .select('image')
+      .eq('id', Supabase.instance.client.auth.currentUser!.id)
+      .toString();
+
+  final userName = Supabase.instance.client
+      .from('users')
+      .select('username')
+      .eq('id', Supabase.instance.client.auth.currentUser!.id)
+      .toString();
+
   Future<void> _fetchBooks() async {
     setState(() {
       isLoading = true;
     });
+
+    // await Future.delayed(const Duration(seconds: 2),);
 
     try {
       final response = await supabase
@@ -49,17 +66,24 @@ class _NewBooksListviewState extends State<NewBooksListview> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 8.sp),
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        final book = books[index];
+    return ModalProgressHUD(
+      color: kScaffoldBackgroundColor,
+      progressIndicator: const AppIndicator(),
+      inAsyncCall: isLoading,
+      child: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 8.sp),
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          final book = books[index];
 
-        return HomeBookItem(
-          book: book,
-        );
-      },
-      itemCount: books.length,
+          return HomeBookItem(
+            book: book,
+            userName: userName,
+            userImage: userImage,
+          );
+        },
+        itemCount: books.length,
+      ),
     );
   }
 }

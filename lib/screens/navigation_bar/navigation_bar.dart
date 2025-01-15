@@ -177,7 +177,7 @@ class NavigationBarAppState extends State<NavigationBarApp> {
                                   BlendMode.srcIn,
                                 ),
                               ),
-                              label: 'مكتبتي',
+                              label: 'قائمتي',
                             ),
                             BottomNavigationBarItem(
                               icon: SvgPicture.asset(

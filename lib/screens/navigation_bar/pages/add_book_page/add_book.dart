@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:biblio/screens/my_lib_page/my_library_page.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/add_book_image.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/title_form_add_book.dart';
@@ -147,14 +146,7 @@ class _AddBookState extends State<AddBook> {
         isLoading = false;
       });
       showSnackBar(context, 'تم إضافة الكتاب بنجاح!');
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return const MyLibraryPage();
-          },
-        ),
-      );
+
       // Navigator.pop(context);
     } catch (e) {
       setState(() {
@@ -257,7 +249,10 @@ class _AddBookState extends State<AddBook> {
         padding: EdgeInsets.all(16.sp),
         child: CustomButton(
           text: 'إضافة الكتاب',
-          onTap: _uploadBook,
+          onTap: () async {
+            await _uploadBook();
+            await Navigator.pushReplacementNamed(context, NavigationBarApp.id);
+          },
         ),
       ),
     );

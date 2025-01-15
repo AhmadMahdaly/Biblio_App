@@ -6,33 +6,18 @@ import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-class HomeBookItem extends StatefulWidget {
+class HomeBookItem extends StatelessWidget {
   const HomeBookItem({
     required this.book,
+    required this.userImage,
+    required this.userName,
     super.key,
   });
 
   final Map<String, dynamic> book;
-
-  @override
-  State<HomeBookItem> createState() => _HomeBookItemState();
-}
-
-class _HomeBookItemState extends State<HomeBookItem> {
-  final userImage = Supabase.instance.client
-      .from('users')
-      .select('image')
-      .eq('id', Supabase.instance.client.auth.currentUser!.id)
-      .toString();
-
-  final userName = Supabase.instance.client
-      .from('users')
-      .select('username')
-      .eq('id', Supabase.instance.client.auth.currentUser!.id)
-      .toString();
-
+  final String userImage;
+  final String userName;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -51,7 +36,7 @@ class _HomeBookItemState extends State<HomeBookItem> {
 
               /// Book Cover
               image: NetworkImage(
-                widget.book['cover_image_url'].toString(),
+                book['cover_image_url'].toString(),
               ),
             ),
             borderRadius: BorderRadius.circular(20.sp),
@@ -164,7 +149,7 @@ class _HomeBookItemState extends State<HomeBookItem> {
           child: SizedBox(
             width: 140.sp,
             child: Text(
-              widget.book['title'].toString(),
+              book['title'].toString(),
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: const Color(0xFF333333),
@@ -181,7 +166,7 @@ class _HomeBookItemState extends State<HomeBookItem> {
           child: SizedBox(
             width: 140.sp,
             child: Text(
-              widget.book['author'].toString(),
+              book['author'].toString(),
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: const Color(0xFF969697),
