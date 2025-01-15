@@ -24,7 +24,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
   void initState() {
     super.initState();
     isInAsyncCall = true;
-    _updateUserData();
+    _fetchUserData();
     waitToLoad();
   }
 
@@ -40,104 +40,90 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
   bool isInAsyncCall = false;
   bool isShowPassword = true;
 
-  Future<void> _updateUserData() async {
+  Future<void> _fetchUserData() async {
     final supabase = Supabase.instance.client;
     final user = supabase.auth.currentUser;
     setState(() {
       isInAsyncCall = true;
     });
-    if (user == null) {
-      setState(() {
-        isInAsyncCall = false;
-      });
-      showSnackBar(context, 'المستخدم غير موجود');
-      return;
-    }
-    var newName = _nameController.text.trim();
-    var newEmail = _emailController.text.trim();
-    var newPassword = _passwordController.text.trim();
-
-    ///
-    if (newName.isEmpty || newName == null) {
-      final response = await supabase
-          .from('users')
-          .select('username')
-          .eq('id', user.id)
-          .single();
-      final name = response['username'] as String;
-
-      /// لإظهار الداتا
-      if (name != null) {
-        _nameController.text = name;
-      }
-      newName = response['username'] as String;
-      setState(() {
-        isInAsyncCall = false;
-      });
-    }
-
-    ///
-    if (newEmail.isEmpty || newEmail == null) {
-      final response = await supabase
-          .from('users')
-          .select('email')
-          .eq('id', user.id)
-          .single();
-      final email = response['email'] as String;
-
-      /// لإظهار الداتا
-      if (email != null) {
-        _emailController.text = email;
-      }
-      newEmail = response['email'] as String;
-      setState(() {
-        isInAsyncCall = false;
-      });
-    }
-
-    ///
-    if (newPassword.isEmpty || newPassword == null) {
-      final response = await supabase
-          .from('users')
-          .select('password')
-          .eq('id', user.id)
-          .single();
-      newPassword = response['password'] as String;
-      setState(() {
-        isInAsyncCall = false;
-      });
-    }
     try {
+      if (user == null) {
+        setState(() {
+          isInAsyncCall = false;
+        });
+        showSnackBar(context, 'المستخدم غير موجود');
+        return;
+      }
+      var newName = _nameController.text.trim();
+      var newEmail = _emailController.text.trim();
+      final newPassword = _passwordController.text.trim();
+
+      ///
+      if (newName.isEmpty || newName == null) {
+        final response = await supabase
+            .from('users')
+            .select('username')
+            .eq('id', user.id)
+            .single();
+        final name = response['username'] as String;
+
+        /// لإظهار الداتا
+        _nameController.text = name;
+        newName = response['username'] as String;
+      }
+
+      ///
+      ///
+      ///
+      if (newEmail.isEmpty || newEmail == null) {
+        final response = await supabase
+            .from('users')
+            .select('email')
+            .eq('id', user.id)
+            .single();
+        final email = response['email'] as String;
+
+        /// لإظهار الداتا
+        if (email != null) {
+          _emailController.text = email;
+        }
+        newEmail = response['email'] as String;
+      }
+
+      ///
+
       /// تحديث الاسم في قاعدة البيانات
-      final response = await supabase
+      await supabase
           .from('users')
           .update({'username': newName}).eq('id', user.id);
-      await Supabase.instance.client.auth.updateUser(
-        UserAttributes(
-          email: newEmail,
-          password: newPassword,
-        ),
-      );
+      if (newPassword.isEmpty || newPassword == null) {
+      } else {
+        await Supabase.instance.client.auth.updateUser(
+          UserAttributes(
+            email: newEmail,
+          ),
+        );
+        showSnackBar(
+          context,
+          'تحقق من صندوق بريدك الإلكتروني لإتمام عملية تغيير عنوان البريد المسجل',
+        );
+      }
+      if (newPassword.isEmpty || newPassword == null) {
+      } else {
+        await Supabase.instance.client.auth.updateUser(
+          UserAttributes(
+            password: newPassword,
+          ),
+        );
+      }
       setState(() {
         isInAsyncCall = false;
       });
-      if (response == null) {
-        showSnackBar(context, 'خطأ أثناء التحديث');
-      }
-      showSnackBar(context, 'تم الحفظ');
-      await Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const NavigationBarApp(),
-        ),
-        (route) => false,
-      );
     } catch (e) {
       setState(() {
         isInAsyncCall = false;
       });
-
-      showSnackBar(context, 'هناك حدث خطأ، من فضلك راجع البيانات!');
+      showSnackBar(context, e.toString());
     }
   }
 
@@ -274,7 +260,18 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
           child: CustomButton(
             padding: 16,
             text: 'حفظ',
-            onTap: _updateUserData,
+            onTap: () async {
+              await _fetchUserData();
+              showSnackBar(context, 'تم الحفظ');
+
+              await Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NavigationBarApp(),
+                ),
+                (route) => false,
+              );
+            },
           ),
         ),
       ),

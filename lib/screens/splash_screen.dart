@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     // This is setting the time for disappeare //
-    Future.delayed(const Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
             const H(h: 10),
             Text(
-              'Biblio',
+              'BookLink',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 40.sp,

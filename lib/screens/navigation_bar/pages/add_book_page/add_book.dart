@@ -147,7 +147,7 @@ class _AddBookState extends State<AddBook> {
         isLoading = false;
       });
       showSnackBar(context, 'تم إضافة الكتاب بنجاح!');
-      await Navigator.pushReplacement(
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) {
