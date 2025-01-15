@@ -51,6 +51,7 @@ flutter:
     - assets/svg/
     - assets/icons/
     - .env
+    - shorebird.yaml
 
   fonts:
     - family: Avenir Arabic
