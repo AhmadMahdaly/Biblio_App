@@ -71,7 +71,6 @@ class PersonalCard extends StatelessWidget {
               );
             },
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 /// Qty of Books
                 Container(

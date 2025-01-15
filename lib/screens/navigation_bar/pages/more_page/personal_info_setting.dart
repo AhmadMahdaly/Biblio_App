@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/title_form_add_book.dart';
+import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/get_user_image.dart';
 import 'package:biblio/services/delete_user.dart';
-import 'package:biblio/services/upload_user_image.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
@@ -9,6 +11,8 @@ import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -32,6 +36,54 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
     await Future.delayed(
       const Duration(seconds: 2),
     );
+  }
+
+  File? userImage;
+
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        userImage = File(pickedFile.path);
+      });
+    }
+    showSnackBar(context, 'يفضل ألا يزيد حجم الصور عن 1 ميجابايت');
+  }
+
+  Future<void> _uploadImage() async {
+    if (userImage == null) {
+      return;
+    }
+    try {
+      setState(() {
+        isInAsyncCall = true;
+      });
+
+      ///
+      /// رفع الصورة إلى Supabase Storage
+      final fileName = 'books/${DateTime.now().toIso8601String()}';
+      // ignore: unused_local_variable
+      final storageResponse = await Supabase.instance.client.storage
+          .from('user-photos')
+          .upload(fileName, userImage!);
+      final imageUrl = Supabase.instance.client.storage
+          .from('user-photos')
+          .getPublicUrl(fileName);
+
+      /// حفظ رابط الصورة في جدول users
+      await Supabase.instance.client.from('users').update({
+        'image': imageUrl,
+      }).eq('id', Supabase.instance.client.auth.currentUser!.id);
+      setState(() {
+        isInAsyncCall = false;
+      });
+    } catch (e) {
+      setState(() {
+        isInAsyncCall = false;
+      });
+      showSnackBar(context, 'يوجد خطأ: $e');
+    }
   }
 
   final TextEditingController _nameController = TextEditingController();
@@ -188,14 +240,32 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const TitleFormAddBook(title: 'الصورة الشخصية'),
-                  IconButton(
-                    onPressed: () {
-                      uploadUserPhoto(context);
-                    },
-                    icon: Icon(
-                      Icons.upload,
-                      size: 24.sp,
-                      color: kMainColor,
+                  InkWell(
+                    onTap: _pickImage,
+                    child: Container(
+                      clipBehavior: Clip.antiAlias,
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.symmetric(horizontal: 16.sp),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFECECEC),
+                        border: DashedBorder.fromBorderSide(
+                          dashLength: 3,
+                          side: BorderSide(
+                            color: kMainColor,
+                          ),
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(320)),
+                      ),
+                      child: userImage == null
+                          ? const GetUserImage()
+                          : CircleAvatar(
+                              backgroundColor: kDisableButtonColor,
+                              radius: 25.sp,
+                              child: Image.file(
+                                userImage!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                     ),
                   ),
                 ],
@@ -261,6 +331,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
             padding: 16,
             text: 'حفظ',
             onTap: () async {
+              await _uploadImage();
               await _fetchUserData();
               showSnackBar(context, 'تم الحفظ');
 
