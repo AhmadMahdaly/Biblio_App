@@ -27,3 +27,5 @@ void main() async {
     ),
   );
 }
+
+/// shorebird patch --platforms=android --release-version=1.0.0+1
