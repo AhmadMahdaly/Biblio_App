@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
+import 'package:biblio/screens/navigation_bar/pages/add_book_page/models/book_model.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/add_book_image.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/title_form_add_book.dart';
-import 'package:biblio/screens/navigation_bar/pages/home_page/models/book_model.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
@@ -40,19 +40,19 @@ class _AddBookState extends State<AddBook> {
   /// Pick 1st image
   Future<void> _pickImage() async {
     final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       setState(() {
         _coverImage = File(pickedFile.path);
       });
     }
-    showSnackBar(context, 'يفضل ألا يزيد حجم الصور عن 1 ميجابايت');
+    showSnackBar(context, 'لا يمكن أن يزيد حجم الصور عن 1 ميجابايت');
   }
 
   /// Pick 2nd image
   Future<void> _pickImageI() async {
     final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       setState(() {
         _coverImageI = File(pickedFile.path);
@@ -75,12 +75,13 @@ class _AddBookState extends State<AddBook> {
 
   /// Upload book
   Future<void> _uploadBook() async {
-    if (_coverImage == null ||
+    if (
+        // _coverImage == null  ||
         _titleController.text.isEmpty ||
-        _authorController.text.isEmpty ||
-        _categoryController.text.isEmpty ||
-        _conditionController.text.isEmpty ||
-        _offerTypeController.text.isEmpty) {
+            _authorController.text.isEmpty ||
+            _categoryController.text.isEmpty ||
+            _conditionController.text.isEmpty ||
+            _offerTypeController.text.isEmpty) {
       showSnackBar(context, 'من فضلك أدخل البيانات المطلوبة');
       return;
     }
@@ -123,6 +124,21 @@ class _AddBookState extends State<AddBook> {
       final imageUrlII =
           supabase.storage.from('book_covers').getPublicUrl(fileNameII);
 
+      // final userName
+      final response = await supabase
+          .from('users')
+          .select('username')
+          .eq('id', Supabase.instance.client.auth.currentUser!.id)
+          .single();
+      final userName = response['username'];
+
+      final userImageResponse = await supabase
+          .from('users')
+          .select('image')
+          .eq('id', Supabase.instance.client.auth.currentUser!.id)
+          .single();
+      final userImage = userImageResponse['image'];
+
       final book = BookModel(
         coverImageUrlI: imageUrlI,
         coverImageUrlII: imageUrlII,
@@ -134,6 +150,8 @@ class _AddBookState extends State<AddBook> {
         description: _descriptionController.text,
         condition: _conditionController.text,
         offerType: _offerTypeController.text,
+        userName: userName.toString(),
+        userImage: userImage.toString(),
       );
 
       // إضافة بيانات الكتاب إلى الجدول
@@ -141,12 +159,15 @@ class _AddBookState extends State<AddBook> {
       // final response =
       await supabase.from('books').insert([book.toJson()]);
 
-      // ignore: avoid_dynamic_calls
-      setState(() {
-        isLoading = false;
-      });
-      showSnackBar(context, 'تم إضافة الكتاب بنجاح!');
-
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+      if (mounted) {
+        showSnackBar(context, 'تم إضافة الكتاب بنجاح!');
+        await Navigator.pushReplacementNamed(context, NavigationBarApp.id);
+      }
       // Navigator.pop(context);
     } catch (e) {
       setState(() {
@@ -195,14 +216,17 @@ class _AddBookState extends State<AddBook> {
               spacing: 12.sp,
               children: [
                 AddBookImages(
+                  icon: Icons.camera_alt_outlined,
                   image: _coverImage,
                   onTap: _pickImage,
                 ),
                 AddBookImages(
+                  icon: Icons.camera_alt_outlined,
                   image: _coverImageI,
                   onTap: _pickImageI,
                 ),
                 AddBookImages(
+                  icon: Icons.image_outlined,
                   image: _coverImageII,
                   onTap: _pickImageII,
                 ),
@@ -251,7 +275,6 @@ class _AddBookState extends State<AddBook> {
           text: 'إضافة الكتاب',
           onTap: () async {
             await _uploadBook();
-            await Navigator.pushReplacementNamed(context, NavigationBarApp.id);
           },
         ),
       ),

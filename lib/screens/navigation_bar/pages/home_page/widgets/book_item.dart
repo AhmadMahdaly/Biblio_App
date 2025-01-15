@@ -1,5 +1,3 @@
-import 'package:biblio/services/fetch_user_image.dart';
-import 'package:biblio/services/fetch_user_name.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/width.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
@@ -10,14 +8,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class HomeBookItem extends StatelessWidget {
   const HomeBookItem({
     required this.book,
-    required this.userImage,
-    required this.userName,
     super.key,
   });
 
   final Map<String, dynamic> book;
-  final String userImage;
-  final String userName;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,8 +26,8 @@ class HomeBookItem extends StatelessWidget {
           height: 220.sp,
           decoration: BoxDecoration(
             image: DecorationImage(
-              scale: 0.9.sp,
-              fit: BoxFit.none,
+              // scale: 0.9.sp,
+              fit: BoxFit.cover,
 
               /// Book Cover
               image: NetworkImage(
@@ -62,78 +57,85 @@ class HomeBookItem extends StatelessWidget {
                     CircleAvatar(
                       backgroundColor: kTextShadowColor,
                       radius: 10.sp,
-                      child: FutureBuilder<String?>(
-                        future: getUserPhoto(context),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(
-                              child: AppIndicator(
-                                size: 10.sp,
-                              ),
-                            );
-                          }
-                          if (snapshot.hasError) {
-                            return Icon(
-                              Icons.account_circle,
-                              size: 10.sp,
-                              color: kScaffoldBackgroundColor,
-                            );
-                          }
-                          final photoUrl = snapshot.data;
-                          if (photoUrl == null || photoUrl.isEmpty) {
-                            return Icon(
-                              Icons.account_circle,
-                              size: 10.sp,
-                              color: kScaffoldBackgroundColor,
-                            );
-                          }
-                          return Container(
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(320),
-                            ),
-                            child: CachedNetworkImage(
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => AppIndicator(
-                                size: 10.sp,
-                              ),
-                              imageUrl: photoUrl,
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                        },
-                      ),
+                      child:
+                          // FutureBuilder<String?>(
+                          //   future: getUserPhoto(context),
+                          //   builder: (context, snapshot) {
+                          //     if (snapshot.connectionState ==
+                          //         ConnectionState.waiting) {
+                          //       return Center(
+                          //         child: AppIndicator(
+                          //           size: 10.sp,
+                          //         ),
+                          //       );
+                          //     }
+                          //     if (snapshot.hasError) {
+                          //       return Icon(
+                          //         Icons.account_circle,
+                          //         size: 10.sp,
+                          //         color: kScaffoldBackgroundColor,
+                          //       );
+                          //     }
+                          //     final photoUrl = snapshot.data;
+                          //     if (photoUrl == null || photoUrl.isEmpty) {
+                          //       return Icon(
+                          //         Icons.account_circle,
+                          //         size: 10.sp,
+                          //         color: kScaffoldBackgroundColor,
+                          //       );
+                          //     }
+                          //     return
+                          book['user_image'] == null
+                              ? const SizedBox()
+                              : Container(
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(320),
+                                  ),
+                                  child: CachedNetworkImage(
+                                    progressIndicatorBuilder:
+                                        (context, url, progress) =>
+                                            AppIndicator(
+                                      size: 10.sp,
+                                    ),
+                                    imageUrl: book['user_image'].toString(),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  //  );
+                                  // },
+                                ),
                     ),
                     const W(w: 3),
 
                     /// User Name
                     SizedBox(
                       width: 70.sp,
-                      child: FutureBuilder<dynamic>(
-                        future: fetchUserName(context),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const AppIndicator(
-                              size: 10,
-                            );
-                          } else if (snapshot.hasError) {
-                            return const Text('');
-                            // خطأ: ${snapshot.error}
-                          } else {
-                            final userName = snapshot.data;
-                            return Text(
-                              userName.toString(),
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: const Color(0xFF3A3A3A),
-                                fontSize: 10.sp,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            );
-                          }
-                        },
+                      child:
+                          // FutureBuilder<dynamic>(
+                          //   future: fetchUserName(context),
+                          //   builder: (context, snapshot) {
+                          //     if (snapshot.connectionState ==
+                          //         ConnectionState.waiting) {
+                          //       return const AppIndicator(
+                          //         size: 10,
+                          //       );
+                          //     } else if (snapshot.hasError) {
+                          //       return const Text('');
+                          //       // خطأ: ${snapshot.error}
+                          //     } else {
+                          //       final userName = snapshot.data;
+                          // return
+                          Text(
+                        book['user_name'].toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: const Color(0xFF3A3A3A),
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        //   );
+                        //  }
+                        //  },
                       ),
                     ),
                   ],

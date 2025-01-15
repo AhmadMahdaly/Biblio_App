@@ -1,7 +1,7 @@
+import 'package:biblio/screens/my_lib_page/my_library_page.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/get_user_image.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/show_email.dart';
 import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/show_user_name.dart';
-import 'package:biblio/screens/my_lib_page/my_library_page.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class PersonalCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: 120.sp,
       decoration: BoxDecoration(
-        color: const Color(0xFFECECEC),
+        color: const Color(0xFFe8eaee),
         borderRadius: borderRadius(),
       ),
       child: Column(

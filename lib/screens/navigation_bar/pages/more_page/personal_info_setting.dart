@@ -157,7 +157,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
         );
         showSnackBar(
           context,
-          'تحقق من صندوق بريدك الإلكتروني لإتمام عملية تغيير عنوان البريد المسجل',
+          'عند تغيير البريد الإلكتروني، عليك أن تتحقق من صندوق بريدك لإتمام عملية تغيير عنوان البريد المسجل',
         );
       }
       if (newPassword.isEmpty || newPassword == null) {

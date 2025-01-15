@@ -1,4 +1,4 @@
-import 'package:biblio/screens/my_lib_page/widgets/book_item.dart';
+import 'package:biblio/screens/my_lib_page/widgets/show_book_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

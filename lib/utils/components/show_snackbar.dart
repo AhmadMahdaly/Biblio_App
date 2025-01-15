@@ -1,9 +1,10 @@
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 
-void showSnackBar(BuildContext context, String text) {
+void showSnackBar(BuildContext context, String text, {int duration = 4}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
+      duration: Duration(seconds: duration),
       backgroundColor: kDisableButtonColor,
       content: Text(
         text,

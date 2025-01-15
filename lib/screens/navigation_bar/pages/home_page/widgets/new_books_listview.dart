@@ -25,24 +25,14 @@ class _NewBooksListviewState extends State<NewBooksListview> {
     _fetchBooks();
   }
 
-  final userImage = Supabase.instance.client
-      .from('users')
-      .select('image')
-      .eq('id', Supabase.instance.client.auth.currentUser!.id)
-      .toString();
-
-  final userName = Supabase.instance.client
-      .from('users')
-      .select('username')
-      .eq('id', Supabase.instance.client.auth.currentUser!.id)
-      .toString();
-
   Future<void> _fetchBooks() async {
     setState(() {
       isLoading = true;
     });
 
-    // await Future.delayed(const Duration(seconds: 2),);
+    await Future.delayed(
+      const Duration(seconds: 2),
+    );
 
     try {
       final response = await supabase
@@ -78,8 +68,6 @@ class _NewBooksListviewState extends State<NewBooksListview> {
 
           return HomeBookItem(
             book: book,
-            userName: userName,
-            userImage: userImage,
           );
         },
         itemCount: books.length,

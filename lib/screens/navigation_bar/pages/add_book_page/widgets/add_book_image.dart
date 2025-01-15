@@ -6,13 +6,14 @@ import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 
 class AddBookImages extends StatefulWidget {
   const AddBookImages({
+    required this.icon,
     this.image,
     super.key,
     this.onTap,
   });
   final File? image;
   final void Function()? onTap;
-
+  final IconData? icon;
   @override
   State<AddBookImages> createState() => _AddBookImagesState();
 }
@@ -25,7 +26,7 @@ class _AddBookImagesState extends State<AddBookImages> {
       child: Container(
         width: 72,
         height: 72,
-        clipBehavior: Clip.antiAlias,
+        clipBehavior: Clip.hardEdge,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: const Color(0xFFECECEC),
@@ -38,9 +39,9 @@ class _AddBookImagesState extends State<AddBookImages> {
           borderRadius: BorderRadius.all(Radius.circular(10.sp)),
         ),
         child: widget.image == null
-            ? const Icon(
-                Icons.image_outlined,
-                color: Color(0xff849090),
+            ? Icon(
+                widget.icon,
+                color: const Color(0xff849090),
               )
             : Image.file(
                 widget.image!,
