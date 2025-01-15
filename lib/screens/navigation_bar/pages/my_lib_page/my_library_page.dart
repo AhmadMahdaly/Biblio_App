@@ -1,11 +1,55 @@
 import 'package:biblio/screens/navigation_bar/pages/my_lib_page/added_library.dart';
+import 'package:biblio/screens/navigation_bar/pages/my_lib_page/empty_library.dart';
+import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
-// import 'package:biblio/screens/navigation_bar/pages/my_lib_page/empty_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class MyLibraryPage extends StatelessWidget {
+class MyLibraryPage extends StatefulWidget {
   const MyLibraryPage({super.key});
+
+  @override
+  State<MyLibraryPage> createState() => _MyLibraryPageState();
+}
+
+class _MyLibraryPageState extends State<MyLibraryPage> {
+  final SupabaseClient supabase = Supabase.instance.client;
+
+  List<Map<String, dynamic>> books = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBooks();
+  }
+
+  Future<void> _fetchBooks() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final response = await supabase
+          .from('books')
+          // ignore: avoid_redundant_argument_values
+          .select('*')
+          .order('created_at', ascending: false);
+
+      setState(() {
+        books = List<Map<String, dynamic>>.from(response);
+      });
+    } catch (e) {
+      showSnackBar(context, 'يوجد خطأ في تحميل البيانات   ');
+      // $e
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +78,11 @@ class MyLibraryPage extends StatelessWidget {
           ),
         ),
       ),
-      body: const AddedLibrary(),
-      //  const EmptyLibrary(),
+      body: isLoading
+          ? const AppIndicator()
+          : books.isEmpty
+              ? const EmptyLibrary()
+              : AddedLibrary(books: books),
     );
   }
 }

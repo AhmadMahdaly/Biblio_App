@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddedLibrary extends StatelessWidget {
-  const AddedLibrary({super.key});
-
+  const AddedLibrary({required this.books, super.key});
+  final List<Map<String, dynamic>> books;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -14,12 +14,15 @@ class AddedLibrary extends StatelessWidget {
           crossAxisCount: 2,
           childAspectRatio: 1 / 1.9,
           crossAxisSpacing: 10,
-          mainAxisSpacing: 0,
+          // mainAxisSpacing: 0,
         ),
         itemBuilder: (context, index) {
-          return const BookItem();
+          final book = books[index];
+          return BookItem(
+            book: book,
+          );
         },
-        itemCount: 2,
+        itemCount: books.length,
       ),
     );
   }

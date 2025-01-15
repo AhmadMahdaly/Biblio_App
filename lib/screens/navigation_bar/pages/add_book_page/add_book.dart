@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/add_book_image.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/title_form_add_book.dart';
-import 'package:biblio/services/book_list.dart';
+import 'package:biblio/screens/navigation_bar/pages/my_lib_page/my_library_page.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
@@ -122,10 +122,21 @@ class _AddBookState extends State<AddBook> {
       }
       final imageUrlII =
           supabase.storage.from('book_covers').getPublicUrl(fileNameII);
-
+      final userImage = supabase
+          .from('users')
+          .select('image')
+          .eq('id', supabase.auth.currentUser!.id)
+          .single();
+      final userName = supabase
+          .from('users')
+          .select('username')
+          .eq('id', supabase.auth.currentUser!.id)
+          .single();
       // إضافة بيانات الكتاب إلى الجدول
       // ignore: unused_local_variable
       final response = await supabase.from('books').insert({
+        'user_name': userName,
+        'user_image': userImage,
         'user_id': supabase.auth.currentUser!.id,
         'cover_image_url': imageUrl,
         'cover_book_url2': imageUrlI,
@@ -147,7 +158,7 @@ class _AddBookState extends State<AddBook> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const BookListPage();
+            return const MyLibraryPage();
           },
         ),
       );

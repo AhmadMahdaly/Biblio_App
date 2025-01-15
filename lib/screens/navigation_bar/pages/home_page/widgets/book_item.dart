@@ -1,4 +1,3 @@
-import 'package:biblio/screens/navigation_bar/pages/home_page/models/book_model.dart';
 import 'package:biblio/utils/components/width.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ class HomeBookItem extends StatelessWidget {
     required this.book,
     super.key,
   });
-  final BookModel book;
+  final Map<String, dynamic> book;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,8 +26,8 @@ class HomeBookItem extends StatelessWidget {
               fit: BoxFit.none,
 
               /// Book Cover
-              image: AssetImage(
-                book.bookImage,
+              image: NetworkImage(
+                book['cover_image_url'].toString(),
               ),
             ),
             borderRadius: BorderRadius.circular(20.sp),
@@ -54,8 +53,8 @@ class HomeBookItem extends StatelessWidget {
                     CircleAvatar(
                       backgroundColor: kMainColor,
                       radius: 10.sp,
-                      child: Image.asset(
-                        book.userImage,
+                      child: Image.network(
+                        book['user_image'].toString(),
                       ),
                     ),
                     const W(w: 3),
@@ -64,7 +63,7 @@ class HomeBookItem extends StatelessWidget {
                     SizedBox(
                       width: 70.sp,
                       child: Text(
-                        book.userName,
+                        book['user_name'].toString(),
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: const Color(0xFF3A3A3A),
@@ -86,7 +85,7 @@ class HomeBookItem extends StatelessWidget {
           child: SizedBox(
             width: 140.sp,
             child: Text(
-              book.bookName,
+              book['title'].toString(),
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: const Color(0xFF333333),
@@ -103,7 +102,7 @@ class HomeBookItem extends StatelessWidget {
           child: SizedBox(
             width: 140.sp,
             child: Text(
-              book.writerName,
+              book['author'].toString(),
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: const Color(0xFF969697),

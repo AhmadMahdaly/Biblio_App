@@ -19,7 +19,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.mahdaly.biblio"
+        applicationId = "com.mahdaly.booklink"
         minSdkVersion 23
         // minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion

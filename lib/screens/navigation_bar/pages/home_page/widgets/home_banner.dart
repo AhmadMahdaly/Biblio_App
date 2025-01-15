@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:biblio/screens/navigation_bar/pages/add_book_page/add_book.dart';
 import 'package:biblio/utils/components/width.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -74,21 +75,33 @@ class HomeBanner extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(bottom: 8.sp),
-                  width: 131,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.sp),
-                  ),
-                  child: Text(
-                    'ابدأ الآن',
-                    style: TextStyle(
-                      color: kMainColor,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const AddBook();
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(bottom: 8.sp),
+                    width: 131,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.sp),
+                    ),
+                    child: Text(
+                      'ابدأ الآن',
+                      style: TextStyle(
+                        color: kMainColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),

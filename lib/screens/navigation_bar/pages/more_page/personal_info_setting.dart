@@ -20,6 +20,20 @@ class PersonalInfoSetting extends StatefulWidget {
 }
 
 class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
+  @override
+  void initState() {
+    super.initState();
+    isInAsyncCall = true;
+    _updateUserData();
+    waitToLoad();
+  }
+
+  Future<void> waitToLoad() async {
+    await Future.delayed(
+      const Duration(seconds: 2),
+    );
+  }
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -39,7 +53,6 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
       showSnackBar(context, 'المستخدم غير موجود');
       return;
     }
-
     var newName = _nameController.text.trim();
     var newEmail = _emailController.text.trim();
     var newPassword = _passwordController.text.trim();
@@ -48,65 +61,52 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
     if (newName.isEmpty || newName == null) {
       final response = await supabase
           .from('users')
-
-          /// اسم الجدول
           .select('username')
-
-          /// العمود المطلوب
           .eq('id', user.id)
-
-          /// البحث باستخدام معرف المستخدم
           .single();
-
-      /// استرجاع صف واحد فقط
-
       final name = response['username'] as String;
+
+      /// لإظهار الداتا
       if (name != null) {
         _nameController.text = name;
-
-        /// عرض الاسم الحالي في TextField
       }
       newName = response['username'] as String;
+      setState(() {
+        isInAsyncCall = false;
+      });
     }
 
     ///
     if (newEmail.isEmpty || newEmail == null) {
       final response = await supabase
           .from('users')
-
-          /// اسم الجدول
           .select('email')
-
-          /// العمود المطلوب
           .eq('id', user.id)
-
-          /// البحث باستخدام معرف المستخدم
           .single();
+      final email = response['email'] as String;
 
-      /// استرجاع صف واحد فقط
-
+      /// لإظهار الداتا
+      if (email != null) {
+        _emailController.text = email;
+      }
       newEmail = response['email'] as String;
+      setState(() {
+        isInAsyncCall = false;
+      });
     }
 
     ///
     if (newPassword.isEmpty || newPassword == null) {
       final response = await supabase
           .from('users')
-
-          /// اسم الجدول
           .select('password')
-
-          /// العمود المطلوب
           .eq('id', user.id)
-
-          /// البحث باستخدام معرف المستخدم
           .single();
-
-      /// استرجاع صف واحد فقط
-
       newPassword = response['password'] as String;
+      setState(() {
+        isInAsyncCall = false;
+      });
     }
-
     try {
       /// تحديث الاسم في قاعدة البيانات
       final response = await supabase
@@ -118,7 +118,6 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
           password: newPassword,
         ),
       );
-
       setState(() {
         isInAsyncCall = false;
       });
@@ -138,11 +137,11 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
         isInAsyncCall = false;
       });
 
-      showSnackBar(context, '/n$eهناك حدث خطأ، من فضلك راجع البيانات!');
+      showSnackBar(context, 'هناك حدث خطأ، من فضلك راجع البيانات!');
     }
   }
 
-  ///
+  ////n$e
   @override
   void dispose() {
     _nameController.dispose();
@@ -231,7 +230,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
               const TitleFormAddBook(title: 'البريد الإلكتروني'),
               CustomTextformfield(
                 controller: _emailController,
-                text: 'البريد الإلكتروني',
+                text: _emailController.text,
               ),
 
               /// Password
