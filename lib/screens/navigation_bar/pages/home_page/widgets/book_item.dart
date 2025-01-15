@@ -1,14 +1,38 @@
+import 'package:biblio/services/fetch_user_image.dart';
+import 'package:biblio/services/fetch_user_name.dart';
+import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/width.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class HomeBookItem extends StatelessWidget {
+class HomeBookItem extends StatefulWidget {
   const HomeBookItem({
     required this.book,
     super.key,
   });
+
   final Map<String, dynamic> book;
+
+  @override
+  State<HomeBookItem> createState() => _HomeBookItemState();
+}
+
+class _HomeBookItemState extends State<HomeBookItem> {
+  final userImage = Supabase.instance.client
+      .from('users')
+      .select('image')
+      .eq('id', Supabase.instance.client.auth.currentUser!.id)
+      .toString();
+
+  final userName = Supabase.instance.client
+      .from('users')
+      .select('username')
+      .eq('id', Supabase.instance.client.auth.currentUser!.id)
+      .toString();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,7 +51,7 @@ class HomeBookItem extends StatelessWidget {
 
               /// Book Cover
               image: NetworkImage(
-                book['cover_image_url'].toString(),
+                widget.book['cover_image_url'].toString(),
               ),
             ),
             borderRadius: BorderRadius.circular(20.sp),
@@ -51,10 +75,49 @@ class HomeBookItem extends StatelessWidget {
 
                     /// User image
                     CircleAvatar(
-                      backgroundColor: kMainColor,
+                      backgroundColor: kTextShadowColor,
                       radius: 10.sp,
-                      child: Image.network(
-                        book['user_image'].toString(),
+                      child: FutureBuilder<String?>(
+                        future: getUserPhoto(context),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: AppIndicator(
+                                size: 10.sp,
+                              ),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            return Icon(
+                              Icons.account_circle,
+                              size: 10.sp,
+                              color: kScaffoldBackgroundColor,
+                            );
+                          }
+                          final photoUrl = snapshot.data;
+                          if (photoUrl == null || photoUrl.isEmpty) {
+                            return Icon(
+                              Icons.account_circle,
+                              size: 10.sp,
+                              color: kScaffoldBackgroundColor,
+                            );
+                          }
+                          return Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(320),
+                            ),
+                            child: CachedNetworkImage(
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => AppIndicator(
+                                size: 10.sp,
+                              ),
+                              imageUrl: photoUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
                       ),
                     ),
                     const W(w: 3),
@@ -62,14 +125,30 @@ class HomeBookItem extends StatelessWidget {
                     /// User Name
                     SizedBox(
                       width: 70.sp,
-                      child: Text(
-                        book['user_name'].toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: const Color(0xFF3A3A3A),
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
+                      child: FutureBuilder<dynamic>(
+                        future: fetchUserName(context),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const AppIndicator(
+                              size: 10,
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Text('');
+                            // خطأ: ${snapshot.error}
+                          } else {
+                            final userName = snapshot.data;
+                            return Text(
+                              userName.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: const Color(0xFF3A3A3A),
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            );
+                          }
+                        },
                       ),
                     ),
                   ],
@@ -85,7 +164,7 @@ class HomeBookItem extends StatelessWidget {
           child: SizedBox(
             width: 140.sp,
             child: Text(
-              book['title'].toString(),
+              widget.book['title'].toString(),
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: const Color(0xFF333333),
@@ -102,7 +181,7 @@ class HomeBookItem extends StatelessWidget {
           child: SizedBox(
             width: 140.sp,
             child: Text(
-              book['author'].toString(),
+              widget.book['author'].toString(),
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: const Color(0xFF969697),

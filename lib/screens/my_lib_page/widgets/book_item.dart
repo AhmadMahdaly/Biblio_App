@@ -84,13 +84,13 @@ class BookItem extends StatelessWidget {
               fit: BoxFit.cover,
             ),
             const SizedBox(height: 10),
-            Text('Author: ${book['author']}'),
-            Text('Category: ${book['category']}'),
-            Text('Condition: ${book['condition']}'),
-            Text('Offer Type: ${book['offer_type']}'),
+            Text('الكاتب: ${book['author']}'),
+            Text('فئة الكتاب: ${book['category']}'),
+            Text('حالة الكتاب: ${book['condition']}'),
+            Text('نوع العرض: ${book['offer_type']}'),
             const SizedBox(height: 10),
             const Text(
-              'Description:',
+              'الوصف:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(book['description'].toString()),
@@ -99,7 +99,7 @@ class BookItem extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: const Text('اغلق'),
           ),
         ],
       ),

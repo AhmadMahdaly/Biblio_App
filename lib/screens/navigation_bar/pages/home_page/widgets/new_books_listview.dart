@@ -54,6 +54,7 @@ class _NewBooksListviewState extends State<NewBooksListview> {
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
         final book = books[index];
+
         return HomeBookItem(
           book: book,
         );

@@ -1,5 +1,5 @@
-import 'package:biblio/screens/navigation_bar/pages/my_lib_page/added_library.dart';
-import 'package:biblio/screens/navigation_bar/pages/my_lib_page/empty_library.dart';
+import 'package:biblio/screens/my_lib_page/added_library.dart';
+import 'package:biblio/screens/my_lib_page/empty_library.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';

@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/add_book_image.dart';
 import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/title_form_add_book.dart';
-import 'package:biblio/screens/navigation_bar/pages/my_lib_page/my_library_page.dart';
+import 'package:biblio/screens/navigation_bar/pages/home_page/models/book_model.dart';
+import 'package:biblio/screens/my_lib_page/my_library_page.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
@@ -122,32 +123,24 @@ class _AddBookState extends State<AddBook> {
       }
       final imageUrlII =
           supabase.storage.from('book_covers').getPublicUrl(fileNameII);
-      final userImage = supabase
-          .from('users')
-          .select('image')
-          .eq('id', supabase.auth.currentUser!.id)
-          .single();
-      final userName = supabase
-          .from('users')
-          .select('username')
-          .eq('id', supabase.auth.currentUser!.id)
-          .single();
+
+      final book = BookModel(
+        coverImageUrlI: imageUrlI,
+        coverImageUrlII: imageUrlII,
+        userId: supabase.auth.currentUser!.id,
+        coverImageUrl: imageUrl,
+        title: _titleController.text,
+        author: _authorController.text,
+        category: _categoryController.text,
+        description: _descriptionController.text,
+        condition: _conditionController.text,
+        offerType: _offerTypeController.text,
+      );
+
       // إضافة بيانات الكتاب إلى الجدول
-      // ignore: unused_local_variable
-      final response = await supabase.from('books').insert({
-        'user_name': userName,
-        'user_image': userImage,
-        'user_id': supabase.auth.currentUser!.id,
-        'cover_image_url': imageUrl,
-        'cover_book_url2': imageUrlI,
-        'cover_book_url3': imageUrlII,
-        'title': _titleController.text,
-        'author': _authorController.text,
-        'category': _categoryController.text,
-        'description': _descriptionController.text,
-        'condition': _conditionController.text,
-        'offer_type': _offerTypeController.text,
-      });
+
+      // final response =
+      await supabase.from('books').insert([book.toJson()]);
 
       // ignore: avoid_dynamic_calls
       setState(() {
@@ -168,6 +161,7 @@ class _AddBookState extends State<AddBook> {
         isLoading = false;
       });
       showSnackBar(context, 'يوجد خطأ: $e');
+      // print('يوجد خطأ: $e');
     }
   }
 
