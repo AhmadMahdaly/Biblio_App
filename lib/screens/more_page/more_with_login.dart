@@ -1,9 +1,9 @@
-import 'package:biblio/screens/navigation_bar/pages/more_page/personal_info_setting.dart';
-import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/category_for_more.dart';
-import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/faq_page.dart';
-import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/personal_card.dart';
-import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/sign_out_button.dart';
-import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/terms_and_conditions_page.dart';
+import 'package:biblio/screens/more_page/personal_info_setting.dart';
+import 'package:biblio/screens/more_page/widgets/category_for_more.dart';
+import 'package:biblio/screens/more_page/widgets/faq_page.dart';
+import 'package:biblio/screens/more_page/widgets/personal_card.dart';
+import 'package:biblio/screens/more_page/widgets/sign_out_button.dart';
+import 'package:biblio/screens/more_page/widgets/terms_and_conditions_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

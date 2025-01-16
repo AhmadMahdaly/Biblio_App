@@ -1,5 +1,5 @@
+import 'package:biblio/screens/home_page/widgets/book_item.dart';
 import 'package:biblio/screens/my_lib_page/widgets/show_book_item.dart';
-import 'package:biblio/screens/navigation_bar/pages/home_page/widgets/book_item.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';

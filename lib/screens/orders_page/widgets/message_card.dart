@@ -1,4 +1,4 @@
-import 'package:biblio/screens/navigation_bar/pages/orders_page/models/message_model.dart';
+import 'package:biblio/screens/orders_page/models/message_model.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

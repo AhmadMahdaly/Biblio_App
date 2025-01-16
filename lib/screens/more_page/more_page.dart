@@ -1,5 +1,5 @@
-import 'package:biblio/screens/navigation_bar/pages/more_page/more_with_login.dart';
-import 'package:biblio/screens/navigation_bar/pages/more_page/more_without_login.dart';
+import 'package:biblio/screens/more_page/more_with_login.dart';
+import 'package:biblio/screens/more_page/more_without_login.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

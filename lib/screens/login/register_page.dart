@@ -1,6 +1,6 @@
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/login/services/sign_up.dart';
-import 'package:biblio/screens/navigation_bar/pages/more_page/widgets/terms_and_conditions_page.dart';
+import 'package:biblio/screens/more_page/widgets/terms_and_conditions_page.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/app_regex.dart';

@@ -1,4 +1,4 @@
-import 'package:biblio/screens/navigation_bar/pages/add_book_page/add_book.dart';
+import 'package:biblio/screens/add_book_page/add_book.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class EmptyLibrary extends StatelessWidget {
                 ),
               );
             },
-          )
+          ),
         ],
       ),
     );

@@ -1,9 +1,9 @@
 import 'package:biblio/animations/animate_do.dart';
-import 'package:biblio/screens/navigation_bar/pages/add_book_page/add_book.dart';
-import 'package:biblio/screens/navigation_bar/pages/home_page/home_page_screen.dart';
-import 'package:biblio/screens/navigation_bar/pages/more_page/more_page.dart';
-import 'package:biblio/screens/navigation_bar/pages/orders_page/order_page.dart';
-import 'package:biblio/screens/navigation_bar/pages/save_page/save_page.dart';
+import 'package:biblio/screens/add_book_page/add_book.dart';
+import 'package:biblio/screens/home_page/home_page_screen.dart';
+import 'package:biblio/screens/more_page/more_page.dart';
+import 'package:biblio/screens/orders_page/order_page.dart';
+import 'package:biblio/screens/save_page/save_page.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

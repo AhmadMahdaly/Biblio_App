@@ -1,5 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:biblio/screens/navigation_bar/pages/add_book_page/add_book.dart';
+import 'package:biblio/screens/add_book_page/add_book.dart';
 import 'package:biblio/utils/components/width.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';

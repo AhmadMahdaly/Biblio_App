@@ -1,5 +1,5 @@
-import 'package:biblio/screens/navigation_bar/pages/orders_page/models/message_model.dart';
-import 'package:biblio/screens/navigation_bar/pages/orders_page/widgets/message_card.dart';
+import 'package:biblio/screens/orders_page/models/message_model.dart';
+import 'package:biblio/screens/orders_page/widgets/message_card.dart';
 import 'package:flutter/material.dart';
 
 class SubmittedRequests extends StatefulWidget {

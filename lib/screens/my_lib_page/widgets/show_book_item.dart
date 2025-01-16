@@ -1,4 +1,4 @@
-import 'package:biblio/screens/navigation_bar/pages/home_page/widgets/title_header_home.dart';
+import 'package:biblio/screens/home_page/widgets/title_header_home.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/custom_button.dart';

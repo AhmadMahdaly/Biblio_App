@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:biblio/screens/add_book_page/models/book_model.dart';
+import 'package:biblio/screens/add_book_page/widgets/add_book_image.dart';
+import 'package:biblio/screens/add_book_page/widgets/title_form_add_book.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
-import 'package:biblio/screens/navigation_bar/pages/add_book_page/models/book_model.dart';
-import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/add_book_image.dart';
-import 'package:biblio/screens/navigation_bar/pages/add_book_page/widgets/title_form_add_book.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
