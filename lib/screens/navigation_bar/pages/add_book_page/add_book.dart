@@ -39,8 +39,8 @@ class _AddBookState extends State<AddBook> {
 
   /// Pick 1st image
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+    final pickedFile = await ImagePicker()
+        .pickImage(imageQuality: 30, source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _coverImage = File(pickedFile.path);
@@ -51,8 +51,8 @@ class _AddBookState extends State<AddBook> {
 
   /// Pick 2nd image
   Future<void> _pickImageI() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+    final pickedFile = await ImagePicker()
+        .pickImage(imageQuality: 30, source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _coverImageI = File(pickedFile.path);
@@ -63,8 +63,10 @@ class _AddBookState extends State<AddBook> {
 
   /// Pick 3rd image
   Future<void> _pickImageII() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(
+      imageQuality: 30,
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       setState(() {
         _coverImageII = File(pickedFile.path);
@@ -216,12 +218,14 @@ class _AddBookState extends State<AddBook> {
               spacing: 12.sp,
               children: [
                 AddBookImages(
-                  icon: Icons.camera_alt_outlined,
+                  icon: Icons.image_outlined,
+                  //  Icons.camera_alt_outlined,
                   image: _coverImage,
                   onTap: _pickImage,
                 ),
                 AddBookImages(
-                  icon: Icons.camera_alt_outlined,
+                  icon: Icons.image_outlined,
+                  //  Icons.camera_alt_outlined,
                   image: _coverImageI,
                   onTap: _pickImageI,
                 ),
@@ -252,7 +256,12 @@ class _AddBookState extends State<AddBook> {
             const TitleFormAddBook(title: 'نبذة عن الكتاب'),
             CustomTextformfield(
               text: '',
-              contentPadding: 32,
+              contentPadding: EdgeInsets.only(
+                bottom: 56.sp,
+                right: 12.sp,
+                left: 12.sp,
+                top: 12.sp,
+              ),
               controller: _descriptionController,
             ),
             const TitleFormAddBook(title: 'حالة الكتاب'),

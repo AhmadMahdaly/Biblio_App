@@ -11,7 +11,7 @@ class CustomTextformfield extends StatelessWidget {
     this.onChanged,
     this.icon,
     this.validator,
-    this.contentPadding = 12,
+    this.contentPadding,
     this.controller,
   });
   final String? text;
@@ -20,18 +20,19 @@ class CustomTextformfield extends StatelessWidget {
   final void Function(String)? onChanged;
   final Widget? icon;
   final String? Function(String?)? validator;
-  final int contentPadding;
+  final EdgeInsetsGeometry? contentPadding;
   final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textAlignVertical: TextAlignVertical.top,
       controller: controller,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator,
       onChanged: onChanged,
       obscureText: obscureText,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(contentPadding.sp),
+        contentPadding: contentPadding,
         hintText: text,
         hintStyle: TextStyle(
           fontSize: 14.sp,

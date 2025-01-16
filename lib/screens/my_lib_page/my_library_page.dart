@@ -1,7 +1,6 @@
 import 'package:biblio/screens/my_lib_page/added_library.dart';
 import 'package:biblio/screens/my_lib_page/empty_library.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
-import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,13 +35,14 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
           .from('books')
           // ignore: avoid_redundant_argument_values
           .select('*')
+          .eq('user_id', Supabase.instance.client.auth.currentUser!.id)
           .order('created_at', ascending: false);
 
       setState(() {
         books = List<Map<String, dynamic>>.from(response);
       });
     } catch (e) {
-      showSnackBar(context, 'يوجد خطأ في تحميل البيانات   ');
+      // showSnackBar(context, 'يوجد خطأ في تحميل البيانات   ');
       // $e
     } finally {
       setState(() {
