@@ -74,7 +74,7 @@ class PersonalCard extends StatelessWidget {
               children: [
                 /// Qty of Books
                 Container(
-                  width: 100.sp,
+                  width: 150.sp,
                   height: 24.sp,
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(
@@ -95,7 +95,7 @@ class PersonalCard extends StatelessWidget {
                         size: 16.sp,
                       ),
                       Text(
-                        '2 كتاب',
+                        'رف الكتب الخاص بك',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12.sp,

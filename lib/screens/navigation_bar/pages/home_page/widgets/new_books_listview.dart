@@ -1,3 +1,4 @@
+import 'package:biblio/screens/my_lib_page/widgets/show_book_item.dart';
 import 'package:biblio/screens/navigation_bar/pages/home_page/widgets/book_item.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
@@ -66,8 +67,20 @@ class _NewBooksListviewState extends State<NewBooksListview> {
         itemBuilder: (context, index) {
           final book = books[index];
 
-          return HomeBookItem(
-            book: book,
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ShowBookItem(
+                    book: book,
+                  ),
+                ),
+              );
+            },
+            child: HomeBookItem(
+              book: book,
+            ),
           );
         },
         itemCount: books.length,
