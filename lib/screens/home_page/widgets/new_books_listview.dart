@@ -1,4 +1,4 @@
-import 'package:biblio/screens/home_page/widgets/book_item.dart';
+import 'package:biblio/screens/add_book_page/show_book.dart';
 import 'package:biblio/screens/my_lib_page/widgets/show_book_item.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
@@ -78,7 +78,7 @@ class _NewBooksListviewState extends State<NewBooksListview> {
                 ),
               );
             },
-            child: HomeBookItem(
+            child: ShowBook(
               book: book,
             ),
           );
