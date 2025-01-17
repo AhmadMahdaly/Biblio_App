@@ -1,5 +1,7 @@
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
+import 'package:biblio/screens/no_network_screen.dart';
 import 'package:biblio/screens/onboard/onboard_screen.dart';
+import 'package:biblio/utils/controller/connectivity_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -39,6 +41,24 @@ this page sets up a listener on the user's auth state using onAuthStateChange. *
   final SupabaseClient supabase = Supabase.instance.client;
   @override
   Widget build(BuildContext context) {
-    return _user == null ? const OnboardScreen() : const NavigationBarApp();
+    /// في حالة وجود انترنت متصل
+    return ValueListenableBuilder(
+      valueListenable: ConnectivityController.instance.isConnected,
+      builder: (_, value, __) {
+        if (value) {
+          ///
+          return _user == null
+              ? const OnboardScreen()
+              : const NavigationBarApp();
+        } else {
+          /// في حالة عدم وجود انترنت متصل
+          return const MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'No NetWork',
+            home: NoNetworkScreen(),
+          );
+        }
+      },
+    );
   }
 }

@@ -32,6 +32,7 @@ dependencies:
   path_provider: ^2.1.5
   cached_network_image: ^3.4.1
   carousel_slider: ^5.0.0
+  connectivity_plus: ^5.0.2
 
   
 

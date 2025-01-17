@@ -21,9 +21,10 @@ class Biblio extends StatelessWidget {
         844,
       ),
       minTextAdapt: true,
+      child:
 
-      /// Remove focus from any input element
-      child: GestureDetector(
+          /// Remove focus from any input element
+          GestureDetector(
         onTap: () {
           final currentFocus = FocusScope.of(context);
           if (!currentFocus.hasPrimaryFocus &&
