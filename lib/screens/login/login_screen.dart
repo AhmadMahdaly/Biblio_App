@@ -1,5 +1,4 @@
 import 'package:biblio/screens/login/register_page.dart';
-import 'package:biblio/screens/login/widgets/forget_password_screen.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/utils/components/app_regex.dart';
 import 'package:biblio/utils/components/custom_button.dart';
@@ -43,6 +42,39 @@ class _LoginScreenState extends State<LoginScreen> {
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     );
+  }
+
+  ///
+  Future<void> resetPassword() async {
+    setState(() {
+      isInAsyncCall = true;
+    });
+    final email = emailController.text.trim();
+    if (email.isEmpty) {
+      showSnackBar(context, 'يرجى إدخال البريد الإلكتروني');
+      return;
+    }
+    try {
+      await supabase.auth
+          .resetPasswordForEmail(
+            email,
+          )
+          .timeout(const Duration(seconds: 66));
+
+      setState(() {
+        isInAsyncCall = false;
+      });
+      showSnackBar(
+        context,
+        'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني',
+      );
+    } catch (error) {
+      showSnackBar(context, 'حدث خطأ أثناء إرسال الرابط. حاول مرة أخرى');
+      print('Error resetting password: $error');
+      setState(() {
+        isInAsyncCall = false;
+      });
+    }
   }
 
   @override
@@ -169,14 +201,24 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const ForgetPasswordPage();
-                                },
-                              ),
-                            );
+                            if (emailController == null) {
+                              showSnackBar(
+                                context,
+                                'قم بإدخال البريد الإلكتروني قبل الضغط على "نسيت كلمة المرور"',
+                              );
+                            }
+                            {
+                              resetPassword();
+                            }
+
+                            // Navigator.pushReplacement(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) {
+                            //       return const ForgetPasswordPage();
+                            //     },
+                            //   ),
+                            // );
                           },
                           child: Text(
                             'نسيت كلمة المرور؟',
