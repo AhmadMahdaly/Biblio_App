@@ -22,7 +22,7 @@ class CategoryItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 5.sp,
         children: [
-          const H(h: 3),
+          const H(h: 5),
           SizedBox(
             child: Image.asset(
               bookCategory.icon,
