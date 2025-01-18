@@ -41,17 +41,20 @@ class _NewBooksListviewState extends State<NewBooksListview> {
           // ignore: avoid_redundant_argument_values
           .select('*')
           .order('created_at', ascending: false);
-
-      setState(() {
-        books = List<Map<String, dynamic>>.from(response);
-      });
+      if (mounted) {
+        setState(() {
+          books = List<Map<String, dynamic>>.from(response);
+        });
+      }
     } catch (e) {
       showSnackBar(context, 'يوجد خطأ في تحميل البيانات');
       // $e
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 

@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
             /// Categories ListView
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 80.sp,
+                height: 95.sp,
                 width: 80.sp,
                 child: const CategoryListview(),
               ),
