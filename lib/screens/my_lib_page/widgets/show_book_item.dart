@@ -23,7 +23,6 @@ class ShowBookItem extends StatelessWidget {
     final images = <String>[
       book['cover_image_url'].toString(),
       book['cover_book_url2'].toString(),
-      book['cover_book_url3'].toString(),
     ];
     return Scaffold(
       appBar: AppBar(
@@ -82,7 +81,7 @@ class ShowBookItem extends StatelessWidget {
                   },
                   errorWidget: (context, url, error) {
                     return const Icon(
-                      Icons.error_outline,
+                      Icons.broken_image_outlined,
                     );
                   },
                 ),

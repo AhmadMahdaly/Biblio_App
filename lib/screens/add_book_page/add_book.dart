@@ -78,7 +78,6 @@ class _AddBookState extends State<AddBook> {
         _coverImage = File(pickedFile.path);
       });
     }
-    showSnackBar(context, 'يفضل ألا يزيد حجم الصور عن 1 ميجابايت');
   }
 
   /// Pick 2nd image
@@ -92,22 +91,21 @@ class _AddBookState extends State<AddBook> {
         _coverImageI = File(pickedFile.path);
       });
     }
-    showSnackBar(context, 'يفضل ألا يزيد حجم الصور عن 1 ميجابايت');
   }
 
-  /// Pick 3rd image
-  Future<void> _pickImageII() async {
-    final pickedFile = await ImagePicker().pickImage(
-      imageQuality: 20,
-      source: ImageSource.gallery,
-    );
-    if (pickedFile != null) {
-      setState(() {
-        _coverImageII = File(pickedFile.path);
-      });
-    }
-    showSnackBar(context, 'يفضل ألا يزيد حجم الصور عن 1 ميجابايت');
-  }
+  // /// Pick 3rd image
+  // Future<void> _pickImageII() async {
+  //   final pickedFile = await ImagePicker().pickImage(
+  //     imageQuality: 20,
+  //     source: ImageSource.gallery,
+  //   );
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _coverImageII = File(pickedFile.path);
+  //     });
+  //   }
+  //   showSnackBar(context, 'يفضل ألا يزيد حجم الصور عن 1 ميجابايت');
+  // }
 
   /// Upload book
   Future<void> _uploadBook() async {
@@ -149,7 +147,6 @@ class _AddBookState extends State<AddBook> {
       final imageUrlII =
           supabase.storage.from('book_covers').getPublicUrl(fileNameII);
 
-      // final userName
       final response = await supabase
           .from('users')
           .select('username')
@@ -182,7 +179,6 @@ class _AddBookState extends State<AddBook> {
 
       // إضافة بيانات الكتاب إلى الجدول
 
-      // final response =
       await supabase.from('books').insert([book.toJson()]);
 
       if (mounted) {
@@ -195,7 +191,6 @@ class _AddBookState extends State<AddBook> {
         showSnackBar(context, 'تم إضافة الكتاب بنجاح!');
         await Navigator.pushReplacementNamed(context, NavigationBarApp.id);
       }
-      // Navigator.pop(context);
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -207,7 +202,9 @@ class _AddBookState extends State<AddBook> {
 
   @override
   Widget build(BuildContext context) {
-    if (_titleController.text.isEmpty ||
+    if (_coverImage == null ||
+        _coverImageI == null ||
+        _titleController.text.isEmpty ||
         _authorController.text.isEmpty ||
         selectedCategory == null ||
         _conditionController.text.isEmpty ||
@@ -247,7 +244,7 @@ class _AddBookState extends State<AddBook> {
           child: ListView(
             children: [
               Text(
-                'من فضلك اضف صورة أو أكثر الكتاب',
+                'من فضلك اضف صورتين للكتاب',
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   color: kTextColor,
@@ -271,11 +268,11 @@ class _AddBookState extends State<AddBook> {
                     image: _coverImageI,
                     onTap: _pickImageI,
                   ),
-                  AddBookImages(
-                    icon: Icons.image_outlined,
-                    image: _coverImageII,
-                    onTap: _pickImageII,
-                  ),
+                  // AddBookImages(
+                  //   icon: Icons.image_outlined,
+                  //   image: _coverImageII,
+                  //   onTap: _pickImageII,
+                  // ),
                 ],
               ),
               const TitleFormAddBook(
@@ -458,21 +455,19 @@ class _AddBookState extends State<AddBook> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16.sp),
-        child: CustomButton(
-          isActive: isActive,
-          text: 'إضافة الكتاب',
-          onTap: () async {
-            if (_coverImage == null &&
-                _coverImageI == null &&
-                _coverImageII == null) {
-              showSnackBar(context, 'من فضلك ادخل ولو صورة واحدة');
-            } else {
-              if (formKey.currentState!.validate()) {
-                await _uploadBook();
-              }
-            }
-          },
-        ),
+        child: isActive
+            ? CustomButton(
+                text: 'إضافة الكتاب',
+                onTap: () async {
+                  if (formKey.currentState!.validate()) {
+                    await _uploadBook();
+                  }
+                },
+              )
+            : const CustomButton(
+                isActive: false,
+                text: 'إضافة الكتاب',
+              ),
       ),
     );
   }
