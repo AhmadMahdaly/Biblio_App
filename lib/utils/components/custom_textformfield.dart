@@ -1,5 +1,6 @@
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextformfield extends StatelessWidget {
@@ -13,6 +14,8 @@ class CustomTextformfield extends StatelessWidget {
     this.validator,
     this.contentPadding,
     this.controller,
+    this.maxLines = 1,
+    this.inputFormatters,
   });
   final String? text;
   final TextInputType? keyboardType;
@@ -22,9 +25,14 @@ class CustomTextformfield extends StatelessWidget {
   final String? Function(String?)? validator;
   final EdgeInsetsGeometry? contentPadding;
   final TextEditingController? controller;
+  final int? maxLines;
+  final List<TextInputFormatter>? inputFormatters;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      inputFormatters: inputFormatters,
+      minLines: 1,
+      maxLines: maxLines,
       textAlignVertical: TextAlignVertical.top,
       controller: controller,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -52,13 +60,13 @@ class CustomTextformfield extends StatelessWidget {
       ),
     );
   }
+}
 
-  OutlineInputBorder border() {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12.sp),
-      borderSide: const BorderSide(
-        color: kBorderColor,
-      ),
-    );
-  }
+OutlineInputBorder border() {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12.sp),
+    borderSide: const BorderSide(
+      color: kBorderColor,
+    ),
+  );
 }

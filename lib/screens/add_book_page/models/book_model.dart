@@ -12,7 +12,9 @@ class BookModel {
     required this.description,
     required this.condition,
     required this.offerType,
+    this.price,
   });
+  final int? price;
   final String userId;
   final String coverImageUrl;
   final String coverImageUrlI;
@@ -28,6 +30,7 @@ class BookModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'price': price,
       'user_image': userImage,
       'user_name': userName,
       'user_id': userId,

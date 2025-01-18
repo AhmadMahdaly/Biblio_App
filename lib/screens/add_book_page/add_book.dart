@@ -10,6 +10,7 @@ import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,6 +26,7 @@ class AddBook extends StatefulWidget {
 class _AddBookState extends State<AddBook> {
   final SupabaseClient supabase = Supabase.instance.client;
   bool isLoading = false;
+  bool isActive = false;
 
   File? _coverImage;
   File? _coverImageI;
@@ -32,27 +34,59 @@ class _AddBookState extends State<AddBook> {
 
   final _titleController = TextEditingController();
   final _authorController = TextEditingController();
-  final _categoryController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _conditionController = TextEditingController();
-  final _offerTypeController = TextEditingController();
+  final priceController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  String? selectedCategory;
+  List<String> categories = [];
+  String? selectedOffer;
+  List<String> offerTypes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCategories();
+    fetchOrderType();
+  }
+
+  Future<void> fetchCategories() async {
+    final response = await supabase.from('categories').select('name');
+
+    setState(() {
+      categories = response.map((e) => e['name'] as String).toList();
+    });
+  }
+
+  Future<void> fetchOrderType() async {
+    final response = await supabase.from('offer_type').select('type');
+
+    setState(() {
+      offerTypes = response.map((e) => e['type'] as String).toList();
+    });
+  }
 
   /// Pick 1st image
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker()
-        .pickImage(imageQuality: 30, source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(
+      imageQuality: 20,
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       setState(() {
         _coverImage = File(pickedFile.path);
       });
     }
-    showSnackBar(context, 'لا يمكن أن يزيد حجم الصور عن 1 ميجابايت');
+    showSnackBar(context, 'يفضل ألا يزيد حجم الصور عن 1 ميجابايت');
   }
 
   /// Pick 2nd image
   Future<void> _pickImageI() async {
-    final pickedFile = await ImagePicker()
-        .pickImage(imageQuality: 30, source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(
+      imageQuality: 20,
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       setState(() {
         _coverImageI = File(pickedFile.path);
@@ -64,7 +98,7 @@ class _AddBookState extends State<AddBook> {
   /// Pick 3rd image
   Future<void> _pickImageII() async {
     final pickedFile = await ImagePicker().pickImage(
-      imageQuality: 30,
+      imageQuality: 20,
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
@@ -77,17 +111,6 @@ class _AddBookState extends State<AddBook> {
 
   /// Upload book
   Future<void> _uploadBook() async {
-    if (
-        // _coverImage == null  ||
-        _titleController.text.isEmpty ||
-            _authorController.text.isEmpty ||
-            _categoryController.text.isEmpty ||
-            _conditionController.text.isEmpty ||
-            _offerTypeController.text.isEmpty) {
-      showSnackBar(context, 'من فضلك أدخل البيانات المطلوبة');
-      return;
-    }
-
     try {
       setState(() {
         isLoading = true;
@@ -96,10 +119,11 @@ class _AddBookState extends State<AddBook> {
       ///
       /// رفع الصورة إلى Supabase Storage
       final fileName = 'books/${DateTime.now().toIso8601String()}';
-      // ignore: unused_local_variable
-      final storageResponse = await supabase.storage
-          .from('book_covers')
-          .upload(fileName, _coverImage!);
+      if (_coverImage != null) {
+        await supabase.storage
+            .from('book_covers')
+            .upload(fileName, _coverImage!);
+      }
       final imageUrl =
           supabase.storage.from('book_covers').getPublicUrl(fileName);
 
@@ -107,19 +131,18 @@ class _AddBookState extends State<AddBook> {
 
       final fileNameI = 'books/${DateTime.now().toIso8601String()}';
       if (_coverImageI != null) {
-        // ignore: unused_local_variable
-        final storageResponseI = await supabase.storage
+        await supabase.storage
             .from('book_covers')
             .upload(fileNameI, _coverImageI!);
       }
+
       final imageUrlI =
           supabase.storage.from('book_covers').getPublicUrl(fileNameI);
 
       ///
       final fileNameII = 'books/${DateTime.now().toIso8601String()}';
-      if (_coverImageI != null) {
-        // ignore: unused_local_variable
-        final storageResponseII = await supabase.storage
+      if (_coverImageII != null) {
+        await supabase.storage
             .from('book_covers')
             .upload(fileNameII, _coverImageII!);
       }
@@ -148,12 +171,13 @@ class _AddBookState extends State<AddBook> {
         coverImageUrl: imageUrl,
         title: _titleController.text,
         author: _authorController.text,
-        category: _categoryController.text,
+        category: selectedCategory!,
         description: _descriptionController.text,
         condition: _conditionController.text,
-        offerType: _offerTypeController.text,
+        offerType: selectedOffer!,
         userName: userName.toString(),
         userImage: userImage.toString(),
+        price: int.tryParse(priceController.text),
       );
 
       // إضافة بيانات الكتاب إلى الجدول
@@ -166,6 +190,7 @@ class _AddBookState extends State<AddBook> {
           isLoading = false;
         });
       }
+
       if (mounted) {
         showSnackBar(context, 'تم إضافة الكتاب بنجاح!');
         await Navigator.pushReplacementNamed(context, NavigationBarApp.id);
@@ -175,13 +200,28 @@ class _AddBookState extends State<AddBook> {
       setState(() {
         isLoading = false;
       });
-      showSnackBar(context, 'يوجد خطأ: $e');
-      // print('يوجد خطأ: $e');
+      showSnackBar(context, 'يوجد خطأ');
+      print(e);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_titleController.text.isEmpty ||
+        _authorController.text.isEmpty ||
+        selectedCategory == null ||
+        _conditionController.text.isEmpty ||
+        selectedOffer == null) {
+      if (mounted) {
+        setState(() {
+          isActive = false;
+        });
+      }
+    } else {
+      setState(() {
+        isActive = true;
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -202,88 +242,235 @@ class _AddBookState extends State<AddBook> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.sp),
-        child: ListView(
-          children: [
-            Text(
-              'من فضلك اضف صورة أو أكثر الكتاب',
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: kTextColor,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
+        child: Form(
+          key: formKey,
+          child: ListView(
+            children: [
+              Text(
+                'من فضلك اضف صورة أو أكثر الكتاب',
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  color: kTextColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            const H(h: 10),
-            Row(
-              spacing: 12.sp,
-              children: [
-                AddBookImages(
-                  icon: Icons.image_outlined,
-                  //  Icons.camera_alt_outlined,
-                  image: _coverImage,
-                  onTap: _pickImage,
-                ),
-                AddBookImages(
-                  icon: Icons.image_outlined,
-                  //  Icons.camera_alt_outlined,
-                  image: _coverImageI,
-                  onTap: _pickImageI,
-                ),
-                AddBookImages(
-                  icon: Icons.image_outlined,
-                  image: _coverImageII,
-                  onTap: _pickImageII,
-                ),
-              ],
-            ),
-            const TitleFormAddBook(
-              title: 'اسم الكتاب',
-            ),
-            CustomTextformfield(
-              text: 'مثال: بين القصرين',
-              controller: _titleController,
-            ),
-            const TitleFormAddBook(title: 'اسم الكاتب'),
-            CustomTextformfield(
-              text: 'مثال: نجيب محفوظ',
-              controller: _authorController,
-            ),
-            const TitleFormAddBook(title: 'فئة الكتاب'),
-            CustomTextformfield(
-              text: '',
-              controller: _categoryController,
-            ),
-            const TitleFormAddBook(title: 'نبذة عن الكتاب'),
-            CustomTextformfield(
-              text: '',
-              contentPadding: EdgeInsets.only(
-                bottom: 56.sp,
-                right: 12.sp,
-                left: 12.sp,
-                top: 12.sp,
+              const H(h: 10),
+              Row(
+                spacing: 12.sp,
+                children: [
+                  AddBookImages(
+                    icon: Icons.image_outlined,
+                    //  Icons.camera_alt_outlined,
+                    image: _coverImage,
+                    onTap: _pickImage,
+                  ),
+                  AddBookImages(
+                    icon: Icons.image_outlined,
+                    //  Icons.camera_alt_outlined,
+                    image: _coverImageI,
+                    onTap: _pickImageI,
+                  ),
+                  AddBookImages(
+                    icon: Icons.image_outlined,
+                    image: _coverImageII,
+                    onTap: _pickImageII,
+                  ),
+                ],
               ),
-              controller: _descriptionController,
-            ),
-            const TitleFormAddBook(title: 'حالة الكتاب'),
-            CustomTextformfield(
-              text: '',
-              controller: _conditionController,
-            ),
-            const TitleFormAddBook(title: 'نوع العرض'),
-            CustomTextformfield(
-              text: '',
-              controller: _offerTypeController,
-            ),
-            const H(h: 16),
-          ],
+              const TitleFormAddBook(
+                title: 'اسم الكتاب',
+              ),
+              CustomTextformfield(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'ادخل البيانات المطلوبة';
+                  }
+                  return null;
+                },
+                text: 'مثال: بين القصرين',
+                controller: _titleController,
+              ),
+              const TitleFormAddBook(title: 'اسم الكاتب'),
+              CustomTextformfield(
+                text: 'مثال: نجيب محفوظ',
+                controller: _authorController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'ادخل البيانات المطلوبة';
+                  }
+                  return null;
+                },
+              ),
+              const TitleFormAddBook(title: 'فئة الكتاب'),
+              DropdownButtonFormField<String>(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'ادخل البيانات المطلوبة';
+                  }
+                  return null;
+                },
+                icon: RotatedBox(
+                  quarterTurns: 1,
+                  child: Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 16.sp,
+                  ),
+                ),
+                elevation: 5,
+                dropdownColor: kLightBlue,
+                value: selectedCategory,
+                items: categories
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: 'اختر فئة الكتاب',
+                  hintStyle: TextStyle(
+                    fontSize: 14.sp,
+                    color: kTextShadowColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  border: border(),
+                  focusedBorder: border(),
+                  enabledBorder: border(),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.sp),
+                    borderSide: const BorderSide(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ),
+              const TitleFormAddBook(title: 'نبذة عن الكتاب'),
+              CustomTextformfield(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'ادخل البيانات المطلوبة';
+                  }
+                  return null;
+                },
+                maxLines: 100,
+                text: '',
+                contentPadding: EdgeInsets.only(
+                  bottom: 56.sp,
+                  right: 12.sp,
+                  left: 12.sp,
+                  top: 12.sp,
+                ),
+                controller: _descriptionController,
+              ),
+              const TitleFormAddBook(title: 'حالة الكتاب'),
+              CustomTextformfield(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'ادخل البيانات المطلوبة';
+                  }
+                  return null;
+                },
+                text: '',
+                controller: _conditionController,
+              ),
+              const TitleFormAddBook(title: 'نوع العرض'),
+              DropdownButtonFormField<String>(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'ادخل البيانات المطلوبة';
+                  }
+                  return null;
+                },
+                icon: RotatedBox(
+                  quarterTurns: 1,
+                  child: Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 16.sp,
+                  ),
+                ),
+                elevation: 5,
+                dropdownColor: kLightBlue,
+                value: selectedOffer,
+                items: offerTypes
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedOffer = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: 'اختر نوع العرض',
+                  hintStyle: TextStyle(
+                    fontSize: 14.sp,
+                    color: kTextShadowColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  border: border(),
+                  focusedBorder: border(),
+                  enabledBorder: border(),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.sp),
+                    borderSide: const BorderSide(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ),
+              if (selectedOffer == 'للبيع')
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const TitleFormAddBook(title: 'السعر'),
+                    CustomTextformfield(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'ادخل البيانات المطلوبة';
+                        }
+                        return null;
+                      },
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      keyboardType: TextInputType.number,
+                      text: 'مثال: 10',
+                      controller: priceController,
+                    ),
+                  ],
+                )
+              else
+                const SizedBox(),
+              const H(h: 16),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16.sp),
         child: CustomButton(
+          isActive: isActive,
           text: 'إضافة الكتاب',
           onTap: () async {
-            await _uploadBook();
+            if (_coverImage == null &&
+                _coverImageI == null &&
+                _coverImageII == null) {
+              showSnackBar(context, 'من فضلك ادخل ولو صورة واحدة');
+            } else {
+              if (formKey.currentState!.validate()) {
+                await _uploadBook();
+              }
+            }
           },
         ),
       ),

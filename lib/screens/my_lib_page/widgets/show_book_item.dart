@@ -18,14 +18,12 @@ class ShowBookItem extends StatelessWidget {
     final now = DateTime.now();
     final specificDate = book['created_at'];
     final createdAt = DateTime.parse(specificDate.toString());
-    final difference = now.difference(createdAt).inDays;
+    final difference = now.difference(createdAt);
 
     final images = <String>[
       book['cover_image_url'].toString(),
-      book['cover_image_urlI']?.toString() ??
-          book['cover_image_url'].toString(),
-      book['cover_image_urlII']?.toString() ??
-          book['cover_image_url'].toString(),
+      book['cover_book_url2'].toString(),
+      book['cover_book_url3'].toString(),
     ];
     return Scaffold(
       appBar: AppBar(
@@ -203,6 +201,22 @@ class ShowBookItem extends StatelessWidget {
               horizontal: 16.sp,
               vertical: 5.sp,
             ),
+            child: SizedBox(
+              child: Text(
+                'منذ ${difference.inMinutes}',
+                style: TextStyle(
+                  color: const Color(0xFFA2A2A2),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.sp,
+              vertical: 5.sp,
+            ),
             child: Row(
               spacing: 5.sp,
               children: [
@@ -250,7 +264,7 @@ class ShowBookItem extends StatelessWidget {
             ),
             child: SizedBox(
               child: Text(
-                'انضم للمكتبة منذ $difference أيام.',
+                'انضم للمكتبة منذ ${difference.inDays} أيام.',
                 style: TextStyle(
                   color: const Color(0xFFA2A2A2),
                   fontSize: 14.sp,

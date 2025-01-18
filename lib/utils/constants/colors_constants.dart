@@ -7,3 +7,4 @@ const kTextShadowColor = Color(0xFFB1B1B1);
 const kHeader1Color = Color(0xFF3A3A3A);
 const kBorderColor = Color(0xFFD3D3D3);
 const kDisableButtonColor = Color(0xFFEFEFEF);
+const kLightBlue = Color(0xffe8eaee);
