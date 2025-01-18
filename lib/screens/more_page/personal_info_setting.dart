@@ -41,8 +41,10 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
   File? userImage;
 
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 20,
+    );
     if (pickedFile != null) {
       setState(() {
         userImage = File(pickedFile.path);
