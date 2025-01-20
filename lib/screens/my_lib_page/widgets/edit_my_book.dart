@@ -8,6 +8,7 @@ import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_dialog.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -340,19 +341,28 @@ class _EditBookState extends State<EditBook> {
           actions: [
             IconButton(
               onPressed: () async {
-                await supabase.from('books').delete().eq(
-                      'id',
-                      bookId,
-                    );
-                await Navigator.pushReplacementNamed(
-                    context, NavigationBarApp.id);
+                final shouldExit = await showCustomDialog(
+                  context,
+                  'ستقوم بحذف الكتاب؟',
+                );
+                // return shouldExit!;
+                if (shouldExit!) {
+                  await supabase.from('books').delete().eq(
+                        'id',
+                        bookId,
+                      );
+                  await Navigator.pushReplacementNamed(
+                    context,
+                    NavigationBarApp.id,
+                  );
+                }
               },
               icon: Icon(
                 Icons.delete_rounded,
                 color: kMainColor,
                 size: 22.sp,
               ),
-            )
+            ),
           ],
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
@@ -377,6 +387,7 @@ class _EditBookState extends State<EditBook> {
             key: formKey,
             child: ListView(
               children: [
+                /// Images book
                 Text(
                   'تعديل صورتي للكتاب',
                   textAlign: TextAlign.right,
