@@ -80,7 +80,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       const H(h: 10),
 
                       /// Button
-                      CustomButton(
+                      const CustomButton(
                         // isActive: false,
                         // onTap: resetPassword,
                         text: 'إرسال الرمز',
