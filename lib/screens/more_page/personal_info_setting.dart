@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:biblio/screens/add_book_page/widgets/title_form_add_book.dart';
 import 'package:biblio/screens/more_page/widgets/get_user_image.dart';
-import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/services/delete_user.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
@@ -215,13 +214,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
           /// Leading
           leading: IconButton(
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NavigationBarApp(),
-                ),
-                (route) => false,
-              ); // إزالة جميع الصفحات
+              Navigator.pop(context); // إزالة جميع الصفحات
             },
             icon: Icon(
               Icons.arrow_back_ios_new,
@@ -336,13 +329,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
               await _fetchUserData();
               showSnackBar(context, 'تم الحفظ');
 
-              await Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NavigationBarApp(),
-                ),
-                (route) => false,
-              );
+              Navigator.pop(context);
             },
           ),
         ),
