@@ -30,7 +30,6 @@ class _AddBookState extends State<AddBook> {
 
   File? _coverImage;
   File? _coverImageI;
-  File? _coverImageII;
 
   final _titleController = TextEditingController();
   final _authorController = TextEditingController();
@@ -70,7 +69,7 @@ class _AddBookState extends State<AddBook> {
   /// Pick 1st image
   Future<void> _pickImage() async {
     final pickedFile = await ImagePicker().pickImage(
-      imageQuality: 20,
+      imageQuality: 30,
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
@@ -83,7 +82,7 @@ class _AddBookState extends State<AddBook> {
   /// Pick 2nd image
   Future<void> _pickImageI() async {
     final pickedFile = await ImagePicker().pickImage(
-      imageQuality: 20,
+      imageQuality: 30,
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
@@ -92,20 +91,6 @@ class _AddBookState extends State<AddBook> {
       });
     }
   }
-
-  // /// Pick 3rd image
-  // Future<void> _pickImageII() async {
-  //   final pickedFile = await ImagePicker().pickImage(
-  //     imageQuality: 20,
-  //     source: ImageSource.gallery,
-  //   );
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       _coverImageII = File(pickedFile.path);
-  //     });
-  //   }
-  //   showSnackBar(context, 'يفضل ألا يزيد حجم الصور عن 1 ميجابايت');
-  // }
 
   /// Upload book
   Future<void> _uploadBook() async {
@@ -116,7 +101,7 @@ class _AddBookState extends State<AddBook> {
 
       ///
       /// رفع الصورة إلى Supabase Storage
-      final fileName = 'books/${DateTime.now().toIso8601String()}';
+      final fileName = DateTime.now().toIso8601String();
       if (_coverImage != null) {
         await supabase.storage
             .from('book_covers')
@@ -127,7 +112,7 @@ class _AddBookState extends State<AddBook> {
 
       ///
 
-      final fileNameI = 'books/${DateTime.now().toIso8601String()}';
+      final fileNameI = DateTime.now().toIso8601String();
       if (_coverImageI != null) {
         await supabase.storage
             .from('book_covers')
@@ -136,16 +121,6 @@ class _AddBookState extends State<AddBook> {
 
       final imageUrlI =
           supabase.storage.from('book_covers').getPublicUrl(fileNameI);
-
-      ///
-      final fileNameII = 'books/${DateTime.now().toIso8601String()}';
-      if (_coverImageII != null) {
-        await supabase.storage
-            .from('book_covers')
-            .upload(fileNameII, _coverImageII!);
-      }
-      final imageUrlII =
-          supabase.storage.from('book_covers').getPublicUrl(fileNameII);
 
       final response = await supabase
           .from('users')
@@ -163,7 +138,6 @@ class _AddBookState extends State<AddBook> {
 
       final book = BookModel(
         coverImageUrlI: imageUrlI,
-        coverImageUrlII: imageUrlII,
         userId: supabase.auth.currentUser!.id,
         coverImageUrl: imageUrl,
         title: _titleController.text,
@@ -192,10 +166,12 @@ class _AddBookState extends State<AddBook> {
         await Navigator.pushReplacementNamed(context, NavigationBarApp.id);
       }
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      showSnackBar(context, 'يوجد خطأ');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(context, 'يوجد خطأ');
+      }
       print(e);
     }
   }
@@ -224,8 +200,10 @@ class _AddBookState extends State<AddBook> {
         leading: IconButton(
           onPressed: () =>
               Navigator.pushReplacementNamed(context, NavigationBarApp.id),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_new_rounded,
+            color: kMainColor,
+            size: 22.sp,
           ),
         ),
         title: Text(
@@ -268,11 +246,6 @@ class _AddBookState extends State<AddBook> {
                     image: _coverImageI,
                     onTap: _pickImageI,
                   ),
-                  // AddBookImages(
-                  //   icon: Icons.image_outlined,
-                  //   image: _coverImageII,
-                  //   onTap: _pickImageII,
-                  // ),
                 ],
               ),
               const TitleFormAddBook(

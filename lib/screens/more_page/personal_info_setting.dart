@@ -64,9 +64,8 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
 
       ///
       /// رفع الصورة إلى Supabase Storage
-      final fileName = 'books/${DateTime.now().toIso8601String()}';
-      // ignore: unused_local_variable
-      final storageResponse = await Supabase.instance.client.storage
+      final fileName = DateTime.now().toIso8601String();
+      await Supabase.instance.client.storage
           .from('user-photos')
           .upload(fileName, userImage!);
       final imageUrl = Supabase.instance.client.storage

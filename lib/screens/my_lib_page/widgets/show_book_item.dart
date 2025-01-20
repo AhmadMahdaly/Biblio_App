@@ -1,4 +1,5 @@
 import 'package:biblio/screens/home_page/widgets/title_header_home.dart';
+import 'package:biblio/screens/my_lib_page/widgets/edit_my_book.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/custom_button.dart';
@@ -19,7 +20,7 @@ class ShowBookItem extends StatelessWidget {
     final specificDate = book['created_at'];
     final createdAt = DateTime.parse(specificDate.toString());
     final difference = now.difference(createdAt);
-
+    final id = book['id'];
     final images = <String>[
       book['cover_image_url'].toString(),
       book['cover_book_url2'].toString(),
@@ -29,7 +30,13 @@ class ShowBookItem extends StatelessWidget {
         /// Action
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                EditBook.id,
+                arguments: {'bookId': id},
+              );
+            },
             icon: const Icon(Icons.mode_edit_outline_outlined),
           ),
           IconButton(
