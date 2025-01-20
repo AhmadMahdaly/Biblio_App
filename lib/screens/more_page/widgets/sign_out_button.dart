@@ -20,10 +20,12 @@ class _SignOutButtonState extends State<SignOutButton> {
     return TextButton(
       onPressed: () async {
         await supabase.auth.signOut();
-        await Navigator.popAndPushNamed(
-          context,
-          OnboardScreen.id,
-        );
+        if (mounted) {
+          await Navigator.popAndPushNamed(
+            context,
+            OnboardScreen.id,
+          );
+        }
       },
       child: Text(
         'تسجيل الخروج',

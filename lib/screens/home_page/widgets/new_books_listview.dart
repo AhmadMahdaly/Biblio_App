@@ -27,9 +27,11 @@ class _NewBooksListviewState extends State<NewBooksListview> {
   }
 
   Future<void> _fetchBooks() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
 
     await Future.delayed(
       const Duration(seconds: 2),
@@ -47,7 +49,9 @@ class _NewBooksListviewState extends State<NewBooksListview> {
         });
       }
     } catch (e) {
-      showSnackBar(context, 'يوجد خطأ في تحميل البيانات');
+      if (mounted) {
+        showSnackBar(context, 'هناك خطأ! حاول مرة أخرى.');
+      }
       // $e
     } finally {
       if (mounted) {
