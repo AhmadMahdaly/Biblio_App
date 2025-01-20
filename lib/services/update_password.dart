@@ -1,5 +1,6 @@
-import 'package:biblio/utils/constants/supabase_instanse.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+final SupabaseClient supabase = Supabase.instance.client;
 
 Future<void> updatePassword(String newPassword) async {
   try {

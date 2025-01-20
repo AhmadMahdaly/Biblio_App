@@ -1,5 +1,5 @@
+import 'package:biblio/services/update_password.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
-import 'package:biblio/utils/constants/supabase_instanse.dart';
 import 'package:flutter/material.dart';
 
 Future<void> updateBook({

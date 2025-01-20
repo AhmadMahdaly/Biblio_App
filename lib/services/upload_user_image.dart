@@ -1,18 +1,22 @@
 import 'dart:io';
 
 import 'package:biblio/utils/components/show_snackbar.dart';
-import 'package:biblio/utils/constants/supabase_instanse.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Upload user photo
 Future<void> uploadUserPhoto(BuildContext context) async {
+  final supabase = Supabase.instance.client;
+
   /// اختيار الصورة باستخدام ImagePicker
+  final picker = ImagePicker();
   final pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
   /// التحقق من اختيار صورة
   if (pickedImage == null) {
     showSnackBar(context, 'لم يتم اختيار صورة.');
+
     return;
   }
 
@@ -23,12 +27,20 @@ Future<void> uploadUserPhoto(BuildContext context) async {
   final user = supabase.auth.currentUser;
   if (user == null) {
     showSnackBar(context, 'يوجد صعوبة في الوصول للمستخدم المُسجل.');
+
     return;
   }
+
   try {
     /// استرجاع رابط الصورة القديمة
-    final response =
-        await supabase.from('users').select('image').eq('id', user.id).single();
+    final response = await supabase
+        .from('users')
+        .select('image')
+
+        /// حقل الصورة
+        .eq('id', user.id)
+        .single();
+
     if (response['image'] != null) {
       final oldPhotoUrl = response['image'] as String;
 
@@ -44,7 +56,11 @@ Future<void> uploadUserPhoto(BuildContext context) async {
     final fileName = '${user.id}_${DateTime.now().millisecondsSinceEpoch}.jpg';
 
     /// رفع الملف إلى Supabase Storage
-    await supabase.storage.from('user-photos').upload(fileName, file);
+    await supabase.storage
+
+        /// اسم الباكت Bucket الذي قمت بإنشائه في Supabase
+        .from('user-photos')
+        .upload(fileName, file);
 
     /// الحصول على رابط الصورة
     final photoUrl =
@@ -58,10 +74,10 @@ Future<void> uploadUserPhoto(BuildContext context) async {
     if (insertResponse == null) {
       showSnackBar(
         context,
-        '!خطأ أثناء حفظ رابط الصورة',
+        // ignore: avoid_dynamic_calls
+        '${insertResponse.error!.message} خطأ أثناء حفظ رابط الصورة',
       );
     }
-
     showSnackBar(context, 'تم الحفظ.');
   } catch (e) {
     // showSnackBar(context, 'حدث خطأ: $e');

@@ -1,10 +1,13 @@
 import 'package:biblio/utils/components/show_snackbar.dart';
-import 'package:biblio/utils/constants/supabase_instanse.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 ///
 /// Get user photo
 Future<String?> getUserPhoto(BuildContext context) async {
+  final supabase = Supabase.instance.client;
+
+  final user = supabase.auth.currentUser;
   if (user == null) {
     showSnackBar(context, 'يوجد صعوبة في الوصول للمستخدم المُسجل.');
 
@@ -18,7 +21,7 @@ Future<String?> getUserPhoto(BuildContext context) async {
         .select('image')
 
         /// تحديد الحقل المطلوب
-        .eq('id', user!.id)
+        .eq('id', user.id)
         .single();
 
     /// جلب سجل واحد فقط

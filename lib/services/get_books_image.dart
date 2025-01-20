@@ -1,11 +1,12 @@
-import 'package:biblio/utils/constants/supabase_instanse.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Get book photo
 Future<String?> getBooksPhoto(
   BuildContext context,
   int id,
 ) async {
+  final supabase = Supabase.instance.client;
   try {
     /// استرجاع رابط الصورة من قاعدة البيانات
     final response = await supabase
@@ -28,6 +29,7 @@ Future<String?> getBooksPhotoI(
   BuildContext context,
   int id,
 ) async {
+  final supabase = Supabase.instance.client;
   try {
     /// استرجاع رابط الصورة من قاعدة البيانات
     final response = await supabase
