@@ -1,5 +1,6 @@
 import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/constants/supabase_instanse.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,7 +9,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DeleteUser extends StatefulWidget {
   const DeleteUser({super.key});
-
   @override
   State<DeleteUser> createState() => _DeleteUserState();
 }
@@ -21,8 +21,6 @@ class _DeleteUserState extends State<DeleteUser> {
       _isDeleting = true;
     });
     try {
-      final user = Supabase.instance.client.auth.currentUser;
-
       if (user == null) {
         throw Exception('لم يتم تسجيل الدخول.');
       }
@@ -31,14 +29,10 @@ class _DeleteUserState extends State<DeleteUser> {
         dotenv.env['SUPABASE_URL'] ?? '', // رابط المشروع
         dotenv.env['SUPABASE_ADMIN'] ?? '', // مفتاح الخدمة
       );
-
-      await supabase.auth.admin.deleteUser(user.id);
-
+      await supabase.auth.admin.deleteUser(user!.id);
       // حذف البيانات المرتبطة بالمستخدم من قاعدة البيانات
-
       final deleteResponse =
-          await supabase.from('users').delete().eq('id', user.id);
-
+          await supabase.from('users').delete().eq('id', user!.id);
       // ignore: avoid_dynamic_calls
       if (deleteResponse.error != null) {
         throw Exception(
@@ -46,11 +40,9 @@ class _DeleteUserState extends State<DeleteUser> {
           'حدث خطأ أثناء حذف بيانات المستخدم: ${deleteResponse.error!.message}',
         );
       }
-
       await Future.delayed(
         const Duration(seconds: 2),
       ); // محاكاة التأخير
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

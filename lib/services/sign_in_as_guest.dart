@@ -1,6 +1,5 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:biblio/utils/constants/supabase_instanse.dart';
 
-final SupabaseClient supabase = Supabase.instance.client;
 Future<void> signInAsGuest() async {
   try {
     // final response =
