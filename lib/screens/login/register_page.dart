@@ -1,5 +1,4 @@
 import 'package:biblio/screens/login/login_screen.dart';
-import 'package:biblio/screens/login/services/sign_up.dart';
 import 'package:biblio/screens/more_page/widgets/terms_and_conditions_page.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
@@ -9,6 +8,7 @@ import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
+import 'package:biblio/utils/constants/supabase_instanse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,6 +37,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isShowPassword = true;
   bool _isAgreed = false;
   bool enabled = false;
+
+  /// Sign Up
+  Future<AuthResponse> signUp(String userName) {
+    return supabase.auth.signUp(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+      data: {'name': userName},
+    );
+  }
 
   ///
   @override
@@ -250,22 +259,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         });
 
                         try {
-                          final response = await signUp(
-                            userName,
-                            password,
-                            emailController,
-                            passwordController,
-                          );
+                          final response = await signUp(userName);
                           if (response.user != null) {
+                            userId = response.user!.id;
                             // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
                             await supabase.from('users').insert({
                               // ربط المستخدم باستخدام UID
-                              'id': response.user?.id,
+                              'id': userId,
                               'username': userName,
                               'email': email,
                               'password': password,
                             });
-                            userId = response.user!.id;
                           }
                           setState(() {
                             isInAsyncCall = false;
@@ -314,10 +318,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               'كلمة المرور ضعيفة',
                             );
                           }
+
+                          showSnackBar(
+                            context,
+                            'أوبس، هناك خطأ في التسجيل! ربما يكون هناك مشكلة في الإتصال.\n$error',
+                          );
                         } catch (e) {
                           setState(() {
                             isInAsyncCall = false;
                           });
+
                           showSnackBar(
                             context,
                             'أوبس، هناك خطأ في التسجيل! ربما يكون هناك مشكلة في الإتصال.\n$e',
