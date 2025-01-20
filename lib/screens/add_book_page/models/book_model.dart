@@ -3,7 +3,6 @@ class BookModel {
     required this.userName,
     required this.userImage,
     required this.coverImageUrlI,
-    required this.coverImageUrlII,
     required this.userId,
     required this.coverImageUrl,
     required this.title,
@@ -19,7 +18,7 @@ class BookModel {
   final String coverImageUrl;
   final String coverImageUrlI;
   final String userName;
-  final String coverImageUrlII;
+
   final String userImage;
   final String title;
   final String author;
@@ -42,7 +41,6 @@ class BookModel {
       'condition': condition,
       'offer_type': offerType,
       'cover_book_url2': coverImageUrlI,
-      'cover_book_url3': coverImageUrlII,
     };
   }
 }
