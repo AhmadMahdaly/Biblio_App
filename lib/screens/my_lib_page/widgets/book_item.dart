@@ -1,4 +1,4 @@
-import 'package:biblio/screens/my_lib_page/widgets/show_book_item.dart';
+import 'package:biblio/screens/my_lib_page/widgets/book_page.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BookItem extends StatelessWidget {
-  const BookItem({required this.book, required this.books, super.key});
+  const BookItem({
+    required this.book,
+    required this.books,
+    super.key,
+  });
 
   final Map<String, dynamic> book;
   final int books;
