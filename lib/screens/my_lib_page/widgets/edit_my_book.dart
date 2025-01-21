@@ -81,7 +81,6 @@ class _EditBookState extends State<EditBook> {
 
       var newTitle = _titleController.text.trim();
       var newdesc = _descriptionController.text.trim();
-
       var newAuthor = _authorController.text.trim();
       var newCategory = selectedCategory;
       var newCondition = _conditionController.text.trim();
@@ -314,7 +313,7 @@ class _EditBookState extends State<EditBook> {
         });
       }
       if (mounted) {
-        showSnackBar(context, 'هناك خطأ! حاول مرة أخرى.');
+        showSnackBar(context, 'هناك خطأ! $e.');
       }
       //  $e
     }
@@ -669,7 +668,7 @@ class _EditBookState extends State<EditBook> {
                   category: selectedCategory!,
                   condition: _conditionController.text,
                   offerType: selectedOffer!,
-                  price: int.tryParse(priceController.text) ?? 0,
+                  price: int.tryParse(priceController.text)!,
                   context: context,
                 );
                 Navigator.pop(context);

@@ -42,7 +42,7 @@ class _GetUserImageState extends State<GetUserImage> {
                 if (photoUrl == null || photoUrl.isEmpty) {
                   return Icon(
                     Icons.account_circle,
-                    size: size.sp,
+                    size: 40.sp,
                     color: kScaffoldBackgroundColor,
                   );
                 }

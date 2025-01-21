@@ -13,7 +13,7 @@ class SignAsVisitor extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        signInAsGuest();
+        signInAsGuest(context);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

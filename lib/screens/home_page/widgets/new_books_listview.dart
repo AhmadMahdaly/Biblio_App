@@ -5,6 +5,7 @@ import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -50,10 +51,8 @@ class _NewBooksListviewState extends State<NewBooksListview> {
       }
     } catch (e) {
       if (mounted) {
-        showSnackBar(context, 'هناك خطأ! حاول مرة أخرى.');
+        showSnackBar(context, ' $e هناك خطأ! حاول مرة أخرى.');
       }
-      // $e
-    } finally {
       if (mounted) {
         setState(() {
           isLoading = false;
@@ -64,34 +63,42 @@ class _NewBooksListviewState extends State<NewBooksListview> {
 
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(
-      color: kScaffoldBackgroundColor,
-      progressIndicator: const AppIndicator(),
-      inAsyncCall: isLoading,
-      child: ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 8.sp),
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          final book = books[index];
+    return books == null || books.isEmpty
+        ? Container(
+            alignment: Alignment.topCenter,
+            child: SvgPicture.asset(
+              'assets/svg/Reading glasses-cuate.svg',
+              height: 100.sp,
+            ),
+          )
+        : ModalProgressHUD(
+            color: kScaffoldBackgroundColor,
+            progressIndicator: const AppIndicator(),
+            inAsyncCall: isLoading,
+            child: ListView.builder(
+              padding: EdgeInsets.symmetric(horizontal: 8.sp),
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                final book = books[index];
 
-          return InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ShowBookItem(
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ShowBookItem(
+                          book: book,
+                        ),
+                      ),
+                    );
+                  },
+                  child: ShowBook(
                     book: book,
                   ),
-                ),
-              );
-            },
-            child: ShowBook(
-              book: book,
+                );
+              },
+              itemCount: books.length,
             ),
           );
-        },
-        itemCount: books.length,
-      ),
-    );
   }
 }

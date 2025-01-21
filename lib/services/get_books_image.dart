@@ -1,3 +1,4 @@
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -42,8 +43,8 @@ Future<String?> getBooksPhotoI(
     final photoUrl = response['cover_book_url2'] as String;
     return photoUrl;
   } catch (e) {
-    // showSnackBar(context, 'جاري العمل على حفظ الصورة!');
-// 'حدث خطأ: $e'
+    showSnackBar(context, 'خطأ $e');
+
     return null;
   }
 }

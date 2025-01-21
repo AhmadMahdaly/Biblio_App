@@ -26,6 +26,6 @@ Future<void> updateBook({
 
     showSnackBar(context, 'تم تعديل الكتاب.');
   } catch (e) {
-    showSnackBar(context, 'هناك خطأ! حاول مرة أخرى.');
+    showSnackBar(context, 'خطأ $e');
   }
 }

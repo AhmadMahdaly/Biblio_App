@@ -229,8 +229,13 @@ class ShowBookItem extends StatelessWidget {
                 CircleAvatar(
                   backgroundColor: kTextShadowColor,
                   radius: 16.sp,
-                  child: book['user_image'] == null
-                      ? const SizedBox()
+                  child: book['user_image'] == null ||
+                          book['user_image'].toString().isEmpty
+                      ? Icon(
+                          Icons.account_circle,
+                          size: 30.sp,
+                          color: kScaffoldBackgroundColor,
+                        )
                       : Container(
                           clipBehavior: Clip.hardEdge,
                           decoration: BoxDecoration(

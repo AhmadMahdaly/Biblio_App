@@ -38,6 +38,6 @@ Future<void> fetchUserName(BuildContext context) async {
 
     return response['username'];
   } catch (e) {
-    showSnackBar(context, e.toString());
+    showSnackBar(context, 'خطأ $e');
   }
 }

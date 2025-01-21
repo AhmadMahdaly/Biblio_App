@@ -1,7 +1,9 @@
+import 'package:biblio/utils/components/show_snackbar.dart';
+import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final SupabaseClient supabase = Supabase.instance.client;
-Future<void> signInAsGuest() async {
+Future<void> signInAsGuest(BuildContext context) async {
   try {
     // final response =
     await supabase.auth.signInAnonymously();
@@ -11,7 +13,7 @@ Future<void> signInAsGuest() async {
     // } else {
     //   print('Failed to sign in as guest.');
     // }
-  } catch (error) {
-    // print('Error signing in as guest: $error');
+  } catch (e) {
+    showSnackBar(context, 'خطأ $e');
   }
 }

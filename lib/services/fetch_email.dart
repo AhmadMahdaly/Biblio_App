@@ -37,6 +37,6 @@ Future<void> fetchEmail(BuildContext context) async {
 
     return response['email'];
   } catch (e) {
-    showSnackBar(context, e.toString());
+    showSnackBar(context, 'خطأ $e');
   }
 }

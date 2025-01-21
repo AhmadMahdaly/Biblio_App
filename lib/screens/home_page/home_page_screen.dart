@@ -1,4 +1,5 @@
-import 'package:biblio/screens/home_page/widgets/category_listview.dart';
+import 'package:biblio/screens/category_page/widgets/category_listview.dart';
+import 'package:biblio/screens/category_page/widgets/see_all.dart';
 import 'package:biblio/screens/home_page/widgets/home_banner.dart';
 import 'package:biblio/screens/home_page/widgets/new_books_listview.dart';
 import 'package:biblio/screens/home_page/widgets/search_textfield.dart';
@@ -46,14 +47,26 @@ class HomePage extends StatelessWidget {
                       text: 'فئات الكتب',
                     ),
                     const Spacer(),
-                    Text(
-                      'عرض الكل',
-                      style: TextStyle(
-                        color: const Color(0xFFA4CFC3),
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w800,
-                        decoration: TextDecoration.underline,
-                        decorationColor: const Color(0xFFA4CFC3),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const CategorySeeAll();
+                            },
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'عرض الكل',
+                        style: TextStyle(
+                          color: const Color(0xFFA4CFC3),
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w800,
+                          decoration: TextDecoration.underline,
+                          decorationColor: const Color(0xFFA4CFC3),
+                        ),
                       ),
                     ),
                     const W(w: 16),
@@ -65,7 +78,7 @@ class HomePage extends StatelessWidget {
             /// Categories ListView
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 95.sp,
+                height: 100.sp,
                 width: 80.sp,
                 child: const CategoryListview(),
               ),

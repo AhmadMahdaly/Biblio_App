@@ -173,9 +173,11 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
         isInAsyncCall = false;
       });
     } catch (e) {
-      setState(() {
-        isInAsyncCall = false;
-      });
+      if (mounted) {
+        setState(() {
+          isInAsyncCall = false;
+        });
+      }
       showSnackBar(context, e.toString());
     }
   }
