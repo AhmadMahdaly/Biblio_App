@@ -9,10 +9,33 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ShowBookItem extends StatelessWidget {
   const ShowBookItem({required this.book, super.key});
   final Map<String, dynamic> book;
+
+  Future<void> addToFavorites() async {
+    final supabase = Supabase.instance.client;
+    try {
+      final user = supabase.auth.currentUser;
+
+      if (user == null) {
+        return;
+      }
+
+      final response = await supabase.from('favorites').insert({
+        'user_id': user.id,
+        'book_id': book['id'],
+      });
+
+      if (response != null) {
+        // print('Book added to favorites!');
+      }
+    } catch (e) {
+      // print('Error adding to favorites: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +48,7 @@ class ShowBookItem extends StatelessWidget {
       book['cover_image_url'].toString(),
       book['cover_book_url2'].toString(),
     ];
+
     return Scaffold(
       appBar: AppBar(
         /// Action
@@ -40,7 +64,7 @@ class ShowBookItem extends StatelessWidget {
             icon: const Icon(Icons.mode_edit_outline_outlined),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: addToFavorites,
             icon: const Icon(Icons.bookmark_outline),
           ),
         ],

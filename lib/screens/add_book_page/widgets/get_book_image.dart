@@ -52,7 +52,7 @@ class _GetBookImageState extends State<GetBookImage> {
               );
             }
             if (snapshot.hasError) {
-              return Center(child: Text('حدث خطأ: ${snapshot.error}'));
+              // return Center(child: Text('حدث خطأ: ${snapshot.error}'));
             }
             final photoUrl = snapshot.data;
 

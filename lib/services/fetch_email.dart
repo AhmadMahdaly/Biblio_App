@@ -32,11 +32,11 @@ Future<void> fetchEmail(BuildContext context) async {
     /// استرجاع صف واحد فقط
 
     if (response['email'] == null) {
-      showSnackBar(context, 'البريد الإلكتروني غير موجود.');
+      // showSnackBar(context, 'البريد الإلكتروني غير موجود.');
     }
 
     return response['email'];
   } catch (e) {
-    showSnackBar(context, 'خطأ $e');
+    // showSnackBar(context, 'خطأ $e');
   }
 }

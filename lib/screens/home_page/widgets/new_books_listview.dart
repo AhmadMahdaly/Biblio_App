@@ -1,7 +1,6 @@
 import 'package:biblio/screens/add_book_page/show_book.dart';
 import 'package:biblio/screens/my_lib_page/widgets/show_book_item.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
-import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,12 +48,12 @@ class _NewBooksListviewState extends State<NewBooksListview> {
       });
     } catch (e) {
       if (mounted) {
-        showSnackBar(context, ' $e هناك خطأ! حاول مرة أخرى.');
-      }
+        // showSnackBar(context, ' $e هناك خطأ! حاول مرة أخرى.');
 
-      setState(() {
-        isLoading = false;
-      });
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 

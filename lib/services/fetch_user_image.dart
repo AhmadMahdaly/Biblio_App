@@ -36,7 +36,7 @@ Future<String?> getUserPhoto(BuildContext context) async {
 
     return photoUrl;
   } catch (e) {
-    showSnackBar(context, 'خطأ $e');
+    // showSnackBar(context, 'خطأ $e');
 
     return null;
   }

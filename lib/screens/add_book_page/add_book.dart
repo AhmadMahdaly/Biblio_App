@@ -61,7 +61,10 @@ class _AddBookState extends State<AddBook> {
         categories = response.map((e) => e['name'] as String).toList();
       });
     } catch (e) {
-      showSnackBar(context, 'هناك خطأ $e');
+      // showSnackBar(context, 'هناك خطأ $e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -72,8 +75,11 @@ class _AddBookState extends State<AddBook> {
       setState(() {
         offerTypes = response.map((e) => e['type'] as String).toList();
       });
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
-      showSnackBar(context, 'هناك خطأ $e');
+      // showSnackBar(context, 'هناك خطأ $e');
     }
   }
 
@@ -105,11 +111,10 @@ class _AddBookState extends State<AddBook> {
 
   /// Upload book
   Future<void> _uploadBook() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
-      setState(() {
-        isLoading = true;
-      });
-
       ///
       /// رفع الصورة إلى Supabase Storage
       final fileName = DateTime.now().toIso8601String();
@@ -159,7 +164,7 @@ class _AddBookState extends State<AddBook> {
         offerType: selectedOffer!,
         userName: userName.toString(),
         userImage: userImage.toString(),
-        price: int.tryParse(priceController.text),
+        price: int.tryParse(priceController.text) ?? 0,
       );
 
       // إضافة بيانات الكتاب إلى الجدول
@@ -181,13 +186,16 @@ class _AddBookState extends State<AddBook> {
         setState(() {
           isLoading = false;
         });
-        showSnackBar(context, 'هناك خطأ! $e.');
+        // showSnackBar(context, 'هناك خطأ! $e.');
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      isLoading = false;
+    });
     if (_coverImage == null ||
         _coverImageI == null ||
         _titleController.text.isEmpty ||
@@ -448,6 +456,9 @@ class _AddBookState extends State<AddBook> {
                   text: 'إضافة الكتاب',
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
+                      setState(() {
+                        isLoading = true;
+                      });
                       await _uploadBook();
                     }
                   },

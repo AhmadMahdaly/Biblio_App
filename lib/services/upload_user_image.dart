@@ -70,13 +70,13 @@ Future<void> uploadUserPhoto(BuildContext context) async {
       'image': photoUrl,
     }).eq('id', user.id);
     if (insertResponse == null) {
-      showSnackBar(
-        context,
-        'خطأ أثناء حفظ رابط الصورة',
-      );
+      // showSnackBar(
+      //   context,
+      //   'خطأ أثناء حفظ رابط الصورة',
+      // );
     }
-    showSnackBar(context, 'تم الحفظ.');
+    // showSnackBar(context, 'تم الحفظ.');
   } catch (e) {
-    showSnackBar(context, 'خطأ $e');
+    // showSnackBar(context, 'خطأ $e');
   }
 }

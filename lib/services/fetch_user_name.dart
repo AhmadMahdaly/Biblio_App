@@ -33,11 +33,11 @@ Future<void> fetchUserName(BuildContext context) async {
     /// استرجاع صف واحد فقط
 
     if (response['username'] == null) {
-      showSnackBar(context, 'اسم المستخدم غير موجود.');
+      // showSnackBar(context, 'اسم المستخدم غير موجود.');
     }
 
     return response['username'];
   } catch (e) {
-    showSnackBar(context, 'خطأ $e');
+    // showSnackBar(context, 'خطأ $e');
   }
 }

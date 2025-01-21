@@ -1,7 +1,6 @@
 import 'package:biblio/screens/category_page/category_page.dart';
 import 'package:biblio/screens/category_page/widgets/category_item.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
-import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -46,7 +45,7 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
         isLoading = false;
       });
     } catch (e) {
-      showSnackBar(context, 'هناك خطأ! $e.');
+      // showSnackBar(context, 'هناك خطأ! $e.');
 
       setState(() {
         isLoading = false;

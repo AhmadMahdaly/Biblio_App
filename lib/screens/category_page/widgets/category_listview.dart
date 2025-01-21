@@ -45,12 +45,13 @@ class _CategoryListviewState extends State<CategoryListview> {
         isLoading = false;
       });
     } catch (e) {
-      // if (mounted) {}
-      // $e
+      if (mounted) {
+        // $e
 
-      setState(() {
-        isLoading = false;
-      });
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
