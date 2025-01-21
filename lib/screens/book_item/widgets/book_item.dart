@@ -1,4 +1,4 @@
-import 'package:biblio/screens/my_lib_page/widgets/book_page.dart';
+import 'package:biblio/screens/book_item/book_page.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';

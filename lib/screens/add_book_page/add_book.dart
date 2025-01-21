@@ -434,7 +434,7 @@ class _AddBookState extends State<AddBook> {
                           return null;
                         },
                         inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.digitsOnly,
                         ],
                         keyboardType: TextInputType.number,
                         text: 'مثال: 10',

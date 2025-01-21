@@ -1,4 +1,4 @@
-import 'package:biblio/screens/my_lib_page/widgets/book_item.dart';
+import 'package:biblio/screens/book_item/widgets/book_item.dart';
 import 'package:biblio/services/update_password.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';

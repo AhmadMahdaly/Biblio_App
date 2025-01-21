@@ -1,6 +1,7 @@
+import 'package:biblio/screens/book_item/edit_my_book.dart';
 import 'package:biblio/screens/home_page/widgets/title_header_home.dart';
-import 'package:biblio/screens/my_lib_page/widgets/edit_my_book.dart';
 import 'package:biblio/screens/my_lib_page/widgets/favorate_button.dart';
+import 'package:biblio/screens/order_the_book_page.dart';
 import 'package:biblio/services/fetch_email.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/border_radius.dart';
@@ -419,13 +420,27 @@ class _ShowBookItemState extends State<ShowBookItem> {
             ),
           ],
         ),
-        bottomNavigationBar: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 16.sp,
-            vertical: 8.sp,
-          ),
-          child: const CustomButton(text: 'طلب الكتاب'),
-        ),
+        bottomNavigationBar: widget.book['user_id'] == _user
+            ? const SizedBox()
+            : Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.sp,
+                  vertical: 8.sp,
+                ),
+                child: CustomButton(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const OrderTheBookPage();
+                        },
+                      ),
+                    );
+                  },
+                  text: 'طلب الكتاب',
+                ),
+              ),
       ),
     );
   }
