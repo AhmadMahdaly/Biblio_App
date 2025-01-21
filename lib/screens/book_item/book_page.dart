@@ -78,7 +78,9 @@ class _ShowBookItemState extends State<ShowBookItem> {
           /// Action
           actions: [
             /// Edit button
-            if (widget.book['user_id'] == _user)
+            if (_user == null)
+              const SizedBox()
+            else if (widget.book['user_id'] == _user)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.sp),
                 child: IconButton(
@@ -92,7 +94,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
                   icon: const Icon(Icons.mode_edit_outline_outlined),
                 ),
               )
-            else
+            else if (widget.book['user_id'] != _user)
 
               /// Favorite button
               Padding(
@@ -100,7 +102,9 @@ class _ShowBookItemState extends State<ShowBookItem> {
                 child: FavoriteButton(
                   bookId: id.toString(),
                 ),
-              ),
+              )
+            else
+              const SizedBox(),
           ],
 
           /// Leading
@@ -420,27 +424,29 @@ class _ShowBookItemState extends State<ShowBookItem> {
             ),
           ],
         ),
-        bottomNavigationBar: widget.book['user_id'] == _user
+        bottomNavigationBar: _user == null || widget.book['user_id'] == _user
             ? const SizedBox()
-            : Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.sp,
-                  vertical: 8.sp,
-                ),
-                child: CustomButton(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const OrderTheBookPage();
-                        },
-                      ),
-                    );
-                  },
-                  text: 'طلب الكتاب',
-                ),
-              ),
+            : widget.book['user_id'] != _user
+                ? Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.sp,
+                      vertical: 8.sp,
+                    ),
+                    child: CustomButton(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const OrderTheBookPage();
+                            },
+                          ),
+                        );
+                      },
+                      text: 'طلب الكتاب',
+                    ),
+                  )
+                : const SizedBox(),
       ),
     );
   }

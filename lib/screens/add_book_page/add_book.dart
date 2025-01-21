@@ -4,6 +4,7 @@ import 'package:biblio/screens/add_book_page/models/book_model.dart';
 import 'package:biblio/screens/add_book_page/widgets/add_book_image.dart';
 import 'package:biblio/screens/add_book_page/widgets/title_form_add_book.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
+import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
@@ -51,6 +52,31 @@ class _AddBookState extends State<AddBook> {
     isLoading = true;
     fetchCategories();
     fetchOrderType();
+    fetchUserId();
+  }
+
+  String? _user;
+  Future<void> fetchUserId() async {
+    try {
+      /// الحصول على المستخدم الحالي
+      final user = supabase.auth.currentUser;
+      if (user == null) {
+        throw Exception('المستخدم غير مسجل الدخول.');
+      }
+
+      if (mounted) {
+        setState(() {
+          _user = user.id;
+        });
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Future<void> fetchCategories() async {
@@ -451,22 +477,30 @@ class _AddBookState extends State<AddBook> {
         ),
         bottomNavigationBar: Padding(
           padding: EdgeInsets.all(16.sp),
-          child: isActive
-              ? CustomButton(
-                  text: 'إضافة الكتاب',
-                  onTap: () async {
-                    if (formKey.currentState!.validate()) {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      await _uploadBook();
-                    }
+          child: _user == null
+              ? CustomBorderBotton(
+                  padding: 16,
+                  text: 'تسجيل الدخول',
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, OnboardScreen.id);
                   },
                 )
-              : const CustomButton(
-                  isActive: false,
-                  text: 'إضافة الكتاب',
-                ),
+              : isActive
+                  ? CustomButton(
+                      text: 'إضافة الكتاب',
+                      onTap: () async {
+                        if (formKey.currentState!.validate()) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await _uploadBook();
+                        }
+                      },
+                    )
+                  : const CustomButton(
+                      isActive: false,
+                      text: 'إضافة الكتاب',
+                    ),
         ),
       ),
     );

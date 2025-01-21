@@ -1,5 +1,7 @@
 import 'package:biblio/screens/book_item/widgets/book_item.dart';
+import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +21,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     isLoading = true;
     _fetchBooks();
     fetchFavorites();
-
+    fetchUserId();
     super.initState();
   }
 
@@ -58,10 +60,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
     await Future.delayed(
       const Duration(seconds: 2),
     );
-
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
 
     try {
       final user = supabase.auth.currentUser;
@@ -97,50 +100,85 @@ class _FavoritesPageState extends State<FavoritesPage> {
     }
   }
 
+  String? _user;
+  Future<void> fetchUserId() async {
+    try {
+      /// الحصول على المستخدم الحالي
+      final user = supabase.auth.currentUser;
+      if (user == null) {
+        throw Exception('المستخدم غير مسجل الدخول.');
+      }
+
+      if (mounted) {
+        setState(() {
+          _user = user.id;
+        });
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return books.isEmpty
-        ? const AppIndicator()
-        : ModalProgressHUD(
-            progressIndicator: const AppIndicator(),
-            inAsyncCall: isLoading,
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  'قائمة الكتب المفضلة',
-                  style: TextStyle(
-                    color: kTextColor,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    height: 1.sp,
+    return _user == null
+        ? Center(
+            child: CustomBorderBotton(
+              padding: 24,
+              text: 'تسجيل الدخول',
+              onTap: () {
+                Navigator.pushReplacementNamed(context, OnboardScreen.id);
+              },
+            ),
+          )
+        : books.isEmpty
+            ? const AppIndicator()
+            : ModalProgressHUD(
+                progressIndicator: const AppIndicator(),
+                inAsyncCall: isLoading,
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text(
+                      'قائمة الكتب المفضلة',
+                      style: TextStyle(
+                        color: kTextColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        height: 1.sp,
+                      ),
+                    ),
+                  ),
+                  body:
+                      //  favoriteBooks.isEmpty
+                      // ? const Center(child: Text('No favorites added yet!')):
+                      GridView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 16.sp),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.9,
+                      crossAxisSpacing: 10,
+                      // mainAxisSpacing: 0,
+                    ),
+                    itemCount: favoriteBooks.length,
+                    itemBuilder: (context, index) {
+                      final favorite = favoriteBooks[index];
+                      final book = books[index];
+                      if (book['id'] == favorite['book_id']) {
+                        return BookItem(
+                          books: book.length,
+                          book: book,
+                        );
+                      }
+                      return null;
+                    },
                   ),
                 ),
-              ),
-              body:
-                  //  favoriteBooks.isEmpty
-                  // ? const Center(child: Text('No favorites added yet!')):
-                  GridView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 16.sp),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1 / 1.9,
-                  crossAxisSpacing: 10,
-                  // mainAxisSpacing: 0,
-                ),
-                itemCount: favoriteBooks.length,
-                itemBuilder: (context, index) {
-                  final favorite = favoriteBooks[index];
-                  final book = books[index];
-                  if (book['id'] == favorite['book_id']) {
-                    return BookItem(
-                      books: book.length,
-                      book: book,
-                    );
-                  }
-                  return null;
-                },
-              ),
-            ),
-          );
+              );
   }
 }

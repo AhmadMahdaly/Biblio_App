@@ -26,7 +26,11 @@ class _FavoriteButtonState extends State<FavoriteButton> {
   }
 
   Future<void> _loadFavoriteState() async {
-    final userId = supabase.auth.currentUser!.id;
+    final user = supabase.auth.currentUser;
+    if (user == null) {
+      throw Exception('المستخدم غير مسجل الدخول.');
+    }
+    final userId = user.id;
     try {
       await supabase
           .from('favorites')
