@@ -22,7 +22,7 @@ class MoreWithLogin extends StatelessWidget {
         children: [
           const PersonalCard(),
           CategoryForMore(
-            text: 'البيانات الشخصية',
+            text: 'إدارة الحساب',
             icon: Icons.mode_edit_outline_outlined,
             onTap: () {
               Navigator.push(
