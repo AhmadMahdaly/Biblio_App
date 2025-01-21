@@ -143,6 +143,65 @@ class ShowBookItem extends StatelessWidget {
                     borderRadius: borderRadius(),
                   ),
                 ),
+                child: book['offer_type'].toString() == 'للبيع'
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 5.sp,
+                        children: [
+                          Icon(
+                            Icons.sell,
+                            size: 12.sp,
+                          ),
+                          Text(
+                            book['offer_type'].toString(),
+                            style: TextStyle(
+                              color: kMainColor,
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w500,
+                              height: 1.30,
+                            ),
+                          ),
+                        ],
+                      )
+                    : book['offer_type'] == 'للتبرع'
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 5.sp,
+                            children: [
+                              Icon(
+                                Icons.wb_sunny_outlined,
+                                size: 12.sp,
+                              ),
+                              Text(
+                                book['offer_type'].toString(),
+                                style: TextStyle(
+                                  color: kMainColor,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.30,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 5.sp,
+                            children: [
+                              Icon(
+                                Icons.sync_outlined,
+                                size: 12.sp,
+                              ),
+                              Text(
+                                book['offer_type'].toString(),
+                                style: TextStyle(
+                                  color: kMainColor,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.30,
+                                ),
+                              ),
+                            ],
+                          ),
               ),
             ],
           ),
