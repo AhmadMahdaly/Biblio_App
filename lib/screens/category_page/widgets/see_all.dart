@@ -1,6 +1,7 @@
 import 'package:biblio/screens/category_page/category_page.dart';
 import 'package:biblio/screens/category_page/widgets/category_item.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -58,6 +59,26 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        title: Text(
+          'فئات الكتب',
+          style: TextStyle(
+            color: kTextColor,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+            height: 1.sp,
+          ),
+        ),
+
+        /// Leading
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            size: 22.sp,
+          ),
+        ),
       ),
       body: isLoading
           ? const AppIndicator()
