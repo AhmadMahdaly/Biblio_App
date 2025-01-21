@@ -64,15 +64,18 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
           : GridView.builder(
               padding: EdgeInsets.symmetric(
                 horizontal: 16.sp,
+                vertical: 16.sp,
               ),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                crossAxisSpacing: 10.sp,
-                mainAxisSpacing: 10.sp,
+                childAspectRatio: 1.2,
+                crossAxisSpacing: 6.sp,
+                mainAxisSpacing: 20.sp,
               ),
               itemBuilder: (context, index) {
                 final book = books[index];
                 return CategoryItem(
+                  icon: book['icon'].toString(),
                   title: book['name'].toString(),
                   onTap: () {
                     Navigator.push(
@@ -83,7 +86,6 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
                       ),
                     );
                   },
-                  icon: book['icon'].toString(),
                 );
               },
               itemCount: books.length,

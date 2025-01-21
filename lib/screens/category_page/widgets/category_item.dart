@@ -20,7 +20,7 @@ class CategoryItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         alignment: Alignment.topCenter,
-        margin: EdgeInsets.symmetric(horizontal: 8.sp),
+        margin: EdgeInsets.symmetric(horizontal: 10.sp),
         width: 80.sp,
         height: 80.sp,
         decoration: BoxDecoration(
