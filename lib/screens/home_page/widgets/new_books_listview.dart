@@ -19,21 +19,16 @@ class _NewBooksListviewState extends State<NewBooksListview> {
   final SupabaseClient supabase = Supabase.instance.client;
 
   List<Map<String, dynamic>> books = [];
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    isLoading = true;
     _fetchBooks();
   }
 
   Future<void> _fetchBooks() async {
-    if (mounted) {
-      setState(() {
-        isLoading = true;
-      });
-    }
-
     await Future.delayed(
       const Duration(seconds: 2),
     );
@@ -49,15 +44,17 @@ class _NewBooksListviewState extends State<NewBooksListview> {
           books = List<Map<String, dynamic>>.from(response);
         });
       }
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
       if (mounted) {
         showSnackBar(context, ' $e هناك خطأ! حاول مرة أخرى.');
       }
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
+
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 

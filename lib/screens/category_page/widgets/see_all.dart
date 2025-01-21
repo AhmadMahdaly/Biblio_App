@@ -17,21 +17,16 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
   final SupabaseClient supabase = Supabase.instance.client;
 
   List<Map<String, dynamic>> books = [];
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    isLoading = true;
     fetchCategories();
   }
 
   Future<void> fetchCategories() async {
-    if (mounted) {
-      setState(() {
-        isLoading = true;
-      });
-    }
-
     await Future.delayed(
       const Duration(seconds: 2),
     );
@@ -47,28 +42,34 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
           books = List<Map<String, dynamic>>.from(response);
         });
       }
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
       showSnackBar(context, 'هناك خطأ! $e.');
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
+
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      ),
       body: isLoading
           ? const AppIndicator()
           : GridView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 16.sp),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              padding: EdgeInsets.symmetric(
+                horizontal: 16.sp,
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                childAspectRatio: 1 / 1.9,
-                crossAxisSpacing: 10,
-                // mainAxisSpacing: 0,
+                crossAxisSpacing: 10.sp,
+                mainAxisSpacing: 10.sp,
               ),
               itemBuilder: (context, index) {
                 final book = books[index];
