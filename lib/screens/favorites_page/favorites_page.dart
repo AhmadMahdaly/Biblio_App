@@ -16,6 +16,10 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
+  final SupabaseClient supabase = Supabase.instance.client;
+  List<Map<String, dynamic>> books = [];
+  bool isLoading = false;
+  List<Map<String, dynamic>> favoriteBooks = [];
   @override
   void initState() {
     isLoading = true;
@@ -24,11 +28,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
     fetchUserId();
     super.initState();
   }
-
-  final SupabaseClient supabase = Supabase.instance.client;
-  List<Map<String, dynamic>> books = [];
-  bool isLoading = true;
-  List<Map<String, dynamic>> favoriteBooks = [];
 
   /// Fetch favorite books
   Future<void> fetchFavorites() async {
@@ -46,7 +45,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
       if (response != null) {
         setState(() {
           favoriteBooks = List<Map<String, dynamic>>.from(response);
-          isLoading = false;
         });
       }
     } catch (e) {
@@ -56,18 +54,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   /// Fetch favorite books
   Future<void> _fetchBooks() async {
-    await Future.delayed(
-      const Duration(seconds: 2),
-    );
-    if (mounted) {
-      setState(() {
-        isLoading = true;
-      });
-    }
-
+    setState(() {
+      isLoading = true;
+    });
     try {
       final user = supabase.auth.currentUser;
-
       if (user == null) {
         ///
         return;
@@ -76,21 +67,19 @@ class _FavoritesPageState extends State<FavoritesPage> {
           .from('books')
           // ignore: avoid_redundant_argument_values
           .select('*')
-          .order('created_at', ascending: false);
-      if (mounted) {
-        setState(() {
-          books = List<Map<String, dynamic>>.from(response);
-        });
-      }
+          .order('created_at', ascending: true);
+
       setState(() {
         books = List<Map<String, dynamic>>.from(response);
-
-        isLoading = false;
       });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     } catch (e) {
       if (mounted) {
         // showSnackBar(context, ' $e هناك خطأ! حاول مرة أخرى.');
-
         setState(() {
           isLoading = false;
         });
@@ -101,104 +90,96 @@ class _FavoritesPageState extends State<FavoritesPage> {
   /// Fetch User Id
   String? _user;
   Future<void> fetchUserId() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
-      /// الحصول على المستخدم الحالي
       final user = supabase.auth.currentUser;
       if (user == null) {
         throw Exception('المستخدم غير مسجل الدخول.');
       }
-
       if (mounted) {
         setState(() {
           _user = user.id;
-          isLoading = false;
         });
       }
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
+      ///
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return _user == null
-        ? Center(
-            child: CustomBorderBotton(
-              padding: 24,
-              text: 'تسجيل الدخول',
-              onTap: () {
-                Navigator.pushReplacementNamed(context, OnboardScreen.id);
-              },
+    return ModalProgressHUD(
+      progressIndicator: const AppIndicator(),
+      inAsyncCall: isLoading,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          title: Text(
+            'قائمة الكتب المفضلة',
+            style: TextStyle(
+              color: kTextColor,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              height: 1.sp,
             ),
-          )
-        : books.isEmpty
-            ? const AppIndicator()
-            : ModalProgressHUD(
-                progressIndicator: const AppIndicator(),
-                inAsyncCall: isLoading,
-                child: Scaffold(
-                  appBar: AppBar(
-                    centerTitle: true,
-                    automaticallyImplyLeading: false,
-                    title: Text(
-                      'قائمة الكتب المفضلة',
-                      style: TextStyle(
-                        color: kTextColor,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        height: 1.sp,
-                      ),
-                    ),
-                  ),
-                  body: favoriteBooks.isEmpty
-                      ? Container(
-                          alignment: Alignment.center,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/svg/Reading glasses-cuate.svg',
-                                height: 100.sp,
-                              ),
-                              Text(
-                                'هذه الفئة فارغة! لم تتم إضافة كتب بعد',
-                                style: TextStyle(
-                                  color: kTextColor,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : GridView.builder(
-                          padding: EdgeInsets.symmetric(horizontal: 16.sp),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 1 / 1.9,
-                            crossAxisSpacing: 10,
-                            // mainAxisSpacing: 0,
-                          ),
-                          itemCount: favoriteBooks.length,
-                          itemBuilder: (context, index) {
-                            final favorite = favoriteBooks[index];
-                            final book = books[index];
-
-                            if (book['id'] == favorite['book_id']) {
-                              return BookItem(
-                                books: book.length,
-                                book: book,
-                              );
-                            }
-                            return null;
-                          },
-                        ),
+          ),
+        ),
+        body: _user == null
+            ? Center(
+                child: CustomBorderBotton(
+                  padding: 24,
+                  text: 'تسجيل الدخول',
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, OnboardScreen.id);
+                  },
                 ),
-              );
+              )
+            : books.isEmpty
+                ? const SizedBox()
+                : favoriteBooks.isEmpty
+                    ? Container(
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svg/Reading glasses-cuate.svg',
+                              height: 100.sp,
+                            ),
+                            Text(
+                              'هذه الفئة فارغة! لم تتم إضافة كتب بعد',
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : GridView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 16.sp),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 1 / 1.9,
+                          crossAxisSpacing: 10,
+                          // mainAxisSpacing: 0,
+                        ),
+                        itemCount: favoriteBooks.length,
+                        itemBuilder: (context, index) {
+                          if (books.isNotEmpty) {}
+                          final book = books[index];
+                          return BookItem(
+                            books: book.length,
+                            book: book,
+                          );
+                        },
+                      ),
+      ),
+    );
   }
 }

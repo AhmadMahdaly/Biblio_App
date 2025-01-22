@@ -141,7 +141,6 @@ class _AddBookState extends State<AddBook> {
       isLoading = true;
     });
     try {
-      ///
       /// رفع الصورة إلى Supabase Storage
       final fileName = DateTime.now().toIso8601String();
       if (_coverImage != null) {
@@ -198,12 +197,7 @@ class _AddBookState extends State<AddBook> {
       await supabase.from('books').insert([book.toJson()]);
 
       if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-
-      if (mounted) {
+        isLoading = false;
         showSnackBar(context, 'تم إضافة الكتاب بنجاح!');
         await Navigator.pushReplacementNamed(context, NavigationBarApp.id);
       }
@@ -219,9 +213,6 @@ class _AddBookState extends State<AddBook> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      isLoading = false;
-    });
     if (_coverImage == null ||
         _coverImageI == null ||
         _titleController.text.isEmpty ||
