@@ -1,7 +1,7 @@
 import 'package:biblio/screens/book_item/edit_my_book.dart';
 import 'package:biblio/screens/home_page/widgets/title_header_home.dart';
 import 'package:biblio/screens/my_lib_page/widgets/favorate_button.dart';
-import 'package:biblio/screens/order_the_book_page.dart';
+import 'package:biblio/screens/orders_page/order_the_book_page.dart';
 import 'package:biblio/services/fetch_email.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/border_radius.dart';
@@ -10,6 +10,7 @@ import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -56,12 +57,25 @@ class _ShowBookItemState extends State<ShowBookItem> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  String getTimeDifference() {
     final now = DateTime.now();
+
     final specificDate = widget.book['created_at'];
     final createdAt = DateTime.parse(specificDate.toString());
     final difference = now.difference(createdAt);
+    if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} دقيقة';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} ساعة';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} يوم';
+    } else {
+      return DateFormat('yyyy-MM-dd').format(createdAt); // تاريخ واضح
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final id = widget.book['id'];
     final images = <String>[
       widget.book['cover_image_url'].toString(),
@@ -323,22 +337,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
               ),
             ),
             const H(h: 16),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16.sp,
-                vertical: 5.sp,
-              ),
-              child: SizedBox(
-                child: Text(
-                  'منذ ${difference.inMinutes}',
-                  style: TextStyle(
-                    color: const Color(0xFFA2A2A2),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
+
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: 16.sp,
@@ -396,7 +395,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
               ),
               child: SizedBox(
                 child: Text(
-                  'انضم للمكتبة منذ ${difference.inDays} أيام.',
+                  'تم النشر منذ ${getTimeDifference()}',
                   style: TextStyle(
                     color: const Color(0xFFA2A2A2),
                     fontSize: 14.sp,
@@ -405,23 +404,39 @@ class _ShowBookItemState extends State<ShowBookItem> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16.sp,
-                vertical: 5.sp,
-              ),
-              child: SizedBox(
-                child: Text(
-                  'عدد الكتب: 2',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: const Color(0xFFA2A2A2),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(
+            //     horizontal: 16.sp,
+            //     vertical: 5.sp,
+            //   ),
+            //   child: SizedBox(
+            //     child: Text(
+            //       'انضم للمكتبة منذ  أيام.',
+            //       style: TextStyle(
+            //         color: const Color(0xFFA2A2A2),
+            //         fontSize: 14.sp,
+            //         fontWeight: FontWeight.w500,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(
+            //     horizontal: 16.sp,
+            //     vertical: 5.sp,
+            //   ),
+            //   child: SizedBox(
+            //     child: Text(
+            //       'عدد الكتب: 2',
+            //       textAlign: TextAlign.right,
+            //       style: TextStyle(
+            //         color: const Color(0xFFA2A2A2),
+            //         fontSize: 14.sp,
+            //         fontWeight: FontWeight.w500,
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         bottomNavigationBar: _user == null || widget.book['user_id'] == _user
@@ -434,13 +449,10 @@ class _ShowBookItemState extends State<ShowBookItem> {
                     ),
                     child: CustomButton(
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const OrderTheBookPage();
-                            },
-                          ),
+                          OrderTheBookPage.id,
+                          arguments: {'book_id': id},
                         );
                       },
                       text: 'طلب الكتاب',

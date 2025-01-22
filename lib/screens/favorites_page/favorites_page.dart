@@ -10,7 +10,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
-
   @override
   State<FavoritesPage> createState() => _FavoritesPageState();
 }
@@ -26,25 +25,23 @@ class _FavoritesPageState extends State<FavoritesPage> {
   }
 
   final SupabaseClient supabase = Supabase.instance.client;
-
   List<Map<String, dynamic>> books = [];
   bool isLoading = true;
   List<Map<String, dynamic>> favoriteBooks = [];
+
+  /// Fetch favorite books
   Future<void> fetchFavorites() async {
     try {
       final user = supabase.auth.currentUser;
-
       if (user == null) {
         ///
         return;
       }
-
       final response = await supabase
           .from('favorites')
           .select('book_id')
           .eq('user_id', user.id)
           .order('created_at', ascending: false);
-
       if (response != null) {
         setState(() {
           favoriteBooks = List<Map<String, dynamic>>.from(response);
@@ -56,6 +53,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     }
   }
 
+  /// Fetch favorite books
   Future<void> _fetchBooks() async {
     await Future.delayed(
       const Duration(seconds: 2),
@@ -77,7 +75,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
           .from('books')
           // ignore: avoid_redundant_argument_values
           .select('*')
-          .eq('user_id', user.id)
           .order('created_at', ascending: false);
       if (mounted) {
         setState(() {
@@ -100,6 +97,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     }
   }
 
+  /// Fetch User Id
   String? _user;
   Future<void> fetchUserId() async {
     try {
@@ -112,15 +110,15 @@ class _FavoritesPageState extends State<FavoritesPage> {
       if (mounted) {
         setState(() {
           _user = user.id;
+          isLoading = false;
         });
       }
-      setState(() {
-        isLoading = false;
-      });
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -153,31 +151,31 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       ),
                     ),
                   ),
-                  body:
-                      //  favoriteBooks.isEmpty
-                      // ? const Center(child: Text('No favorites added yet!')):
-                      GridView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 16.sp),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1 / 1.9,
-                      crossAxisSpacing: 10,
-                      // mainAxisSpacing: 0,
-                    ),
-                    itemCount: favoriteBooks.length,
-                    itemBuilder: (context, index) {
-                      final favorite = favoriteBooks[index];
-                      final book = books[index];
-                      if (book['id'] == favorite['book_id']) {
-                        return BookItem(
-                          books: book.length,
-                          book: book,
-                        );
-                      }
-                      return null;
-                    },
-                  ),
+                  body: favoriteBooks.isEmpty
+                      ? const Center(child: Text('No favorites added yet!'))
+                      : GridView.builder(
+                          padding: EdgeInsets.symmetric(horizontal: 16.sp),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1 / 1.9,
+                            crossAxisSpacing: 10,
+                            // mainAxisSpacing: 0,
+                          ),
+                          itemCount: favoriteBooks.length,
+                          itemBuilder: (context, index) {
+                            final favorite = favoriteBooks[index];
+                            final book = books[index];
+
+                            if (book['id'] == favorite['book_id']) {
+                              return BookItem(
+                                books: book.length,
+                                book: book,
+                              );
+                            }
+                            return null;
+                          },
+                        ),
                 ),
               );
   }

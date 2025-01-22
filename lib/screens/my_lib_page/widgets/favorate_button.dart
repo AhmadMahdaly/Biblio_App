@@ -17,12 +17,10 @@ class FavoriteButton extends StatefulWidget {
 
 class _FavoriteButtonState extends State<FavoriteButton> {
   bool isFavorite = false;
-
   @override
   void initState() {
     super.initState();
     _loadFavoriteState();
-// تعيين الحالة الأولية
   }
 
   Future<void> _loadFavoriteState() async {
