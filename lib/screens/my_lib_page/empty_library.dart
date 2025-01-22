@@ -1,5 +1,6 @@
 import 'package:biblio/screens/add_book_page/add_book.dart';
 import 'package:biblio/utils/components/custom_button.dart';
+import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,12 +11,15 @@ class EmptyLibrary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Container(
+      alignment: Alignment.center,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 24.sp,
         children: [
-          SvgPicture.asset('assets/svg/my_lib.svg'),
+          SvgPicture.asset(
+            'assets/svg/Reading glasses-cuate.svg',
+            height: 100.sp,
+          ),
           Text(
             'مكتبتك فارغة! لم تتم إضافة كتب بعد',
             style: TextStyle(
@@ -24,8 +28,9 @@ class EmptyLibrary extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          CustomButton(
-            padding: 16,
+          const H(h: 24),
+          CustomBorderBotton(
+            padding: 56,
             text: 'إضافة كتاب جديد',
             onTap: () {
               Navigator.push(

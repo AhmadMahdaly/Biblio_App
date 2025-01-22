@@ -4,7 +4,6 @@ import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -60,13 +59,7 @@ class _NewBooksListviewState extends State<NewBooksListview> {
   @override
   Widget build(BuildContext context) {
     return books == null || books.isEmpty
-        ? Container(
-            alignment: Alignment.topCenter,
-            child: SvgPicture.asset(
-              'assets/svg/Reading glasses-cuate.svg',
-              height: 100.sp,
-            ),
-          )
+        ? const AppIndicator()
         : ModalProgressHUD(
             color: kScaffoldBackgroundColor,
             progressIndicator: const AppIndicator(),

@@ -5,6 +5,7 @@ import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -141,6 +142,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 inAsyncCall: isLoading,
                 child: Scaffold(
                   appBar: AppBar(
+                    centerTitle: true,
+                    automaticallyImplyLeading: false,
                     title: Text(
                       'قائمة الكتب المفضلة',
                       style: TextStyle(
@@ -152,7 +155,26 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     ),
                   ),
                   body: favoriteBooks.isEmpty
-                      ? const Center(child: Text('No favorites added yet!'))
+                      ? Container(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/svg/Reading glasses-cuate.svg',
+                                height: 100.sp,
+                              ),
+                              Text(
+                                'هذه الفئة فارغة! لم تتم إضافة كتب بعد',
+                                style: TextStyle(
+                                  color: kTextColor,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       : GridView.builder(
                           padding: EdgeInsets.symmetric(horizontal: 16.sp),
                           gridDelegate:
