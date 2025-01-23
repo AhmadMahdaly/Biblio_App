@@ -8,12 +8,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class BookItem extends StatelessWidget {
   const BookItem({
     required this.book,
-    required this.books,
     super.key,
   });
 
   final Map<String, dynamic> book;
-  final int books;
   @override
   Widget build(BuildContext context) {
     return Center(

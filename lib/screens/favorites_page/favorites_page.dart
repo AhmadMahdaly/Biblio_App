@@ -1,3 +1,4 @@
+import 'package:biblio/animations/animate_do.dart';
 import 'package:biblio/screens/book_item/widgets/book_item.dart';
 import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
@@ -20,6 +21,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
   List<Map<String, dynamic>> books = [];
   bool isLoading = false;
   List<Map<String, dynamic>> favoriteBooks = [];
+
   @override
   void initState() {
     isLoading = true;
@@ -41,13 +43,20 @@ class _FavoritesPageState extends State<FavoritesPage> {
           .from('favorites')
           .select('book_id')
           .eq('user_id', user.id)
-          .order('created_at', ascending: false);
+          .order('created_at', ascending: true);
       if (response != null) {
         setState(() {
           favoriteBooks = List<Map<String, dynamic>>.from(response);
+          isLoading = false;
         });
       }
     } catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+
       /// print('Error fetching favorites: $e');
     }
   }
@@ -101,84 +110,101 @@ class _FavoritesPageState extends State<FavoritesPage> {
       if (mounted) {
         setState(() {
           _user = user.id;
+          isLoading = false;
         });
       }
     } catch (e) {
-      ///
+      setState(() {
+        isLoading = false;
+      });
     }
+  }
+
+  // دالة التحديث عند السحب
+  Future<void> _refreshData() async {
+    await _fetchBooks();
+    await fetchFavorites();
+    await fetchUserId(); // استدعاء دالة جلب البيانات
   }
 
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(
-      progressIndicator: const AppIndicator(),
-      inAsyncCall: isLoading,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          title: Text(
-            'قائمة الكتب المفضلة',
-            style: TextStyle(
-              color: kTextColor,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-              height: 1.sp,
+    return RefreshIndicator(
+      strokeWidth: 0.9,
+      color: kMainColor,
+      onRefresh: _refreshData,
+      child: ModalProgressHUD(
+        progressIndicator: const AppIndicator(),
+        inAsyncCall: isLoading,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            automaticallyImplyLeading: false,
+            title: Text(
+              'قائمة الكتب المفضلة',
+              style: TextStyle(
+                color: kTextColor,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+                height: 1.sp,
+              ),
             ),
           ),
+          body: _user == null
+              ? Center(
+                  child: CustomBorderBotton(
+                    padding: 24,
+                    text: 'تسجيل الدخول',
+                    onTap: () {
+                      Navigator.pushReplacementNamed(context, OnboardScreen.id);
+                    },
+                  ),
+                )
+              : books.isEmpty
+                  ? const SizedBox()
+                  : favoriteBooks.isEmpty
+                      ? CustomFadeInRight(
+                          duration: 600,
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/svg/Reading glasses-cuate.svg',
+                                  height: 100.sp,
+                                ),
+                                Text(
+                                  'هذه الفئة فارغة! لم تتم إضافة كتب بعد',
+                                  style: TextStyle(
+                                    color: kTextColor,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : GridView.builder(
+                          padding: EdgeInsets.symmetric(horizontal: 16.sp),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1 / 1.9,
+                            crossAxisSpacing: 10,
+                          ),
+                          itemCount: favoriteBooks.length,
+                          itemBuilder: (context, index) {
+                            // final favorite = favoriteBooks[index];
+                            // id = favorite['book_id'] as int;
+                            final book = books[index];
+                            return BookItem(
+                              book: book,
+                            );
+                          },
+                        ),
         ),
-        body: _user == null
-            ? Center(
-                child: CustomBorderBotton(
-                  padding: 24,
-                  text: 'تسجيل الدخول',
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, OnboardScreen.id);
-                  },
-                ),
-              )
-            : books.isEmpty
-                ? const SizedBox()
-                : favoriteBooks.isEmpty
-                    ? Container(
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/svg/Reading glasses-cuate.svg',
-                              height: 100.sp,
-                            ),
-                            Text(
-                              'هذه الفئة فارغة! لم تتم إضافة كتب بعد',
-                              style: TextStyle(
-                                color: kTextColor,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : GridView.builder(
-                        padding: EdgeInsets.symmetric(horizontal: 16.sp),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1 / 1.9,
-                          crossAxisSpacing: 10,
-                          // mainAxisSpacing: 0,
-                        ),
-                        itemCount: favoriteBooks.length,
-                        itemBuilder: (context, index) {
-                          if (books.isNotEmpty) {}
-                          final book = books[index];
-                          return BookItem(
-                            books: book.length,
-                            book: book,
-                          );
-                        },
-                      ),
       ),
     );
   }

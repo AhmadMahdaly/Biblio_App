@@ -19,7 +19,6 @@ class AddedLibrary extends StatelessWidget {
         itemBuilder: (context, index) {
           final book = books[index];
           return BookItem(
-            books: books.length,
             book: book,
           );
         },

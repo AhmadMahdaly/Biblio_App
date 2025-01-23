@@ -104,7 +104,6 @@ class _CategoryPageState extends State<CategoryPage> {
                     itemBuilder: (context, index) {
                       final book = books[index];
                       return BookItem(
-                        books: book.length,
                         book: book,
                       );
                     },
