@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  bool isInAsyncCall = false;
   bool isShowPassword = true;
 
   ///
@@ -191,10 +190,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 InkWell(
-                                  onTap: () 
-                                    {
-                                      // resetPassword();
-                                   
+                                  onTap: () {
+                                    // resetPassword();
                                   },
                                   child: Text(
                                     'نسيت كلمة المرور؟',
@@ -217,8 +214,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               onTap: () async {
                                 if (formKey.currentState!.validate()) {
                                   await cubit.login(
-                                    email: _emailController.text.trim(),
-                                    password: _passwordController.text.trim(),
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
                                   );
 
                                   //     try {
@@ -322,8 +319,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    _emailController;
-    _passwordController;
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 }
