@@ -18,7 +18,6 @@ class BookModel {
   final String coverImageUrl;
   final String coverImageUrlI;
   final String userName;
-
   final String userImage;
   final String title;
   final String author;

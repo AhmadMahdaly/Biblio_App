@@ -59,7 +59,6 @@ class _ShowBookItemState extends State<ShowBookItem> {
 
   String getTimeDifference() {
     final now = DateTime.now();
-
     final specificDate = widget.book['created_at'];
     final createdAt = DateTime.parse(specificDate.toString());
     final difference = now.difference(createdAt);
@@ -158,7 +157,6 @@ class _ShowBookItemState extends State<ShowBookItem> {
                   child: CachedNetworkImage(
                     imageUrl: images[index],
                     fit: BoxFit.cover,
-                    // width: double.infinity,
                     placeholder: (context, url) {
                       return const AppIndicator();
                     },
@@ -270,7 +268,6 @@ class _ShowBookItemState extends State<ShowBookItem> {
                     color: kMainColor,
                   ),
 
-                  ///
                   ////// Location
                   Text(
                     'مصر، القاهرة',
