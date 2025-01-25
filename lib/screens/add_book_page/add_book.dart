@@ -30,10 +30,8 @@ class _AddBookState extends State<AddBook> {
   final SupabaseClient supabase = Supabase.instance.client;
   bool isLoading = false;
   bool isActive = false;
-
   File? _coverImage;
   File? _coverImageI;
-
   final _titleController = TextEditingController();
   final _authorController = TextEditingController();
   final _descriptionController = TextEditingController();

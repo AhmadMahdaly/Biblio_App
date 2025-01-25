@@ -24,12 +24,11 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final supabase = Supabase.instance.client;
-
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final userNameController = TextEditingController();
 // ID المستخدم لتحديده بعد التسجيل
-  String? userId;
+  // String? userId;
   String? userName;
   String? email;
   String? password;
@@ -261,17 +260,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         try {
                           final response = await signUp(userName);
-                          if (response.user != null) {
-                            userId = response.user!.id;
-                            // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
-                            await supabase.from('users').insert({
-                              // ربط المستخدم باستخدام UID
-                              'id': userId,
-                              'username': userName,
-                              'email': email,
-                              'password': password,
-                            });
-                          }
+                          // إضافة اسم المستخدم إلى جدول "users" بعد نجاح التسجيل
+                          await supabase.from('users').insert({
+                            // ربط المستخدم باستخدام UID
+                            'id': response.user!.id,
+                            'username': userName,
+                            'email': email,
+                            'password': password,
+                          });
                           setState(() {
                             isInAsyncCall = false;
                           });
@@ -279,7 +275,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             context,
                             'تم التسجيل',
                           );
-
                           await Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

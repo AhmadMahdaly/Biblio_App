@@ -27,7 +27,7 @@ class BookItem extends StatelessWidget {
                     book: book,
                   ),
                 ),
-              );
+              ).then((_) {});
             },
             child: Container(
               clipBehavior: Clip.hardEdge,

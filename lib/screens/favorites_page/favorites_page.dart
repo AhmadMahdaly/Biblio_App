@@ -18,69 +18,52 @@ class FavoritesPage extends StatefulWidget {
 
 class _FavoritesPageState extends State<FavoritesPage> {
   final SupabaseClient supabase = Supabase.instance.client;
-  List<Map<String, dynamic>> books = [];
   bool isLoading = false;
-  List<Map<String, dynamic>> favoriteBooks = [];
-
+  List<Map<String, dynamic>> books = [];
   @override
   void initState() {
     isLoading = true;
-    _fetchBooks();
     fetchFavorites();
     fetchUserId();
     super.initState();
   }
 
+  Map<String, dynamic>? bok;
+
   /// Fetch favorite books
   Future<void> fetchFavorites() async {
+    final user = supabase.auth.currentUser!.id;
+    if (user == null) {
+      ///
+      return;
+    }
     try {
-      final user = supabase.auth.currentUser;
-      if (user == null) {
-        ///
-        return;
-      }
-      final response = await supabase
+      /// جلب قائمة book_id من favorites
+      final favoritesResponse = await supabase
           .from('favorites')
           .select('book_id')
-          .eq('user_id', user.id)
-          .order('created_at', ascending: true);
-      if (response != null) {
+          .eq('user_id', user);
+
+      if (favoritesResponse != null) {
+        final bookIds =
+            List<int>.from(favoritesResponse.map((item) => item['book_id']));
+
+        /// جلب تفاصيل الكتب بناءً على book_id
+        final booksResponse = await supabase
+            .from('books')
+            // ignore: avoid_redundant_argument_values
+            .select('*')
+            .filter(
+              'id',
+
+              /// استخدام in لتحديد الكتب المطلوبة
+              'in',
+              bookIds,
+            );
         setState(() {
-          favoriteBooks = List<Map<String, dynamic>>.from(response);
-          isLoading = false;
+          books = booksResponse;
         });
       }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-
-      /// print('Error fetching favorites: $e');
-    }
-  }
-
-  /// Fetch favorite books
-  Future<void> _fetchBooks() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      final user = supabase.auth.currentUser;
-      if (user == null) {
-        ///
-        return;
-      }
-      final response = await supabase
-          .from('books')
-          // ignore: avoid_redundant_argument_values
-          .select('*')
-          .order('created_at', ascending: true);
-
-      setState(() {
-        books = List<Map<String, dynamic>>.from(response);
-      });
       if (mounted) {
         setState(() {
           isLoading = false;
@@ -88,7 +71,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
       }
     } catch (e) {
       if (mounted) {
-        // showSnackBar(context, ' $e هناك خطأ! حاول مرة أخرى.');
         setState(() {
           isLoading = false;
         });
@@ -120,11 +102,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
     }
   }
 
-  // دالة التحديث عند السحب
+  /// دالة التحديث عند السحب
   Future<void> _refreshData() async {
-    await _fetchBooks();
     await fetchFavorites();
-    await fetchUserId(); // استدعاء دالة جلب البيانات
+    await fetchUserId();
   }
 
   @override
@@ -161,49 +142,45 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   ),
                 )
               : books.isEmpty
-                  ? const SizedBox()
-                  : favoriteBooks.isEmpty
-                      ? CustomFadeInRight(
-                          duration: 600,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/svg/Reading glasses-cuate.svg',
-                                  height: 100.sp,
-                                ),
-                                Text(
-                                  'هذه الفئة فارغة! لم تتم إضافة كتب بعد',
-                                  style: TextStyle(
-                                    color: kTextColor,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
+                  ? CustomFadeInRight(
+                      duration: 600,
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svg/Reading glasses-cuate.svg',
+                              height: 100.sp,
                             ),
-                          ),
-                        )
-                      : GridView.builder(
-                          padding: EdgeInsets.symmetric(horizontal: 16.sp),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 1 / 1.9,
-                            crossAxisSpacing: 10,
-                          ),
-                          itemCount: favoriteBooks.length,
-                          itemBuilder: (context, index) {
-                            // final favorite = favoriteBooks[index];
-                            // id = favorite['book_id'] as int;
-                            final book = books[index];
-                            return BookItem(
-                              book: book,
-                            );
-                          },
+                            Text(
+                              'هذه الفئة فارغة! لم تتم إضافة كتب بعد',
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
+                      ),
+                    )
+                  : GridView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 16.sp),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1 / 1.9,
+                        crossAxisSpacing: 10,
+                      ),
+                      itemCount: books.length,
+                      itemBuilder: (context, index) {
+                        final book = books[index];
+                        return BookItem(
+                          book: book,
+                        );
+                      },
+                    ),
         ),
       ),
     );
