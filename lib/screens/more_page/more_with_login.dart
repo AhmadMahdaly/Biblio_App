@@ -1,4 +1,4 @@
-import 'package:biblio/screens/more_page/personal_info_setting.dart';
+import 'package:biblio/screens/account_manegment/acount_manegment_screen.dart';
 import 'package:biblio/screens/more_page/widgets/category_for_more.dart';
 import 'package:biblio/screens/more_page/widgets/faq_page.dart';
 import 'package:biblio/screens/more_page/widgets/personal_card.dart';
@@ -29,7 +29,7 @@ class MoreWithLogin extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return const PersonalInfoSetting();
+                    return const AcountManegmentScreen();
                   },
                 ),
               );

@@ -23,6 +23,10 @@ class SaveUserLocationCubit extends Cubit<SaveUserLocationState> {
           'country': selectedCountry,
           'city': selectedCity,
         }).eq('id', userId);
+        await supabase.from('books').update({
+          'country': selectedCountry,
+          'city': selectedCity,
+        }).eq('user_id', userId);
       }
       emit(SaveUserLocationSuccess());
       await Navigator.pushReplacementNamed(

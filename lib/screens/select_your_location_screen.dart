@@ -1,4 +1,4 @@
-import 'package:biblio/cubit/user/cubit/save_user_location_cubit.dart';
+import 'package:biblio/cubit/user/user_location_cubit/save_user_location_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/height.dart';
