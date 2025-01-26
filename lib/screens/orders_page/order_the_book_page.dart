@@ -143,7 +143,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
         ),
         bottomNavigationBar: Padding(
           padding: EdgeInsets.all(16.sp),
-          child: CustomButton(
+          child: const CustomButton(
             text: 'إرسال',
           ),
         ),
