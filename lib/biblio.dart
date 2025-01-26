@@ -1,3 +1,4 @@
+import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/screens/add_book_page/add_book.dart';
 import 'package:biblio/screens/book_item/edit_my_book.dart';
 import 'package:biblio/screens/login/login_screen.dart';
@@ -9,6 +10,7 @@ import 'package:biblio/screens/splash_screen.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Biblio extends StatelessWidget {
@@ -35,44 +37,49 @@ class Biblio extends StatelessWidget {
           }
         },
 
-        /// MaterialApp
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Biblio',
+        /// Auth Cubit
+        child: BlocProvider<AuthCubit>(
+          create: (context) => AuthCubit(),
 
-          /// Localizations
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
+          /// MaterialApp
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Biblio',
 
-          /// Theme
-          theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-              color: kScaffoldBackgroundColor,
-              iconTheme: IconThemeData(
-                color: kMainColor,
-              ),
-            ),
-            scaffoldBackgroundColor: kScaffoldBackgroundColor,
-            textTheme: Theme.of(
-              context,
-            ).textTheme.apply(
-                  fontFamily: 'Avenir Arabic',
+            /// Localizations
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+
+            /// Theme
+            theme: ThemeData(
+              appBarTheme: const AppBarTheme(
+                color: kScaffoldBackgroundColor,
+                iconTheme: IconThemeData(
+                  color: kMainColor,
                 ),
-          ),
+              ),
+              scaffoldBackgroundColor: kScaffoldBackgroundColor,
+              textTheme: Theme.of(
+                context,
+              ).textTheme.apply(
+                    fontFamily: 'Avenir Arabic',
+                  ),
+            ),
 
-          /// Routes
-          routes: {
-            SplashScreen.id: (context) => const SplashScreen(),
-            OnboardScreen.id: (context) => const OnboardScreen(),
-            LoginScreen.id: (context) => const LoginScreen(),
-            RegisterScreen.id: (context) => const RegisterScreen(),
-            NavigationBarApp.id: (context) => const NavigationBarApp(),
-            AddBook.id: (context) => const AddBook(),
-            EditBook.id: (context) => const EditBook(),
-            OrderTheBookPage.id: (context) => const OrderTheBookPage(),
-          },
-          initialRoute: SplashScreen.id,
+            /// Routes
+            routes: {
+              SplashScreen.id: (context) => const SplashScreen(),
+              OnboardScreen.id: (context) => const OnboardScreen(),
+              LoginScreen.id: (context) => const LoginScreen(),
+              RegisterScreen.id: (context) => const RegisterScreen(),
+              NavigationBarApp.id: (context) => const NavigationBarApp(),
+              AddBook.id: (context) => const AddBook(),
+              EditBook.id: (context) => const EditBook(),
+              OrderTheBookPage.id: (context) => const OrderTheBookPage(),
+            },
+            initialRoute: SplashScreen.id,
+          ),
         ),
       ),
     );
