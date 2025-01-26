@@ -1,8 +1,10 @@
+import 'package:biblio/cubit/my_list/my_list_cubit.dart';
 import 'package:biblio/screens/book_item/book_page.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BookItem extends StatelessWidget {
@@ -27,7 +29,9 @@ class BookItem extends StatelessWidget {
                     book: book,
                   ),
                 ),
-              ).then((_) {});
+              ).then((_) {
+                context.read<MyListCubit>().showMyFavoriteBooks();
+              });
             },
             child: Container(
               clipBehavior: Clip.hardEdge,
