@@ -14,7 +14,6 @@ class AddedLibrary extends StatelessWidget {
           crossAxisCount: 2,
           childAspectRatio: 1 / 1.9,
           crossAxisSpacing: 10,
-          // mainAxisSpacing: 0,
         ),
         itemBuilder: (context, index) {
           final book = books[index];
