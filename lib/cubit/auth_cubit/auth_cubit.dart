@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -53,10 +55,14 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> signOut() async {
+  Future<void> signOut(BuildContext context) async {
     emit(SignOutLoading());
     try {
       await user.auth.signOut();
+      await Navigator.pushReplacementNamed(
+        context,
+        OnboardScreen.id,
+      );
       emit(SignOutSuccess());
     } on AuthException catch (e) {
       log(e.toString());

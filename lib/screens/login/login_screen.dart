@@ -27,39 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   bool isShowPassword = true;
 
-  ///
-  // Future<void> resetPassword() async {
-  //   setState(() {
-  //     isInAsyncCall = true;
-  //   });
-  //   final email = emailController.text.trim();
-  //   if (email.isEmpty) {
-  //     showSnackBar(context, 'يرجى إدخال البريد الإلكتروني');
-  //     return;
-  //   }
-  //   try {
-  //     await supabase.auth
-  //         .resetPasswordForEmail(
-  //           email,
-  //         )
-  //         .timeout(const Duration(seconds: 66));
-
-  //     setState(() {
-  //       isInAsyncCall = false;
-  //     });
-  //     showSnackBar(
-  //       context,
-  //       'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني',
-  //     );
-  //   } catch (error) {
-  //     showSnackBar(context, 'حدث خطأ أثناء إرسال الرابط. حاول مرة أخرى');
-
-  //     setState(() {
-  //       isInAsyncCall = false;
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(

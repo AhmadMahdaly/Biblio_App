@@ -2,6 +2,7 @@ import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,8 +18,41 @@ class ForgetPasswordPage extends StatefulWidget {
 
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   final SupabaseClient supabase = Supabase.instance.client;
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   bool isLoading = false;
+
+  ///
+  Future<void> resetPassword() async {
+    setState(() {
+      isLoading = true;
+    });
+    final email = _emailController.text;
+    if (email.isEmpty) {
+      showSnackBar(context, 'يرجى إدخال البريد الإلكتروني');
+      return;
+    }
+    try {
+      await supabase.auth
+          .resetPasswordForEmail(
+            email,
+          )
+          .timeout(const Duration(seconds: 66));
+
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(
+        context,
+        'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني',
+      );
+    } catch (error) {
+      showSnackBar(context, 'حدث خطأ أثناء إرسال الرابط. حاول مرة أخرى');
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,15 +108,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         ],
                       ),
                       CustomTextformfield(
-                        controller: emailController,
+                        controller: _emailController,
                         text: 'البريد الإلكتروني',
                       ),
                       const H(h: 10),
 
                       /// Button
-                      const CustomButton(
+                      CustomButton(
                         // isActive: false,
-                        // onTap: resetPassword,
+                        onTap: resetPassword,
                         text: 'إرسال الرمز',
                       ),
                     ],
@@ -91,5 +125,11 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               ),
             ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
   }
 }
