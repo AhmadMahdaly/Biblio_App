@@ -1,4 +1,6 @@
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
+import 'package:biblio/cubit/books/fetch_book_category_cubit/fetch_book_category_cubit.dart';
+import 'package:biblio/cubit/books/fetch_order_type_book_cubit/fetch_order_type_book_cubit.dart';
 import 'package:biblio/cubit/favorite_button_cubit/favorite_button_cubit.dart';
 import 'package:biblio/cubit/my_list/my_list_cubit.dart';
 import 'package:biblio/cubit/user/user_location_cubit/save_user_location_cubit.dart';
@@ -53,6 +55,12 @@ class Biblio extends StatelessWidget {
             ),
             BlocProvider<SaveUserLocationCubit>(
               create: (context) => SaveUserLocationCubit(),
+            ),
+            BlocProvider<FetchBookCategoryCubit>(
+              create: (context) => FetchBookCategoryCubit(),
+            ),
+            BlocProvider<FetchOrderTypeBookCubit>(
+              create: (context) => FetchOrderTypeBookCubit(),
             ),
           ],
 
