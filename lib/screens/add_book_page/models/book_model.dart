@@ -1,6 +1,7 @@
 class BookModel {
   BookModel({
     required this.userName,
+    required this.userCity,
     required this.userImage,
     required this.coverImageUrlI,
     required this.userId,
@@ -11,10 +12,12 @@ class BookModel {
     required this.description,
     required this.condition,
     required this.offerType,
+    required this.userCountry,
     this.price,
   });
   final int? price;
   final String userId;
+  final String userCity;
   final String coverImageUrl;
   final String coverImageUrlI;
   final String userName;
@@ -25,9 +28,12 @@ class BookModel {
   final String description;
   final String condition;
   final String offerType;
+  final String userCountry;
 
   Map<String, dynamic> toJson() {
     return {
+      'country': userCountry,
+      'city': userCity,
       'price': price,
       'user_image': userImage,
       'user_name': userName,
