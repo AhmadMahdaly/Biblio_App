@@ -1,4 +1,5 @@
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
+import 'package:biblio/cubit/my_list/my_list_cubit.dart';
 import 'package:biblio/screens/add_book_page/add_book.dart';
 import 'package:biblio/screens/book_item/edit_my_book.dart';
 import 'package:biblio/screens/login/login_screen.dart';
@@ -36,10 +37,16 @@ class Biblio extends StatelessWidget {
             currentFocus.unfocus();
           }
         },
-
-        /// Auth Cubit
-        child: BlocProvider<AuthCubit>(
-          create: (context) => AuthCubit(),
+        child: MultiBlocProvider(
+          providers: [
+            /// Auth Cubit
+            BlocProvider<AuthCubit>(
+              create: (context) => AuthCubit(),
+            ),
+            BlocProvider<MyListCubit>(
+              create: (context) => MyListCubit(),
+            ),
+          ],
 
           /// MaterialApp
           child: MaterialApp(
