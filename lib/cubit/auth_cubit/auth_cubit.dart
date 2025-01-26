@@ -29,7 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String email,
     required String password,
   }) async {
-    emit(LoginLoading());
+    emit(SignUpLoading());
     try {
       await user.auth.signUp(
         email: email,
@@ -43,13 +43,27 @@ class AuthCubit extends Cubit<AuthState> {
         'email': email,
         'password': password,
       });
-      emit(LoginSuccess());
+      emit(SignUpSuccess());
     } on AuthException catch (e) {
       log(e.toString());
-      emit(LoginError(e.message));
+      emit(SignUpError(e.message));
     } catch (e) {
       log(e.toString());
-      emit(LoginError(e.toString()));
+      emit(SignUpError(e.toString()));
+    }
+  }
+
+  Future<void> signOut() async {
+    emit(SignOutLoading());
+    try {
+      await user.auth.signOut();
+      emit(SignOutSuccess());
+    } on AuthException catch (e) {
+      log(e.toString());
+      emit(SignOutError(e.message));
+    } catch (e) {
+      log(e.toString());
+      emit(SignOutError(e.toString()));
     }
   }
 }

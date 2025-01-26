@@ -24,3 +24,13 @@ final class SignUpError extends AuthState {
 
   final String message;
 }
+
+final class SignOutLoading extends AuthState {}
+
+final class SignOutSuccess extends AuthState {}
+
+final class SignOutError extends AuthState {
+  SignOutError(this.message);
+
+  final String message;
+}
