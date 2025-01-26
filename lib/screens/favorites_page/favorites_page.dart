@@ -1,15 +1,13 @@
-import 'package:biblio/animations/animate_do.dart';
 import 'package:biblio/cubit/my_list/my_list_cubit.dart';
-import 'package:biblio/screens/book_item/widgets/book_item.dart';
-import 'package:biblio/screens/onboard/onboard_screen.dart';
+import 'package:biblio/screens/favorites_page/widgets/empty_favorite_books.dart';
+import 'package:biblio/screens/favorites_page/widgets/favorite_grid_books.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
-import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
+import 'package:biblio/widgets/login_user_not_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
@@ -60,56 +58,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
             body: state is MyListLoading
                 ? const AppIndicator()
                 : context.read<MyListCubit>().supabase.auth.currentUser == null
-                    ? Center(
-                        child: CustomBorderBotton(
-                          padding: 24,
-                          text: 'تسجيل الدخول',
-                          onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, OnboardScreen.id);
-                          },
-                        ),
-                      )
+                    ? const LoginUserNotFound()
                     : cubit.books.isEmpty
-                        ? CustomFadeInRight(
-                            duration: 600,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/svg/Reading glasses-cuate.svg',
-                                    height: 100.sp,
-                                  ),
-                                  Text(
-                                    'هذه الفئة فارغة! لم تتم إضافة كتب بعد',
-                                    style: TextStyle(
-                                      color: kTextColor,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        : GridView.builder(
-                            padding: EdgeInsets.symmetric(horizontal: 16.sp),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 1 / 1.9,
-                              crossAxisSpacing: 10,
-                            ),
-                            itemCount: cubit.books.length,
-                            itemBuilder: (context, index) {
-                              final book = cubit.books[index];
-                              return BookItem(
-                                book: book,
-                              );
-                            },
-                          ),
+                        ? const EmptyFavoriteBooks()
+                        : FavoritesGridBooks(cubit: cubit),
           ),
         );
       },
