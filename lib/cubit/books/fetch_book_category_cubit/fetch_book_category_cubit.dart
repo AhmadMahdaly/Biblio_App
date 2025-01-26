@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,8 +15,10 @@ class FetchBookCategoryCubit extends Cubit<FetchBookCategoryState> {
   String? selectedCategory;
 
   /// Fetch Category
-  Future<void> fetchCategories() async {
+  Future<void> fetchCategories(BuildContext context) async {
     emit(FetchBookCategoryLoading());
+    final cubit = context.read<FetchBookCategoryCubit>();
+
     try {
       final response = await supabase.from('categories').select('name');
       categories = response.map((e) => e['name'] as String).toList();
@@ -24,9 +28,10 @@ class FetchBookCategoryCubit extends Cubit<FetchBookCategoryState> {
       emit(FetchBookCategoryError(e.message));
     } catch (e) {
       log(e.toString());
-      emit(FetchBookCategoryError(e.toString()));
+
+      if (!cubit.isClosed) {
+        emit(FetchBookCategoryError(e.toString()));
+      }
     }
   }
-
-  ///
 }

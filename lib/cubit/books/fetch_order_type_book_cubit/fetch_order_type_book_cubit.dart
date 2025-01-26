@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -12,9 +14,11 @@ class FetchOrderTypeBookCubit extends Cubit<FetchOrderTypeBookState> {
   List<String> offerTypes = [];
   String? selectedOffer;
 
-  /// Fetch Category
-  Future<void> fetchOrderType() async {
+  /// Fetch order type
+  Future<void> fetchOrderType(BuildContext context) async {
     emit(FetchOrderTypeBookLoading());
+    final cubit = context.read<FetchOrderTypeBookCubit>();
+
     try {
       final response = await supabase.from('offer_type').select('type');
       offerTypes = response.map((e) => e['type'] as String).toList();
@@ -24,7 +28,9 @@ class FetchOrderTypeBookCubit extends Cubit<FetchOrderTypeBookState> {
       emit(FetchOrderTypeBookError(e.message));
     } catch (e) {
       log(e.toString());
-      emit(FetchOrderTypeBookError(e.toString()));
+      if (!cubit.isClosed) {
+        emit(FetchOrderTypeBookError(e.toString()));
+      }
     }
   }
 }
