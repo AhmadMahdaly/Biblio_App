@@ -68,7 +68,7 @@ class Biblio extends StatelessWidget {
           /// MaterialApp
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Biblio',
+            title: 'Booklink',
 
             /// Localizations
             localizationsDelegates: context.localizationDelegates,

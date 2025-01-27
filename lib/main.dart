@@ -1,4 +1,4 @@
-import 'package:biblio/biblio.dart';
+import 'package:biblio/booklink.dart';
 import 'package:biblio/utils/controller/connectivity_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';

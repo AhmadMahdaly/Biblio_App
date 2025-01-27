@@ -49,7 +49,7 @@ class NavigationBarAppState extends State<NavigationBarApp> {
               ),
             ),
             content: Text(
-              'هل تريد الخروج',
+              'هل تريد الخروج من التطبيق؟',
               style: TextStyle(
                 color: kMainColor,
                 fontSize: 13.sp,
