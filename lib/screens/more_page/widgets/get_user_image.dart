@@ -13,58 +13,55 @@ class GetUserImage extends StatefulWidget {
 }
 
 class _GetUserImageState extends State<GetUserImage> {
-  final int size = 50;
+  final int size = 80;
   final int indicatorSize = 10;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.sp),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
-            backgroundColor: kDisableButtonColor,
+            backgroundColor: kLightBlue,
             radius: size / 2.sp,
             child: FutureBuilder<String?>(
               future: getUserPhoto(context),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: AppIndicator(
-                      size: indicatorSize.sp,
-                    ),
+                  return AppIndicator(
+                    size: indicatorSize.sp,
                   );
                 }
                 if (snapshot.hasError) {
-                  return Center(child: Text('حدث خطأ: ${snapshot.error}'));
+                  return Text('حدث خطأ: ${snapshot.error}');
                 }
                 final photoUrl = snapshot.data;
                 if (photoUrl == null || photoUrl.isEmpty) {
                   return Icon(
                     Icons.account_circle,
-                    size: 40.sp,
-                    color: kScaffoldBackgroundColor,
+                    size: 80.sp,
+                    color: kMainColor,
                   );
                 }
 
-                return Center(
-                  child: Container(
+                return Container(
+                  width: size.sp,
+                  height: size.sp,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(320),
+                  ),
+                  child: CachedNetworkImage(
+                    progressIndicatorBuilder: (context, url, progress) =>
+                        AppIndicator(
+                      size: indicatorSize.sp,
+                    ),
+                    imageUrl: photoUrl,
+                    fit: BoxFit.cover,
                     width: size.sp,
                     height: size.sp,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(320),
-                    ),
-                    child: CachedNetworkImage(
-                      progressIndicatorBuilder: (context, url, progress) =>
-                          AppIndicator(
-                        size: indicatorSize.sp,
-                      ),
-                      imageUrl: photoUrl,
-                      fit: BoxFit.cover,
-                      width: size.sp,
-                      height: size.sp,
-                    ),
                   ),
                 );
               },

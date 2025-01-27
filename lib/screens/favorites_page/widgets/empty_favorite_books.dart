@@ -23,7 +23,7 @@ class EmptyFavoriteBooks extends StatelessWidget {
               height: 100.sp,
             ),
             Text(
-              'هذه الفئة فارغة! لم تتم إضافة كتب بعد',
+              'القائمة فارغة! لم تتم إضافة كتب بعد',
               style: TextStyle(
                 color: kTextColor,
                 fontSize: 16.sp,

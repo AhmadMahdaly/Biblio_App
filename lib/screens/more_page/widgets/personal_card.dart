@@ -18,26 +18,21 @@ class PersonalCard extends StatelessWidget {
       alignment: Alignment.center,
       margin: EdgeInsets.all(16.sp),
       width: MediaQuery.of(context).size.width,
-      height: 120.sp,
+      height: 200.sp,
       decoration: BoxDecoration(
         color: const Color(0xFFe8eaee),
         borderRadius: borderRadius(),
       ),
       child: Column(
-        spacing: 6.sp,
+        spacing: 16.sp,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ///
           Row(
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.sp),
-
-                /// User Image
-                child: const SizedBox(
-                  child: GetUserImage(),
-                ),
+              const SizedBox(
+                child: Center(child: GetUserImage()),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,6 +48,7 @@ class PersonalCard extends StatelessWidget {
               ),
             ],
           ),
+
           Divider(
             thickness: 0.5.sp,
             height: 4.sp,
@@ -74,8 +70,8 @@ class PersonalCard extends StatelessWidget {
               children: [
                 /// Qty of Books
                 Container(
-                  width: 150.sp,
-                  height: 24.sp,
+                  width: 180.sp,
+                  height: 35.sp,
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(
                     right: 12.sp,
