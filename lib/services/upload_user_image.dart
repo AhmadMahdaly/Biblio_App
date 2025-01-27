@@ -9,15 +9,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 Future<void> uploadUserPhoto(BuildContext context) async {
   try {
     final supabase = Supabase.instance.client;
-
-    /// اختيار الصورة باستخدام ImagePicker
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
     /// التحقق من اختيار صورة
     if (pickedImage == null) {
       showSnackBar(context, 'لم يتم اختيار صورة.');
-
       return;
     }
 
@@ -28,18 +25,12 @@ Future<void> uploadUserPhoto(BuildContext context) async {
     final user = supabase.auth.currentUser;
     if (user == null) {
       showSnackBar(context, 'يوجد صعوبة في الوصول للمستخدم المُسجل.');
-
       return;
     }
 
     /// استرجاع رابط الصورة القديمة
-    final response = await supabase
-        .from('users')
-        .select('image')
-
-        /// حقل الصورة
-        .eq('id', user.id)
-        .single();
+    final response =
+        await supabase.from('users').select('image').eq('id', user.id).single();
 
     if (response['image'] != null) {
       final oldPhotoUrl = response['image'] as String;
