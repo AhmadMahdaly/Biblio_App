@@ -2,6 +2,7 @@ import 'package:biblio/screens/book_item/edit_my_book.dart';
 import 'package:biblio/screens/home_page/widgets/title_header_home.dart';
 import 'package:biblio/screens/my_lib_page/widgets/favorate_button.dart';
 import 'package:biblio/screens/orders_page/order_the_book_page.dart';
+import 'package:biblio/screens/user_page/user_page.dart';
 import 'package:biblio/services/fetch_email.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/border_radius.dart';
@@ -104,14 +105,18 @@ class _ShowBookItemState extends State<ShowBookItem> {
                       arguments: {'bookId': id},
                     );
                   },
-                  icon: const Icon(Icons.mode_edit_outline_outlined),
+                  icon: Icon(
+                    Icons.mode_edit_outline_outlined,
+                    size: 24.sp,
+                    color: kMainColor,
+                  ),
                 ),
               )
             else if (widget.book['user_id'] != _user)
 
               /// Favorite button
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.sp),
+                padding: EdgeInsets.symmetric(horizontal: 16.sp),
                 child: FavoriteButton(
                   bookId: id.toString(),
                 ),
@@ -178,87 +183,112 @@ class _ShowBookItemState extends State<ShowBookItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 270.sp,
+                  width: 250.sp,
                   child: TitleHeaderHome(
                     text: widget.book['title'].toString(),
                   ),
                 ),
-                Container(
-                  width: 80,
-                  height: 26,
-                  margin: EdgeInsets.symmetric(horizontal: 16.sp),
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFFF0F6FF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: borderRadius(),
+                if (widget.book['offer_type'].toString() == 'للبيع')
+                  Container(
+                    width: 100,
+                    height: 26,
+                    margin: EdgeInsets.symmetric(horizontal: 16.sp),
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFF0F6FF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12.sp),
+                          topRight: Radius.circular(12.sp),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: widget.book['offer_type'].toString() == 'للبيع'
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 5.sp,
-                          children: [
-                            Icon(
-                              Icons.sell,
-                              size: 12.sp,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 5.sp,
+                      children: [
+                        Icon(
+                          Icons.sell,
+                          size: 12.sp,
+                        ),
+                        Text(
+                          widget.book['offer_type'].toString(),
+                          style: TextStyle(
+                            color: kMainColor,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w500,
+                            height: 1.30,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  widget.book['offer_type'] == 'للتبرع'
+                      ? Container(
+                          width: 100,
+                          height: 26,
+                          margin: EdgeInsets.symmetric(horizontal: 16.sp),
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFFF0F6FF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: borderRadius(),
                             ),
-                            Text(
-                              widget.book['offer_type'].toString(),
-                              style: TextStyle(
-                                color: kMainColor,
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.w500,
-                                height: 1.30,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 5.sp,
+                            children: [
+                              Icon(
+                                Icons.wb_sunny_outlined,
+                                size: 12.sp,
                               ),
-                            ),
-                          ],
+                              Text(
+                                widget.book['offer_type'].toString(),
+                                style: TextStyle(
+                                  color: kMainColor,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.30,
+                                ),
+                              ),
+                            ],
+                          ),
                         )
-                      : widget.book['offer_type'] == 'للتبرع'
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              spacing: 5.sp,
-                              children: [
-                                Icon(
-                                  Icons.wb_sunny_outlined,
-                                  size: 12.sp,
-                                ),
-                                Text(
-                                  widget.book['offer_type'].toString(),
-                                  style: TextStyle(
-                                    color: kMainColor,
-                                    fontSize: 13.sp,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.30,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              spacing: 5.sp,
-                              children: [
-                                Icon(
-                                  Icons.sync_outlined,
-                                  size: 12.sp,
-                                ),
-                                Text(
-                                  widget.book['offer_type'].toString(),
-                                  style: TextStyle(
-                                    color: kMainColor,
-                                    fontSize: 13.sp,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.30,
-                                  ),
-                                ),
-                              ],
+                      : Container(
+                          width: 100,
+                          height: 26,
+                          margin: EdgeInsets.symmetric(horizontal: 16.sp),
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFFF0F6FF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: borderRadius(),
                             ),
-                ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 5.sp,
+                            children: [
+                              Icon(
+                                Icons.sync_outlined,
+                                size: 12.sp,
+                              ),
+                              Text(
+                                widget.book['offer_type'].toString(),
+                                style: TextStyle(
+                                  color: kMainColor,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
               ],
             ),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: 16.sp,
-                vertical: 5.sp,
               ),
               child: Row(
                 children: [
@@ -268,9 +298,9 @@ class _ShowBookItemState extends State<ShowBookItem> {
                     color: kMainColor,
                   ),
 
-                  ////// Location
+                  /// Location
                   Text(
-                    'مصر، القاهرة',
+                    ' ${widget.book['country']} - ${widget.book['city']} ',
                     style: TextStyle(
                       color: kMainColor,
                       fontSize: 12.sp,
@@ -278,6 +308,47 @@ class _ShowBookItemState extends State<ShowBookItem> {
                       height: 1.30,
                     ),
                   ),
+                  const Spacer(),
+                  if (widget.book['offer_type'].toString() == 'للبيع')
+                    Container(
+                      width: 100,
+                      height: 26,
+                      // margin: EdgeInsets.symmetric(horizontal: 16.sp),
+                      decoration: ShapeDecoration(
+                        color: const Color(0xFFF0F6FF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(12.sp),
+                            bottomRight: Radius.circular(12.sp),
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 5.sp,
+                        children: [
+                          Text(
+                            widget.book['price'].toString(),
+                            style: TextStyle(
+                              color: kMainColor,
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            ' جنيه',
+                            style: TextStyle(
+                              color: kMainColor,
+                              fontSize: 13.sp,
+                              fontFamily: 'Nunito',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    const SizedBox(),
                 ],
               ),
             ),
@@ -292,7 +363,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
                   widget.book['description'].toString(),
                   style: TextStyle(
                     color: const Color(0xFF686868),
-                    fontSize: 13.sp,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                     height: 1.85,
                   ),
@@ -306,13 +377,25 @@ class _ShowBookItemState extends State<ShowBookItem> {
               ),
               child: SizedBox(
                 width: 351.sp,
-                child: Text(
-                  'المؤلف: ${widget.book['author']}',
-                  style: TextStyle(
-                    color: const Color(0xFFA2A2A2),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+                child: Row(
+                  children: [
+                    Text(
+                      'المؤلف: ',
+                      style: TextStyle(
+                        color: const Color(0xFFA2A2A2),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      widget.book['author'].toString(),
+                      style: TextStyle(
+                        color: const Color(0xFFA2A2A2),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -323,13 +406,25 @@ class _ShowBookItemState extends State<ShowBookItem> {
               ),
               child: SizedBox(
                 width: 351.sp,
-                child: Text(
-                  'التصنيف: ${widget.book['category']}',
-                  style: TextStyle(
-                    color: const Color(0xFFA2A2A2),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+                child: Row(
+                  children: [
+                    Text(
+                      'التصنيف: ',
+                      style: TextStyle(
+                        color: const Color(0xFFA2A2A2),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      widget.book['category'].toString(),
+                      style: TextStyle(
+                        color: const Color(0xFFA2A2A2),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -340,49 +435,59 @@ class _ShowBookItemState extends State<ShowBookItem> {
                 horizontal: 16.sp,
                 vertical: 5.sp,
               ),
-              child: Row(
-                spacing: 5.sp,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: kTextShadowColor,
-                    radius: 16.sp,
-                    child: widget.book['user_image'] == null ||
-                            widget.book['user_image'].toString().isEmpty
-                        ? Icon(
-                            Icons.account_circle,
-                            size: 30.sp,
-                            color: kScaffoldBackgroundColor,
-                          )
-                        : Container(
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(320),
-                            ),
-                            child: CachedNetworkImage(
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => AppIndicator(
-                                size: 10.sp,
-                              ),
-                              imageUrl: widget.book['user_image'].toString(),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+              child: InkWell(
+                highlightColor: kDisableButtonColor,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UserPage(),
                   ),
-                  SizedBox(
-                    child: Text(
-                      widget.book['user_name'].toString(),
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: kTextColor,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                        decoration: TextDecoration.underline,
-                        decorationColor: kTextColor,
-                        height: 0.71,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 5.sp,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: kTextShadowColor,
+                      radius: 16.sp,
+                      child: widget.book['user_image'] == null ||
+                              widget.book['user_image'].toString().isEmpty
+                          ? Icon(
+                              Icons.account_circle,
+                              size: 30.sp,
+                              color: kScaffoldBackgroundColor,
+                            )
+                          : Container(
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(320),
+                              ),
+                              child: CachedNetworkImage(
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => AppIndicator(
+                                  size: 10.sp,
+                                ),
+                                imageUrl: widget.book['user_image'].toString(),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                    ),
+                    SizedBox(
+                      child: Text(
+                        widget.book['user_name'].toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: kTextColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.underline,
+                          decorationColor: kTextColor,
+                          height: 0.71,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Padding(
