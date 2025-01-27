@@ -11,7 +11,7 @@ class EmptyFavoriteBooks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomFadeInRight(
+    return CustomFadeInUp(
       duration: 300,
       child: Container(
         alignment: Alignment.center,

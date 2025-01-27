@@ -1,5 +1,6 @@
 import 'package:biblio/cubit/favorite_button_cubit/favorite_button_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +32,9 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     final cubit = context.read<FavoriteButtonCubit>();
     return BlocConsumer<FavoriteButtonCubit, FavoriteButtonState>(
       listener: (context, state) {
-        // TODO: implement listener
+        if (state is FavoriteButtonError) {
+          showSnackBar(context, state.message);
+        }
       },
       builder: (context, state) {
         return InkWell(
