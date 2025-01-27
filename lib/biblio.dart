@@ -2,6 +2,7 @@ import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/cubit/books/upload_book_cubit/upload_book_cubit.dart';
 import 'package:biblio/cubit/favorite_button_cubit/favorite_button_cubit.dart';
 import 'package:biblio/cubit/my_list/my_list_cubit.dart';
+import 'package:biblio/cubit/user/get_user_qty_books_cubit/get_user_qty_books_cubit.dart';
 import 'package:biblio/cubit/user/user_location_cubit/save_user_location_cubit.dart';
 import 'package:biblio/screens/add_book_page/add_book.dart';
 import 'package:biblio/screens/book_item/edit_my_book.dart';
@@ -59,6 +60,9 @@ class Biblio extends StatelessWidget {
             BlocProvider<UploadBookCubit>(
               create: (context) => UploadBookCubit(),
             ),
+            BlocProvider<GetUserQtyBooksCubit>(
+              create: (context) => GetUserQtyBooksCubit(),
+            )
           ],
 
           /// MaterialApp
