@@ -1,3 +1,4 @@
+import 'package:biblio/cubit/books/fetch_located_books_cubit/fetch_located_books_cubit.dart';
 import 'package:biblio/screens/category_page/widgets/category_listview.dart';
 import 'package:biblio/screens/category_page/widgets/see_all.dart';
 import 'package:biblio/screens/home_page/widgets/home_banner.dart';
@@ -8,6 +9,7 @@ import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/width.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -118,7 +120,10 @@ class HomePage extends StatelessWidget {
               child: SizedBox(
                 width: 140.sp,
                 height: 280.sp,
-                child: const NewBooksListview(),
+                child: BlocProvider<FetchLocatedBooksCubit>(
+                  create: (context) => FetchLocatedBooksCubit(),
+                  child: const NewBooksListview(),
+                ),
               ),
             ),
             const SliverToBoxAdapter(
