@@ -13,6 +13,7 @@ class BookModel {
     required this.condition,
     required this.offerType,
     required this.userCountry,
+    required this.userCreatedAt,
     this.price,
   });
   final int? price;
@@ -29,6 +30,7 @@ class BookModel {
   final String condition;
   final String offerType;
   final String userCountry;
+  final String userCreatedAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -46,6 +48,7 @@ class BookModel {
       'condition': condition,
       'offer_type': offerType,
       'cover_book_url2': coverImageUrlI,
+      'user_created_at': userCreatedAt,
     };
   }
 }

@@ -440,7 +440,9 @@ class _ShowBookItemState extends State<ShowBookItem> {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const UserPage(),
+                    builder: (context) => UserPage(
+                      book: widget.book,
+                    ),
                   ),
                 ),
                 child: Row(

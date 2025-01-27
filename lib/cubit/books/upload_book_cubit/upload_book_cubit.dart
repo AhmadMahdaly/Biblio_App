@@ -75,6 +75,13 @@ class UploadBookCubit extends Cubit<UploadBookState> {
           .single();
       final userCountry = userCountryResponse['country'];
 
+      final userCreateAtResponse = await supabase
+          .from('users')
+          .select('created_at')
+          .eq('id', Supabase.instance.client.auth.currentUser!.id)
+          .single();
+      final userCreatedAt = userCreateAtResponse['created_at'];
+
       final book = BookModel(
         coverImageUrl: imageUrl,
         coverImageUrlI: imageUrlI,
@@ -90,6 +97,7 @@ class UploadBookCubit extends Cubit<UploadBookState> {
         userImage: userImage.toString(),
         userCity: userLocation.toString(),
         userCountry: userCountry.toString(),
+        userCreatedAt: userCreatedAt.toString(),
       );
       // إضافة بيانات الكتاب إلى الجدول
       await supabase.from('books').insert([book.toJson()]);
