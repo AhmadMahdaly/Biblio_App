@@ -91,11 +91,9 @@ class UploadBookCubit extends Cubit<UploadBookState> {
         userCity: userLocation.toString(),
         userCountry: userCountry.toString(),
       );
-
       // إضافة بيانات الكتاب إلى الجدول
       await supabase.from('books').insert([book.toJson()]);
       emit(UploadBookSuccess());
-
       await Navigator.pushReplacementNamed(context, NavigationBarApp.id);
     } catch (e) {
       log(e.toString());

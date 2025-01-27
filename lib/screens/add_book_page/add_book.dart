@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:biblio/cubit/books/cubit/upload_book_cubit.dart';
+import 'package:biblio/cubit/books/upload_book_cubit/upload_book_cubit.dart';
 import 'package:biblio/cubit/books/fetch_book_category_cubit/fetch_book_category_cubit.dart';
 import 'package:biblio/cubit/books/fetch_order_type_book_cubit/fetch_order_type_book_cubit.dart';
 import 'package:biblio/screens/add_book_page/widgets/add_book_image.dart';
