@@ -58,6 +58,8 @@ class _GetBookImageState extends State<GetBookImage> {
 
             return Center(
               child: Container(
+                width: 72,
+                height: 72,
                 clipBehavior: Clip.antiAlias,
                 decoration: const BoxDecoration(),
                 child: CachedNetworkImage(

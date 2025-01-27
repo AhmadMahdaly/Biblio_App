@@ -18,57 +18,54 @@ class _GetUserImageState extends State<GetUserImage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.sp),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            backgroundColor: kLightBlue,
-            radius: size / 2.sp,
-            child: FutureBuilder<String?>(
-              future: getUserPhoto(context),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return AppIndicator(
-                    size: indicatorSize.sp,
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Text('حدث خطأ: ${snapshot.error}');
-                }
-                final photoUrl = snapshot.data;
-                if (photoUrl == null || photoUrl.isEmpty) {
-                  return Icon(
-                    Icons.account_circle,
-                    size: 80.sp,
-                    color: kMainColor,
-                  );
-                }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircleAvatar(
+          backgroundColor: kLightBlue,
+          radius: size / 2.sp,
+          child: FutureBuilder<String?>(
+            future: getUserPhoto(context),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return AppIndicator(
+                  size: indicatorSize.sp,
+                );
+              }
+              if (snapshot.hasError) {
+                return Text('حدث خطأ: ${snapshot.error}');
+              }
+              final photoUrl = snapshot.data;
+              if (photoUrl == null || photoUrl.isEmpty) {
+                return Icon(
+                  Icons.account_circle,
+                  size: 80.sp,
+                  color: kMainColor,
+                );
+              }
 
-                return Container(
+              return Container(
+                width: size.sp,
+                height: size.sp,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(320),
+                ),
+                child: CachedNetworkImage(
+                  progressIndicatorBuilder: (context, url, progress) =>
+                      AppIndicator(
+                    size: indicatorSize.sp,
+                  ),
+                  imageUrl: photoUrl,
+                  fit: BoxFit.cover,
                   width: size.sp,
                   height: size.sp,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(320),
-                  ),
-                  child: CachedNetworkImage(
-                    progressIndicatorBuilder: (context, url, progress) =>
-                        AppIndicator(
-                      size: indicatorSize.sp,
-                    ),
-                    imageUrl: photoUrl,
-                    fit: BoxFit.cover,
-                    width: size.sp,
-                    height: size.sp,
-                  ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

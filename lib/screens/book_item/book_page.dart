@@ -429,7 +429,6 @@ class _ShowBookItemState extends State<ShowBookItem> {
               ),
             ),
             const H(h: 16),
-
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: 16.sp,
@@ -449,31 +448,30 @@ class _ShowBookItemState extends State<ShowBookItem> {
                   mainAxisSize: MainAxisSize.min,
                   spacing: 5.sp,
                   children: [
-                    CircleAvatar(
-                      backgroundColor: kTextShadowColor,
-                      radius: 16.sp,
-                      child: widget.book['user_image'] == null ||
-                              widget.book['user_image'].toString().isEmpty
-                          ? Icon(
-                              Icons.account_circle,
-                              size: 30.sp,
-                              color: kScaffoldBackgroundColor,
-                            )
-                          : Container(
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(320),
-                              ),
-                              child: CachedNetworkImage(
-                                progressIndicatorBuilder:
-                                    (context, url, progress) => AppIndicator(
-                                  size: 10.sp,
-                                ),
-                                imageUrl: widget.book['user_image'].toString(),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                    ),
+                    if (widget.book['user_image'] == null ||
+                        widget.book['user_image'].toString().isEmpty)
+                      Icon(
+                        Icons.account_circle,
+                        size: 30.sp,
+                        color: kScaffoldBackgroundColor,
+                      )
+                    else
+                      Container(
+                        height: 32.sp,
+                        width: 32.sp,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(320),
+                        ),
+                        child: CachedNetworkImage(
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              AppIndicator(
+                            size: 10.sp,
+                          ),
+                          imageUrl: widget.book['user_image'].toString(),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     SizedBox(
                       child: Text(
                         widget.book['user_name'].toString(),
@@ -508,39 +506,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
                 ),
               ),
             ),
-            // Padding(
-            //   padding: EdgeInsets.symmetric(
-            //     horizontal: 16.sp,
-            //     vertical: 5.sp,
-            //   ),
-            //   child: SizedBox(
-            //     child: Text(
-            //       'انضم للمكتبة منذ  أيام.',
-            //       style: TextStyle(
-            //         color: const Color(0xFFA2A2A2),
-            //         fontSize: 14.sp,
-            //         fontWeight: FontWeight.w500,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // Padding(
-            //   padding: EdgeInsets.symmetric(
-            //     horizontal: 16.sp,
-            //     vertical: 5.sp,
-            //   ),
-            //   child: SizedBox(
-            //     child: Text(
-            //       'عدد الكتب: 2',
-            //       textAlign: TextAlign.right,
-            //       style: TextStyle(
-            //         color: const Color(0xFFA2A2A2),
-            //         fontSize: 14.sp,
-            //         fontWeight: FontWeight.w500,
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            const H(h: 36),
           ],
         ),
         bottomNavigationBar: _user == null || widget.book['user_id'] == _user

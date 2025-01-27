@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:biblio/cubit/books/upload_book_cubit/upload_book_cubit.dart';
 import 'package:biblio/cubit/books/fetch_book_category_cubit/fetch_book_category_cubit.dart';
 import 'package:biblio/cubit/books/fetch_order_type_book_cubit/fetch_order_type_book_cubit.dart';
+import 'package:biblio/cubit/books/upload_book_cubit/upload_book_cubit.dart';
 import 'package:biblio/screens/add_book_page/widgets/add_book_image.dart';
 import 'package:biblio/screens/add_book_page/widgets/title_form_add_book.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
@@ -175,7 +175,9 @@ class _AddBookState extends State<AddBook> {
                   appBar: AppBar(
                     leading: IconButton(
                       onPressed: () => Navigator.pushReplacementNamed(
-                          context, NavigationBarApp.id),
+                        context,
+                        NavigationBarApp.id,
+                      ),
                       icon: Icon(
                         Icons.arrow_back_ios_new_rounded,
                         color: kMainColor,
@@ -433,7 +435,9 @@ class _AddBookState extends State<AddBook> {
                             text: 'تسجيل الدخول',
                             onTap: () {
                               Navigator.pushReplacementNamed(
-                                  context, OnboardScreen.id);
+                                context,
+                                OnboardScreen.id,
+                              );
                             },
                           )
                         : isActive

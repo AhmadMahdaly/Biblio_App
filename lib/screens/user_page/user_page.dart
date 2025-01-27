@@ -89,33 +89,30 @@ class _UserPageState extends State<UserPage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           const Spacer(),
-                          CircleAvatar(
-                            radius: 80.sp,
-                            backgroundColor: kLightBlue,
-                            child: widget.book['user_image'] == null ||
-                                    widget.book['user_image'].toString().isEmpty
-                                ? Icon(
-                                    Icons.account_circle,
-                                    size: 150.sp,
-                                    color: kScaffoldBackgroundColor,
-                                  )
-                                : Container(
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(320),
-                                    ),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      progressIndicatorBuilder:
-                                          (context, url, progress) =>
-                                              AppIndicator(
-                                        size: 10.sp,
-                                      ),
-                                      imageUrl:
-                                          widget.book['user_image'].toString(),
-                                    ),
-                                  ),
-                          ),
+                          if (widget.book['user_image'] == null ||
+                              widget.book['user_image'].toString().isEmpty)
+                            Icon(
+                              Icons.account_circle,
+                              size: 150.sp,
+                              color: kScaffoldBackgroundColor,
+                            )
+                          else
+                            Container(
+                              height: 150.sp,
+                              width: 150.sp,
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(320),
+                              ),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.fitWidth,
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => AppIndicator(
+                                  size: 10.sp,
+                                ),
+                                imageUrl: widget.book['user_image'].toString(),
+                              ),
+                            ),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8.sp),
                             child: Text(
@@ -193,7 +190,7 @@ class _UserPageState extends State<UserPage> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

@@ -3,6 +3,7 @@ import 'package:biblio/screens/more_page/widgets/show_email.dart';
 import 'package:biblio/screens/more_page/widgets/show_user_name.dart';
 import 'package:biblio/screens/my_lib_page/my_library_page.dart';
 import 'package:biblio/utils/components/border_radius.dart';
+import 'package:biblio/utils/components/width.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,9 +32,11 @@ class PersonalCard extends StatelessWidget {
           ///
           Row(
             children: [
+              const W(w: 12),
               const SizedBox(
                 child: Center(child: GetUserImage()),
               ),
+              const W(w: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

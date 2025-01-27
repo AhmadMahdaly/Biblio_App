@@ -29,13 +29,6 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
     super.initState();
     isInAsyncCall = true;
     _fetchUserData();
-    waitToLoad();
-  }
-
-  Future<void> waitToLoad() async {
-    await Future.delayed(
-      const Duration(seconds: 2),
-    );
   }
 
   File? userImage;
@@ -73,9 +66,25 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
           .getPublicUrl(fileName);
 
       /// حفظ رابط الصورة في جدول users
+      final response = await Supabase.instance.client
+          .from('users')
+          .select('image')
+          .eq('id', Supabase.instance.client.auth.currentUser!.id)
+          .single();
+      final oldPhotoUrl = response['image'] as String;
+      final oldFileName = oldPhotoUrl.split('/').last;
+
+      /// حذف الصورة القديمة
+      await Supabase.instance.client.storage
+          .from('user-photos')
+          .remove([oldFileName]);
       await Supabase.instance.client.from('users').update({
         'image': imageUrl,
       }).eq('id', Supabase.instance.client.auth.currentUser!.id);
+      await Supabase.instance.client.from('books').update({
+        'user_image': imageUrl,
+      }).eq('user_id', Supabase.instance.client.auth.currentUser!.id);
+
       setState(() {
         isInAsyncCall = false;
       });
@@ -118,6 +127,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
             .select('username')
             .eq('id', user.id)
             .single();
+
         final name = response['username'] as String;
 
         /// لإظهار الداتا
@@ -149,6 +159,9 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
       await supabase
           .from('users')
           .update({'username': newName}).eq('id', user.id);
+      await supabase.from('books').update({
+        'user_name': newName,
+      }).eq('user_id', user.id);
       if (newPassword.isEmpty || newPassword == null) {
       } else {
         await Supabase.instance.client.auth.updateUser(
@@ -248,7 +261,6 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                     child: Container(
                       clipBehavior: Clip.antiAlias,
                       alignment: Alignment.center,
-                      margin: EdgeInsets.symmetric(horizontal: 16.sp),
                       decoration: const BoxDecoration(
                         color: Color(0xFFECECEC),
                         border: DashedBorder.fromBorderSide(

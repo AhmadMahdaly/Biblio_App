@@ -62,7 +62,7 @@ class Biblio extends StatelessWidget {
             ),
             BlocProvider<GetUserQtyBooksCubit>(
               create: (context) => GetUserQtyBooksCubit(),
-            )
+            ),
           ],
 
           /// MaterialApp

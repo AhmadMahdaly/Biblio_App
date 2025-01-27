@@ -53,31 +53,30 @@ class ShowBook extends StatelessWidget {
                     const W(w: 3),
 
                     /// User image
-                    CircleAvatar(
-                      backgroundColor: kTextShadowColor,
-                      radius: 10.sp,
-                      child: book['user_image'] == null ||
-                              book['user_image'].toString().isEmpty
-                          ? Icon(
-                              Icons.account_circle,
-                              size: 20.sp,
-                              color: kScaffoldBackgroundColor,
-                            )
-                          : Container(
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(320),
-                              ),
-                              child: CachedNetworkImage(
-                                progressIndicatorBuilder:
-                                    (context, url, progress) => AppIndicator(
-                                  size: 10.sp,
-                                ),
-                                imageUrl: book['user_image'].toString(),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                    ),
+                    if (book['user_image'] == null ||
+                        book['user_image'].toString().isEmpty)
+                      Icon(
+                        Icons.account_circle,
+                        size: 20.sp,
+                        color: kScaffoldBackgroundColor,
+                      )
+                    else
+                      Container(
+                        height: 20.sp,
+                        width: 20.sp,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(320),
+                        ),
+                        child: CachedNetworkImage(
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              AppIndicator(
+                            size: 10.sp,
+                          ),
+                          imageUrl: book['user_image'].toString(),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     const W(w: 3),
 
                     /// User Name
