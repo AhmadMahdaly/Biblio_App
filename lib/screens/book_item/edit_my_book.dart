@@ -315,6 +315,33 @@ class _EditBookState extends State<EditBook> {
     }
   }
 
+  Future<void> deleteBook() async {
+    final response = await Supabase.instance.client
+        .from('books')
+        .select('cover_image_url')
+        .eq('id', bookId)
+        .single();
+    final oldPhotoUrl = response['cover_image_url'] as String;
+    final oldFileName = oldPhotoUrl.split('/').last;
+    await Supabase.instance.client.storage
+        .from('book_covers')
+        .remove([oldFileName]);
+    final responsed = await Supabase.instance.client
+        .from('books')
+        .select('cover_book_url2')
+        .eq('id', bookId)
+        .single();
+    final oldPhotoUrlI = responsed['cover_book_url2'] as String;
+    final oldFileNameI = oldPhotoUrlI.split('/').last;
+    await Supabase.instance.client.storage
+        .from('book_covers')
+        .remove([oldFileNameI]);
+    await supabase.from('books').delete().eq(
+          'id',
+          bookId,
+        );
+  }
+
   ///
   @override
   void dispose() {
@@ -334,28 +361,28 @@ class _EditBookState extends State<EditBook> {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(
-              onPressed: () async {
-                final shouldExit = await showCustomDialog(
-                  context,
-                  'ستقوم بحذف الكتاب؟',
-                );
-                // return shouldExit!;
-                if (shouldExit!) {
-                  await supabase.from('books').delete().eq(
-                        'id',
-                        bookId,
-                      );
-                  await Navigator.pushReplacementNamed(
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.sp),
+              child: IconButton(
+                onPressed: () async {
+                  final shouldExit = await showCustomDialog(
                     context,
-                    NavigationBarApp.id,
+                    'ستقوم بحذف الكتاب؟',
                   );
-                }
-              },
-              icon: Icon(
-                Icons.delete_rounded,
-                color: kMainColor,
-                size: 22.sp,
+                  // return shouldExit!;
+                  if (shouldExit!) {
+                    await deleteBook();
+                    await Navigator.pushReplacementNamed(
+                      context,
+                      NavigationBarApp.id,
+                    );
+                  }
+                },
+                icon: Icon(
+                  Icons.delete_rounded,
+                  color: kMainColor,
+                  size: 22.sp,
+                ),
               ),
             ),
           ],
