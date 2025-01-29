@@ -38,7 +38,12 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
       conversationId = response['id'] as int;
       // إضافة المستخدمين إلى المحادثة
       await supabase.from('conversation_participants').insert([
-        {'conversation_id': conversationId, 'user_id': userId},
+        {
+          'conversation_id': conversationId,
+          'user_id': userId,
+          'book_image': bookImg,
+          'title_book': titleBook,
+        },
         {'conversation_id': conversationId, 'user_id': otherId},
       ]);
 

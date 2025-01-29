@@ -14,3 +14,12 @@ final class FetchMessagesError extends FetchMessagesState {
 
   final String message;
 }
+
+class UpdateMessageLoading extends FetchMessagesState {}
+
+class UpdateMessageSuccess extends FetchMessagesState {}
+
+class UpdateMessageError extends FetchMessagesState {
+  UpdateMessageError(this.message);
+  final String message;
+}
