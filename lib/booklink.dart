@@ -1,6 +1,10 @@
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/cubit/books/upload_book_cubit/upload_book_cubit.dart';
 import 'package:biblio/cubit/favorite_button_cubit/favorite_button_cubit.dart';
+import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversation_cubit.dart';
+import 'package:biblio/cubit/messages/fetch_messages_cubit/fetch_messages_cubit.dart';
+import 'package:biblio/cubit/messages/fetch_user_conversations_cubit/fetch_user_conversations_cubit.dart';
+import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
 import 'package:biblio/cubit/my_list/my_list_cubit.dart';
 import 'package:biblio/cubit/user/get_user_qty_books_cubit/get_user_qty_books_cubit.dart';
 import 'package:biblio/cubit/user/user_location_cubit/save_user_location_cubit.dart';
@@ -56,12 +60,23 @@ class Biblio extends StatelessWidget {
             BlocProvider<SaveUserLocationCubit>(
               create: (context) => SaveUserLocationCubit(),
             ),
-
             BlocProvider<UploadBookCubit>(
               create: (context) => UploadBookCubit(),
             ),
             BlocProvider<GetUserQtyBooksCubit>(
               create: (context) => GetUserQtyBooksCubit(),
+            ),
+            BlocProvider<CreateConversationCubit>(
+              create: (context) => CreateConversationCubit(),
+            ),
+            BlocProvider<FetchMessagesCubit>(
+              create: (context) => FetchMessagesCubit(),
+            ),
+            BlocProvider<FetchUserConversationsCubit>(
+              create: (context) => FetchUserConversationsCubit(),
+            ),
+            BlocProvider<SendMessagesCubit>(
+              create: (context) => SendMessagesCubit(),
             ),
           ],
 

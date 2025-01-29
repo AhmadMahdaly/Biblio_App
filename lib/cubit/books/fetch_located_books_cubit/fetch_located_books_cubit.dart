@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -12,8 +14,9 @@ class FetchLocatedBooksCubit extends Cubit<FetchLocatedBooksState> {
   List<Map<String, dynamic>> books = [];
   // List<Map<String, dynamic>> countryBooks = [];
 
-  Future<void> fetchLocatedBooks() async {
+  Future<void> fetchLocatedBooks(BuildContext context) async {
     emit(FetchLocatedBooksLoading());
+    final cubit = context.read<FetchLocatedBooksCubit>();
     try {
       final user = supabase.auth.currentUser;
       if (user != null) {
@@ -55,7 +58,9 @@ class FetchLocatedBooksCubit extends Cubit<FetchLocatedBooksState> {
       emit(FetchLocatedBooksError(e.message));
     } catch (e) {
       log(e.toString());
-      emit(FetchLocatedBooksError(e.toString()));
+      if (!cubit.isClosed) {
+        emit(FetchLocatedBooksError(e.toString()));
+      }
     }
   }
 }
