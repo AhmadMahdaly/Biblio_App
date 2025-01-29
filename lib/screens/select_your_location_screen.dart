@@ -1,6 +1,7 @@
 import 'package:biblio/cubit/user/user_location_cubit/save_user_location_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
+import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
@@ -133,6 +134,15 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
                       ),
                       DropdownButtonFormField<String>(
                         decoration: InputDecoration(
+                          border: border(),
+                          focusedBorder: border(),
+                          enabledBorder: border(),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.sp),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
                           hintText: 'اختار الدولة',
                           hintStyle: TextStyle(
                             fontSize: 14.sp,
