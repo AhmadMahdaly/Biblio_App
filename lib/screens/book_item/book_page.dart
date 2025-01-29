@@ -1,3 +1,4 @@
+import 'package:biblio/cubit/favorite_button_cubit/favorite_button_cubit.dart';
 import 'package:biblio/screens/book_item/edit_my_book.dart';
 import 'package:biblio/screens/home_page/widgets/title_header_home.dart';
 import 'package:biblio/screens/my_lib_page/widgets/favorate_button.dart';
@@ -13,6 +14,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -32,6 +34,10 @@ class _ShowBookItemState extends State<ShowBookItem> {
     super.initState();
     isLoading = true;
     fetchUserId();
+
+    context.read<FavoriteButtonCubit>().loadFavoriteState(
+          bookId: widget.book['id'].toString(),
+        );
   }
 
   String? _user;
@@ -118,7 +124,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.sp),
                 child: FavoriteButton(
-                  bookId: id.toString(),
+                  bookId: widget.book['id'].toString(),
                 ),
               )
             else

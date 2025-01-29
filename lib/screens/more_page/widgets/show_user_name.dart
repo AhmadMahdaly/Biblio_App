@@ -30,8 +30,8 @@ class ShowUserName extends StatelessWidget {
               textAlign: TextAlign.start,
               style: TextStyle(
                 color: kMainColor,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
+                fontSize: 17.sp,
+                fontWeight: FontWeight.w600,
               ),
             );
           }
