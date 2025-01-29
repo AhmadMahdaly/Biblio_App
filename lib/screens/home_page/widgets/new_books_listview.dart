@@ -19,7 +19,7 @@ class _NewBooksListviewState extends State<NewBooksListview> {
   @override
   void initState() {
     super.initState();
-    context.read<FetchLocatedBooksCubit>().fetchLocatedBooks();
+    context.read<FetchLocatedBooksCubit>().fetchLocatedBooks(context);
   }
 
   @override

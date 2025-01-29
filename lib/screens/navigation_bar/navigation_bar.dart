@@ -11,10 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NavigationBarApp extends StatefulWidget {
-  const NavigationBarApp({
-    super.key,
-  });
+  const NavigationBarApp({super.key});
   static String id = 'NavigationBarApp';
+
   @override
   State<NavigationBarApp> createState() => NavigationBarAppState();
 }

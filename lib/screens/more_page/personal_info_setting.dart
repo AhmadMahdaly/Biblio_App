@@ -230,13 +230,11 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
           /// Leading
           leading: IconButton(
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
+              Navigator.pushNamedAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const NavigationBarApp(),
-                ),
+                NavigationBarApp.id,
                 (route) => false,
-              ); // إزالة جميع الصفحات
+              );
             },
             icon: Icon(
               Icons.arrow_back_ios_new,
@@ -350,11 +348,9 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
               await _fetchUserData();
               showSnackBar(context, 'تم الحفظ');
 
-              await Navigator.pushAndRemoveUntil(
+              await Navigator.pushNamedAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const NavigationBarApp(),
-                ),
+                NavigationBarApp.id,
                 (route) => false,
               );
             },

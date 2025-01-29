@@ -231,59 +231,61 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-          bottomNavigationBar: Column(
-            spacing: 12.sp,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              /// Sign up Button
-              CustomButton(
-                isActive: enabled,
-                text: 'إنشاء الحساب',
-                padding: 16,
-                onTap: _isAgreed
-                    ? () async {
-                        if (formKey.currentState!.validate()) {
-                          await cubit.signUp(
-                            name: _userNameController.text,
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          );
-                        }
-                      }
-                    : () {},
-              ),
+          bottomNavigationBar: state is SignUpLoading
+              ? const SizedBox()
+              : Column(
+                  spacing: 12.sp,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    /// Sign up Button
+                    CustomButton(
+                      isActive: enabled,
+                      text: 'إنشاء الحساب',
+                      padding: 16,
+                      onTap: _isAgreed
+                          ? () async {
+                              if (formKey.currentState!.validate()) {
+                                await cubit.signUp(
+                                  name: _userNameController.text,
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                );
+                              }
+                            }
+                          : () {},
+                    ),
 
-              /// Login
-              InkWell(
-                onTap: () {
-                  Navigator.popAndPushNamed(context, LoginScreen.id);
-                },
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'لديك حساب بالفعل؟ ',
-                        style: TextStyle(
-                          color: kHeader1Color,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
+                    /// Login
+                    InkWell(
+                      onTap: () {
+                        Navigator.popAndPushNamed(context, LoginScreen.id);
+                      },
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'لديك حساب بالفعل؟ ',
+                              style: TextStyle(
+                                color: kHeader1Color,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'تسجيل الدخول',
+                              style: TextStyle(
+                                color: const Color(0xFF3E5879),
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      TextSpan(
-                        text: 'تسجيل الدخول',
-                        style: TextStyle(
-                          color: const Color(0xFF3E5879),
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const H(h: 16),
+                  ],
                 ),
-              ),
-              const H(h: 16),
-            ],
-          ),
         );
       },
     );
