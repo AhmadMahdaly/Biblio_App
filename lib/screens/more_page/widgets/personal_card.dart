@@ -1,5 +1,4 @@
 import 'package:biblio/screens/more_page/widgets/get_user_image.dart';
-import 'package:biblio/screens/more_page/widgets/show_email.dart';
 import 'package:biblio/screens/more_page/widgets/show_user_name.dart';
 import 'package:biblio/screens/my_lib_page/my_library_page.dart';
 import 'package:biblio/utils/components/border_radius.dart';
@@ -41,12 +40,21 @@ class PersonalCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 12.sp),
+                  Text(
+                    'أهلـًا',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: kMainColor,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w200,
+                    ),
+                  ),
 
                   /// User name
                   const ShowUserName(),
 
-                  /// Email
-                  const ShowEmail(),
+                  // /// Email
+                  // const ShowEmail(),
                 ],
               ),
             ],

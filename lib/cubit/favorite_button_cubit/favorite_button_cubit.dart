@@ -1,9 +1,6 @@
 import 'dart:developer';
 
-import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -17,10 +14,10 @@ class FavoriteButtonCubit extends Cubit<FavoriteButtonState> {
 
   Future<void> loadFavoriteState({
     required String bookId,
-    required BuildContext context,
   }) async {
     emit(FavoriteButtonLoading());
     try {
+      isFavorite = false;
       if (user != null) {
         final userId = user!.id;
         final response = await supabase
@@ -28,7 +25,7 @@ class FavoriteButtonCubit extends Cubit<FavoriteButtonState> {
             .select()
             .eq('user_id', userId)
             .eq('book_id', bookId)
-            .maybeSingle();
+            .single();
         if (response != null) {
           isFavorite = true;
         }
@@ -40,10 +37,7 @@ class FavoriteButtonCubit extends Cubit<FavoriteButtonState> {
       emit(FavoriteButtonError(e.message));
     } on AuthException catch (e) {
       log(e.toString());
-      if (e.message ==
-          'ClientException: Connection closed before full header was received') {
-        await context.read<AuthCubit>().signOut(context);
-      }
+
       emit(FavoriteButtonError(e.message));
     } catch (e) {
       log(e.toString());

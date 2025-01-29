@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:biblio/cubit/favorite_button_cubit/favorite_button_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
-import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +25,6 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     super.initState();
     context.read<FavoriteButtonCubit>().loadFavoriteState(
           bookId: widget.bookId,
-          context: context,
         );
   }
 
@@ -34,7 +34,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     return BlocConsumer<FavoriteButtonCubit, FavoriteButtonState>(
       listener: (context, state) {
         if (state is FavoriteButtonError) {
-          showSnackBar(context, state.message);
+          log(state.message);
         }
       },
       builder: (context, state) {
