@@ -1,28 +1,20 @@
-import 'package:biblio/screens/orders_page/models/message_model.dart';
-import 'package:biblio/screens/orders_page/widgets/message_card.dart';
+import 'package:biblio/screens/orders_page/widgets/conversation_card.dart';
 import 'package:flutter/material.dart';
 
-class IncomingRequests extends StatefulWidget {
-  const IncomingRequests({super.key});
-
-  @override
-  State<IncomingRequests> createState() => _IncomingRequestsState();
-}
-
-class _IncomingRequestsState extends State<IncomingRequests> {
-  final MessageModel message = MessageModel(
-    image: 'assets/icons/logo w text.png',
-    title: 'كتاب الروح',
-    message:
-        'صباح الخير، أريد أن اتواصل بخصوص ثلاثة كتب كنت قد رأيتها مطولا لدى',
-  );
+class IncomingRequests extends StatelessWidget {
+  const IncomingRequests({required this.conversation, super.key});
+  final List<Map<String, dynamic>> conversation;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 2,
+      itemCount: conversation.length,
       itemBuilder: (context, index) {
-        return MessageCard(message: message);
+        final conversations = conversation[index];
+
+        return MessageCard(
+          conversation: conversations,
+        );
       },
     );
   }
