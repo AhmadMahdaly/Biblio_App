@@ -24,6 +24,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     super.initState();
     context.read<FavoriteButtonCubit>().loadFavoriteState(
           bookId: widget.bookId,
+          context: context,
         );
   }
 

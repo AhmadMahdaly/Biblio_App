@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +56,10 @@ class FetchLocatedBooksCubit extends Cubit<FetchLocatedBooksState> {
       emit(FetchLocatedBooksSuccess());
     } on AuthException catch (e) {
       log(e.toString());
+      if (e.message ==
+          'ClientException: Connection closed before full header was received') {
+        await context.read<AuthCubit>().signOut(context);
+      }
       emit(FetchLocatedBooksError(e.message));
     } catch (e) {
       log(e.toString());

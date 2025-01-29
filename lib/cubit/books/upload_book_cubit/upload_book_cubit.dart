@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/screens/add_book_page/models/book_model.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:bloc/bloc.dart';
@@ -103,6 +104,13 @@ class UploadBookCubit extends Cubit<UploadBookState> {
       await supabase.from('books').insert([book.toJson()]);
       emit(UploadBookSuccess());
       await Navigator.pushReplacementNamed(context, NavigationBarApp.id);
+    } on AuthException catch (e) {
+      log(e.toString());
+      if (e.message ==
+          'ClientException: Connection closed before full header was received') {
+        await context.read<AuthCubit>().signOut(context);
+      }
+      emit(UploadBookError(e.message));
     } catch (e) {
       log(e.toString());
       emit(UploadBookError(e.toString()));

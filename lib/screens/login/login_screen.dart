@@ -181,6 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               onTap: () async {
                                 if (formKey.currentState!.validate()) {
                                   await cubit.login(
+                                    context: context,
                                     email: _emailController.text,
                                     password: _passwordController.text,
                                   );

@@ -1,6 +1,9 @@
 import 'dart:developer';
 
+import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -17,6 +20,7 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
     required String otherId,
     required String titleBook,
     required String bookImg,
+    required BuildContext context,
   }) async {
     emit(CreateConversationLoading());
     try {
@@ -41,6 +45,10 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
       emit(CreateConversationSeccess());
     } on AuthException catch (e) {
       log(e.toString());
+      if (e.message ==
+          'ClientException: Connection closed before full header was received') {
+        await context.read<AuthCubit>().signOut(context);
+      }
       emit(CreateConversationError(e.message));
     } catch (e) {
       log(e.toString());

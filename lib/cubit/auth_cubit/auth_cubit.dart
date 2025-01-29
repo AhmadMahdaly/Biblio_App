@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -11,7 +12,10 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
   SupabaseClient user = Supabase.instance.client;
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
     emit(LoginLoading());
     try {
       await user.auth.signInWithPassword(email: email, password: password);
@@ -19,6 +23,10 @@ class AuthCubit extends Cubit<AuthState> {
       emit(LoginSuccess());
     } on AuthException catch (e) {
       log(e.toString());
+      if (e.message ==
+          'ClientException: Connection closed before full header was received') {
+        await context.read<AuthCubit>().signOut(context);
+      }
       emit(LoginError(e.message));
     } catch (e) {
       log(e.toString());
@@ -30,6 +38,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String name,
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     emit(SignUpLoading());
     try {
@@ -48,6 +57,10 @@ class AuthCubit extends Cubit<AuthState> {
       emit(SignUpSuccess());
     } on AuthException catch (e) {
       log(e.toString());
+      if (e.message ==
+          'ClientException: Connection closed before full header was received') {
+        await signOut(context);
+      }
       emit(SignUpError(e.message));
     } catch (e) {
       log(e.toString());
@@ -66,6 +79,10 @@ class AuthCubit extends Cubit<AuthState> {
       emit(SignOutSuccess());
     } on AuthException catch (e) {
       log(e.toString());
+      if (e.message ==
+          'ClientException: Connection closed before full header was received') {
+        await context.read<AuthCubit>().signOut(context);
+      }
       emit(SignOutError(e.message));
     } catch (e) {
       log(e.toString());

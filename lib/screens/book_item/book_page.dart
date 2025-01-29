@@ -229,7 +229,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
                           height: 26,
                           margin: EdgeInsets.symmetric(horizontal: 16.sp),
                           decoration: ShapeDecoration(
-                            color: const Color(0xFFF0F6FF),
+                            color: const Color(0xFFE4FFF3),
                             shape: RoundedRectangleBorder(
                               borderRadius: borderRadius(),
                             ),
@@ -245,7 +245,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
                               Text(
                                 widget.book['offer_type'].toString(),
                                 style: TextStyle(
-                                  color: kMainColor,
+                                  color: const Color(0xFF4DC591),
                                   fontSize: 13.sp,
                                   fontWeight: FontWeight.w500,
                                   height: 1.30,
