@@ -79,9 +79,6 @@ class _AddBookState extends State<AddBook> {
   @override
   void initState() {
     super.initState();
-    // context
-    //   ..read<FetchBookCategoryCubit>().fetchCategories()
-    //   ..read<FetchOrderTypeBookCubit>().fetchOrderType();
     fetchUserId();
   }
 
@@ -101,36 +98,6 @@ class _AddBookState extends State<AddBook> {
       ///
     }
   }
-
-  // Future<void> fetchCategories() async {
-  //   try {
-  //     final response = await supabase.from('categories').select('name');
-
-  //     setState(() {
-  //       categories = response.map((e) => e['name'] as String).toList();
-  //     });
-  //   } catch (e) {
-  //     // showSnackBar(context, 'هناك خطأ $e');
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   }
-  // }
-
-  // Future<void> fetchOrderType() async {
-  //   try {
-  //     final response = await supabase.from('offer_type').select('type');
-
-  //     setState(() {
-  //       offerTypes = response.map((e) => e['type'] as String).toList();
-  //     });
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   } catch (e) {
-  //     // showSnackBar(context, 'هناك خطأ $e');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +167,7 @@ class _AddBookState extends State<AddBook> {
                       child: ListView(
                         children: [
                           Text(
-                            'من فضلك اضف صورتين للكتاب',
+                            'من فضلك أضف صورتين: لوجه وظهر الكتاب',
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               color: kTextColor,
@@ -210,6 +177,7 @@ class _AddBookState extends State<AddBook> {
                           ),
                           const H(h: 10),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             spacing: 12.sp,
                             children: [
                               AddBookImages(

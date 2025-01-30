@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MessageCard extends StatefulWidget {
+class MessageCard extends StatelessWidget {
   const MessageCard({
     required this.conversation,
     super.key,
@@ -14,29 +14,26 @@ class MessageCard extends StatefulWidget {
   final Map<String, dynamic> conversation;
 
   @override
-  State<MessageCard> createState() => _MessageCardState();
-}
-
-class _MessageCardState extends State<MessageCard> {
-  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ConversationRoom(
-            conversationId: widget.conversation['conversation_id'].toString(),
-            titleBook: widget.conversation['title_book'].toString(),
+            conversationId: conversation['conversation_id'].toString(),
+            titleBook: conversation['title_book'].toString(),
+            userName: conversation['sender'].toString(),
           ),
         ),
       ),
       child: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: 16.sp,
-          vertical: 5.sp,
+        margin: EdgeInsets.only(
+          right: 16.sp,
+          left: 16.sp,
+          top: 16.sp,
         ),
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F7F7),
+          color: kLightBlue,
           borderRadius: BorderRadius.circular(10.sp),
         ),
         height: 72.sp,
@@ -44,6 +41,7 @@ class _MessageCardState extends State<MessageCard> {
           spacing: 16.sp,
           children: [
             Container(
+              margin: EdgeInsets.all(8.sp),
               height: 60.sp,
               width: 60.sp,
               clipBehavior: Clip.antiAlias,
@@ -51,7 +49,7 @@ class _MessageCardState extends State<MessageCard> {
                 borderRadius: BorderRadius.circular(320),
               ),
               child: CachedNetworkImage(
-                imageUrl: widget.conversation['book_image'].toString(),
+                imageUrl: conversation['book_image'].toString(),
                 fit: BoxFit.cover,
                 height: 60.sp,
                 width: 60.sp,
@@ -86,21 +84,30 @@ class _MessageCardState extends State<MessageCard> {
               ),
             ),
             Column(
-              spacing: 10.sp,
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 2.sp,
               children: [
                 const H(h: 6),
                 SizedBox(
-                  width: 200.sp,
                   child: Text(
-                    'طلب كتاب: ${widget.conversation['title_book']}',
+                    '${conversation['sender']}',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: kMainColor,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  child: Text(
+                    'طلب كتاب: ${conversation['title_book']}',
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: kMainColor,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w800,
                       height: 1.70,
-                      letterSpacing: 0.10,
                     ),
                   ),
                 ),

@@ -20,6 +20,8 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
     required String titleBook,
     required String bookImg,
     required String bookId,
+    required String sender,
+    required String receiver,
   }) async {
     emit(CreateConversationLoading());
     try {
@@ -32,6 +34,7 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
           .select('id')
           .single();
       conversationId = response['id'] as int;
+
       // إضافة المستخدمين إلى المحادثة
       await supabase.from('conversation_participants').insert([
         {
@@ -40,6 +43,8 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
           'book_image': bookImg,
           'title_book': titleBook,
           'book_id': bookId,
+          'receiver': sender,
+          'sender': sender,
         },
         {
           'conversation_id': conversationId,
@@ -47,6 +52,8 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
           'book_image': bookImg,
           'title_book': titleBook,
           'book_id': bookId,
+          'receiver': receiver,
+          'sender': receiver,
         },
       ]);
 

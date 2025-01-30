@@ -21,7 +21,10 @@ class FetchBookCategoryCubit extends Cubit<FetchBookCategoryState> {
     final cubit = context.read<FetchBookCategoryCubit>();
 
     try {
-      final response = await supabase.from('categories').select('name');
+      final response = await supabase
+          .from('categories')
+          .select('name')
+          .order('id', ascending: true);
       categories = response.map((e) => e['name'] as String).toList();
       emit(FetchBookCategorySuccess());
     } on AuthException catch (e) {

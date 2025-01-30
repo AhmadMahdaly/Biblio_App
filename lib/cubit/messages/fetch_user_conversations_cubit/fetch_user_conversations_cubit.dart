@@ -18,7 +18,7 @@ class FetchUserConversationsCubit extends Cubit<FetchUserConversationsState> {
       final response = await supabase
           .from('conversation_participants')
           .select(
-            'conversation_id, book_image, title_book, conversations(created_at)',
+            'conversation_id, book_image, title_book, receiver, sender, conversations(created_at)',
           )
           .eq('user_id', userId);
       conversations = List<Map<String, dynamic>>.from(response);

@@ -19,8 +19,8 @@ class AddBookImages extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: 72,
-        height: 72,
+        width: 144,
+        height: 144,
         clipBehavior: Clip.hardEdge,
         alignment: Alignment.center,
         decoration: BoxDecoration(

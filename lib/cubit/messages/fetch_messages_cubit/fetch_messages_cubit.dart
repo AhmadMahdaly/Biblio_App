@@ -51,8 +51,11 @@ class FetchMessagesCubit extends Cubit<FetchMessagesState> {
       log(e.toString());
       if (e.message ==
           'JSON object requested, multiple (or no) rows returned') {}
+      emit(FetchMessagesLoading());
     } on AuthException catch (e) {
       log(e.toString());
+      if (e.message == 'Connection closed before full header was received') {}
+      emit(FetchMessagesLoading());
       emit(FetchMessagesError(e.message));
     } catch (e) {
       log(e.toString());
