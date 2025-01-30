@@ -177,6 +177,15 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
                       ),
                       DropdownButtonFormField<String>(
                         decoration: InputDecoration(
+                          border: border(),
+                          focusedBorder: border(),
+                          enabledBorder: border(),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.sp),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
                           hintText: 'اختار المدينة',
                           hintStyle: TextStyle(
                             fontSize: 14.sp,
