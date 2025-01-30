@@ -41,6 +41,8 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
   String titleBook = '';
   String bookUser = '';
   String bookImage = '';
+  String otherName = '';
+  String uuser = '';
   Future<void> _fetchBooks(int bookId) async {
     try {
       final user = supabase.auth.currentUser;
@@ -53,6 +55,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
           .select('title')
           .eq('id', bookId)
           .single();
+
       final responseBookImage = await supabase
           .from('books')
           .select('cover_image_url')
@@ -63,14 +66,28 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
           .select('user_id')
           .eq('id', bookId)
           .single();
+      final responseee1 = await supabase
+          .from('books')
+          .select('user_name')
+          .eq('id', bookId)
+          .single();
+      final senderResponse = await supabase
+          .from('users')
+          .select('username')
+          .eq('id', user.id)
+          .single();
 
       setState(() {
+        final nameOther = responseee1['user_name'];
         final title = response['title'];
         final bookUserId = responsed['user_id'];
         final userImg = responseBookImage['cover_image_url'];
+        final sender = senderResponse['username'];
         titleBook = title.toString();
         bookUser = bookUserId.toString();
         bookImage = userImg.toString();
+        otherName = nameOther.toString();
+        uuser = sender.toString();
       });
     } catch (e) {
       if (mounted) {
@@ -90,7 +107,20 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
       builder: (context, state) {
         final sendMsgCubit = context.read<SendMessagesCubit>();
         return BlocConsumer<CreateConversationCubit, CreateConversationState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if (state is CreateConversationError) {
+              showSnackBar(context, state.message);
+            }
+            if (state is CreateConversationSeccess) {
+              showSnackBar(context, 'تم ارسال الرسالة بنجاح');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NavigationBarApp(),
+                ),
+              );
+            }
+          },
           builder: (context, state) {
             final createConCubit = context.read<CreateConversationCubit>();
             return Scaffold(
@@ -165,6 +195,8 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                           onTap: () async {
                             try {
                               await createConCubit.createConversation(
+                                sender: otherName,
+                                receiver: uuser,
                                 otherId: bookUser,
                                 titleBook: titleBook,
                                 bookImg: bookImage,
@@ -174,14 +206,6 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                                 content: _messageController.text,
                                 conversationId:
                                     createConCubit.conversationId.toString(),
-                              );
-                              showSnackBar(context, 'تم ارسال الرسالة بنجاح');
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const NavigationBarApp(),
-                                ),
                               );
                             } catch (e) {
                               log(e.toString());

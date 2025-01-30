@@ -56,14 +56,17 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        backgroundColor: kMainColor,
+        toolbarHeight: 100.sp,
 
         /// Title
         title: Text(
           'مكتبتك',
           style: TextStyle(
-            color: kMainColor,
+            color: Colors.white,
             fontSize: 14.sp,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w500,
+            height: 1.sp,
           ),
         ),
 
@@ -75,6 +78,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
           icon: Icon(
             Icons.arrow_back_ios_new,
             size: 22.sp,
+            color: Colors.white,
           ),
         ),
       ),

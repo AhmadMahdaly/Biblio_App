@@ -45,10 +45,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
             appBar: AppBar(
               centerTitle: true,
               automaticallyImplyLeading: false,
+              backgroundColor: kMainColor,
+              toolbarHeight: 80.sp,
               title: Text(
                 'قائمة الكتب المفضلة',
                 style: TextStyle(
-                  color: kTextColor,
+                  color: Colors.white,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                   height: 1.sp,
