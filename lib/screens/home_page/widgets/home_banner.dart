@@ -16,6 +16,10 @@ class HomeBanner extends StatelessWidget {
     return Stack(
       children: [
         Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.sp),
+          ),
+          clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.symmetric(horizontal: 16.sp),
           width: MediaQuery.of(context).size.width,
           height: 140.sp,
@@ -93,7 +97,7 @@ class HomeBanner extends StatelessWidget {
                     height: 32,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.sp),
+                      borderRadius: BorderRadius.circular(15.sp),
                     ),
                     child: Text(
                       'ابدأ الآن',

@@ -21,7 +21,7 @@ class AddBookImages extends StatelessWidget {
       child: Container(
         width: 144,
         height: 144,
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: Clip.antiAlias,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: const Color(0xFFECECEC),
@@ -31,7 +31,7 @@ class AddBookImages extends StatelessWidget {
               color: Color(0xFFB0BEBF),
             ),
           ),
-          borderRadius: BorderRadius.all(Radius.circular(10.sp)),
+          borderRadius: BorderRadius.all(Radius.circular(15.sp)),
         ),
         child: image != null
             ? Image.file(

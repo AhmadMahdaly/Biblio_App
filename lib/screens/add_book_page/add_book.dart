@@ -168,7 +168,6 @@ class _AddBookState extends State<AddBook> {
                         children: [
                           Text(
                             'من فضلك أضف صورتين: لوجه وظهر الكتاب',
-                            textAlign: TextAlign.right,
                             style: TextStyle(
                               color: kTextColor,
                               fontSize: 14.sp,
@@ -177,7 +176,6 @@ class _AddBookState extends State<AddBook> {
                           ),
                           const H(h: 10),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             spacing: 12.sp,
                             children: [
                               AddBookImages(

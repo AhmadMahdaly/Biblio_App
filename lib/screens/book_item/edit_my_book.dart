@@ -441,8 +441,8 @@ class _EditBookState extends State<EditBook> {
                       )
                     else
                       Container(
-                        width: 72,
-                        height: 72,
+                        width: 144,
+                        height: 144,
                         clipBehavior: Clip.antiAlias,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
@@ -468,8 +468,8 @@ class _EditBookState extends State<EditBook> {
                       )
                     else
                       Container(
-                        width: 72,
-                        height: 72,
+                        width: 144,
+                        height: 144,
                         clipBehavior: Clip.antiAlias,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(

@@ -24,8 +24,8 @@ class _GetBookImageState extends State<GetBookImage> {
     return InkWell(
       onTap: widget.onTap,
       child: Container(
-        width: 72,
-        height: 72,
+        width: 144,
+        height: 144,
         clipBehavior: Clip.antiAlias,
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -56,20 +56,28 @@ class _GetBookImageState extends State<GetBookImage> {
             }
             final photoUrl = snapshot.data;
 
-            return Center(
-              child: Container(
-                width: 72,
-                height: 72,
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(),
-                child: CachedNetworkImage(
-                  progressIndicatorBuilder: (context, url, progress) =>
-                      AppIndicator(
-                    size: 10.sp,
+            return Container(
+              width: 144,
+              height: 144,
+              clipBehavior: Clip.antiAlias,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color(0xFFECECEC),
+                border: const DashedBorder.fromBorderSide(
+                  dashLength: 3,
+                  side: BorderSide(
+                    color: Color(0xFFB0BEBF),
                   ),
-                  imageUrl: photoUrl!,
-                  fit: BoxFit.cover,
                 ),
+                borderRadius: BorderRadius.all(Radius.circular(10.sp)),
+              ),
+              child: CachedNetworkImage(
+                progressIndicatorBuilder: (context, url, progress) =>
+                    AppIndicator(
+                  size: 10.sp,
+                ),
+                imageUrl: photoUrl!,
+                fit: BoxFit.cover,
               ),
             );
           },
@@ -98,8 +106,8 @@ class _GetBookImageIState extends State<GetBookImageI> {
     return InkWell(
       onTap: widget.onTap,
       child: Container(
-        width: 72,
-        height: 72,
+        width: 144,
+        height: 144,
         clipBehavior: Clip.antiAlias,
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -110,7 +118,7 @@ class _GetBookImageIState extends State<GetBookImageI> {
               color: Color(0xFFB0BEBF),
             ),
           ),
-          borderRadius: BorderRadius.all(Radius.circular(10.sp)),
+          borderRadius: BorderRadius.all(Radius.circular(15.sp)),
         ),
         child: FutureBuilder<String?>(
           future: getBooksPhotoI(
@@ -130,18 +138,28 @@ class _GetBookImageIState extends State<GetBookImageI> {
             }
             final photoUrl = snapshot.data;
 
-            return Center(
-              child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(),
-                child: CachedNetworkImage(
-                  progressIndicatorBuilder: (context, url, progress) =>
-                      AppIndicator(
-                    size: 10.sp,
+            return Container(
+              width: 144,
+              height: 144,
+              clipBehavior: Clip.antiAlias,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color(0xFFECECEC),
+                border: const DashedBorder.fromBorderSide(
+                  dashLength: 3,
+                  side: BorderSide(
+                    color: Color(0xFFB0BEBF),
                   ),
-                  imageUrl: photoUrl!,
-                  fit: BoxFit.cover,
                 ),
+                borderRadius: BorderRadius.all(Radius.circular(10.sp)),
+              ),
+              child: CachedNetworkImage(
+                progressIndicatorBuilder: (context, url, progress) =>
+                    AppIndicator(
+                  size: 10.sp,
+                ),
+                imageUrl: photoUrl!,
+                fit: BoxFit.cover,
               ),
             );
           },

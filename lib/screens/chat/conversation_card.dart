@@ -1,5 +1,4 @@
 import 'package:biblio/screens/chat/conversation_room.dart';
-import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -34,11 +33,11 @@ class MessageCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: kLightBlue,
-          borderRadius: BorderRadius.circular(10.sp),
+          borderRadius: BorderRadius.circular(15.sp),
         ),
-        height: 72.sp,
+        height: 90.sp,
         child: Row(
-          spacing: 16.sp,
+          spacing: 20.sp,
           children: [
             Container(
               margin: EdgeInsets.all(8.sp),
@@ -84,17 +83,17 @@ class MessageCard extends StatelessWidget {
               ),
             ),
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 2.sp,
+              spacing: 5.sp,
               children: [
-                const H(h: 6),
                 SizedBox(
                   child: Text(
                     '${conversation['sender']}',
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: kMainColor,
-                      fontSize: 12.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -106,7 +105,7 @@ class MessageCard extends StatelessWidget {
                     style: TextStyle(
                       color: kMainColor,
                       fontSize: 14.sp,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w500,
                       height: 1.70,
                     ),
                   ),

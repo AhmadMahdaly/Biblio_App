@@ -25,7 +25,7 @@ class SearchTextfield extends StatelessWidget {
           decoration: BoxDecoration(
             // color: Colors.white,
             borderRadius: BorderRadius.circular(
-              8.sp,
+              15.sp,
             ),
           ),
           child: SvgPicture.asset(
