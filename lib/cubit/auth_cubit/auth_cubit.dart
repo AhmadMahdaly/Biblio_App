@@ -12,10 +12,11 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
   SupabaseClient user = Supabase.instance.client;
-  Future<void> login(
-      {required String email,
-      required String password,
-      required BuildContext context}) async {
+  Future<void> login({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
     emit(LoginLoading());
     try {
       await user.auth.signInWithPassword(email: email, password: password);

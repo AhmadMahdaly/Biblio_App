@@ -23,6 +23,7 @@ class _AcountManegmentScreenState extends State<AcountManegmentScreen> {
 
   Future<void> fetchDate() async {
     await context.read<FetchUserDataCubit>().fetchUserData();
+    setState(() {});
   }
 
   @override

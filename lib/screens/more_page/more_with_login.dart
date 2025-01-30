@@ -1,4 +1,4 @@
-import 'package:biblio/screens/account_manegment/acount_manegment_screen.dart';
+import 'package:biblio/screens/more_page/widgets/acount_manegment_screen.dart';
 import 'package:biblio/screens/more_page/widgets/category_for_more.dart';
 import 'package:biblio/screens/more_page/widgets/faq_page.dart';
 import 'package:biblio/screens/more_page/widgets/personal_card.dart';

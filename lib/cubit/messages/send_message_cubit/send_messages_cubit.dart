@@ -24,6 +24,10 @@ class SendMessagesCubit extends Cubit<SendMessagesState> {
         'content': content,
       });
       emit(SendMessagesSuccess());
+    } on PostgrestException catch (e) {
+      log(e.toString());
+      if (e.message ==
+          'JSON object requested, multiple (or no) rows returned') {}
     } on AuthException catch (e) {
       log(e.toString());
       emit(SendMessagesError(e.message));

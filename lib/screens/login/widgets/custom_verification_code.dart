@@ -13,8 +13,7 @@ class CustomVerificationCode extends StatefulWidget {
 
 class _CustomVerificationCodeState extends State<CustomVerificationCode> {
   bool _onEditing = true;
-  // ignore: unused_field, use_late_for_private_fields_and_variables
-  String? _code;
+  String? code;
   @override
   Widget build(BuildContext context) {
     return VerificationCode(
@@ -24,7 +23,7 @@ class _CustomVerificationCodeState extends State<CustomVerificationCode> {
       cursorColor: kMainColor,
       onCompleted: (String value) {
         setState(() {
-          _code = value;
+          code = value;
         });
 
         Navigator.pushReplacement(

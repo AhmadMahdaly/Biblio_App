@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversation_cubit.dart';
 import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
@@ -11,7 +13,6 @@ import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class OrderTheBookPage extends StatefulWidget {
   const OrderTheBookPage({super.key});
@@ -54,7 +55,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
           .single();
       final responseBookImage = await supabase
           .from('books')
-          .select('user_image')
+          .select('cover_image_url')
           .eq('id', bookId)
           .single();
       final responsed = await supabase
@@ -66,7 +67,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
       setState(() {
         final title = response['title'];
         final bookUserId = responsed['user_id'];
-        final userImg = responseBookImage['user_image'];
+        final userImg = responseBookImage['cover_image_url'];
         titleBook = title.toString();
         bookUser = bookUserId.toString();
         bookImage = userImg.toString();
@@ -84,67 +85,6 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
       listener: (context, state) {
         if (state is SendMessagesError) {
           showSnackBar(context, state.message);
-        }
-        if (state is SendMessagesSuccess) {
-          showDialog<bool?>(
-            context: context,
-            builder: (context) => AlertDialog(
-              backgroundColor: kLightBlue,
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const H(h: 12),
-                  Text(
-                    'تم إرسال طلبك',
-                    style: TextStyle(
-                      color: kMainColor,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SvgPicture.asset(
-                    'assets/svg/Messages-pana.svg',
-                    height: 200,
-                  ),
-                  Text(
-                    textAlign: TextAlign.center,
-                    'يمكنك متابعة الطلبات المُرسلة وانتظار الردود في الطلبات',
-                    style: TextStyle(
-                      color: kMainColor,
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const H(h: 12),
-                  Container(
-                    height: 40.sp,
-                    width: 40.sp,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: kLightBlue,
-                      borderRadius: BorderRadius.circular(320.sp),
-                      border: Border.all(
-                        width: 3.sp,
-                        color: kMainColor,
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        NavigationBarApp.id,
-                        (route) => false,
-                      ),
-                      icon: Icon(
-                        Icons.done,
-                        color: kMainColor,
-                        size: 20.sp,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
         }
       },
       builder: (context, state) {
@@ -223,17 +163,29 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                         ),
                         child: CustomButton(
                           onTap: () async {
-                            await createConCubit.createConversation(
-                              otherId: bookUser,
-                              titleBook: titleBook,
-                              bookImg: bookImage,
-                              context: context,
-                            );
-                            await sendMsgCubit.sendMessage(
-                              content: _messageController.text,
-                              conversationId:
-                                  createConCubit.conversationId.toString(),
-                            );
+                            try {
+                              await createConCubit.createConversation(
+                                otherId: bookUser,
+                                titleBook: titleBook,
+                                bookImg: bookImage,
+                                bookId: bookId.toString(),
+                              );
+                              await sendMsgCubit.sendMessage(
+                                content: _messageController.text,
+                                conversationId:
+                                    createConCubit.conversationId.toString(),
+                              );
+                              showSnackBar(context, 'تم ارسال الرسالة بنجاح');
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NavigationBarApp(),
+                                ),
+                              );
+                            } catch (e) {
+                              log(e.toString());
+                            }
                           },
                           text: 'إرسال',
                         ),

@@ -1,4 +1,4 @@
-import 'package:biblio/features/auth/auth_check.dart';
+import 'package:biblio/services/auth_check.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';

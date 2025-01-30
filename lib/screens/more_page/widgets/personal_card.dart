@@ -18,13 +18,13 @@ class PersonalCard extends StatelessWidget {
       alignment: Alignment.center,
       margin: EdgeInsets.all(16.sp),
       width: MediaQuery.of(context).size.width,
-      height: 200.sp,
+      height: 170.sp,
       decoration: BoxDecoration(
         color: const Color(0xFFe8eaee),
         borderRadius: borderRadius(),
       ),
       child: Column(
-        spacing: 16.sp,
+        spacing: 10.sp,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

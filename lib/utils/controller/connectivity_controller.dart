@@ -8,9 +8,7 @@ class ConnectivityController {
   /// Static instance
   static final ConnectivityController instance = ConnectivityController._();
 
-  /// Notifier for connection status
-  /// هي فاليو تمكننا من عمل ليسن
-  /// لعمل سويتش بين اليو اي
+  /// Notifier for connection status: value to listen & switch UI
   ValueNotifier<bool> isConnected = ValueNotifier(
     true,
   );
@@ -22,15 +20,12 @@ class ConnectivityController {
     Connectivity().onConnectivityChanged.listen(isInternetConnected);
   }
 
-  /// Handle connectivity changes
   bool isInternetConnected(ConnectivityResult? result) {
     if (result == ConnectivityResult.none) {
-      /// لربطها بالنوتيفاي
       isConnected.value = false;
       return false;
     } else if (result == ConnectivityResult.mobile ||
         result == ConnectivityResult.wifi) {
-      /// لربطها بالنوتيفاي
       isConnected.value = true;
       return true;
     }

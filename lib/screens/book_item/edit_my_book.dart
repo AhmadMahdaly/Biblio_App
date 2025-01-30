@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:biblio/screens/add_book_page/widgets/get_book_image.dart';
@@ -316,30 +317,40 @@ class _EditBookState extends State<EditBook> {
   }
 
   Future<void> deleteBook() async {
-    final response = await Supabase.instance.client
-        .from('books')
-        .select('cover_image_url')
-        .eq('id', bookId)
-        .single();
-    final oldPhotoUrl = response['cover_image_url'] as String;
-    final oldFileName = oldPhotoUrl.split('/').last;
-    await Supabase.instance.client.storage
-        .from('book_covers')
-        .remove([oldFileName]);
-    final responsed = await Supabase.instance.client
-        .from('books')
-        .select('cover_book_url2')
-        .eq('id', bookId)
-        .single();
-    final oldPhotoUrlI = responsed['cover_book_url2'] as String;
-    final oldFileNameI = oldPhotoUrlI.split('/').last;
-    await Supabase.instance.client.storage
-        .from('book_covers')
-        .remove([oldFileNameI]);
-    await supabase.from('books').delete().eq(
-          'id',
-          bookId,
-        );
+    try {
+      final response = await Supabase.instance.client
+          .from('books')
+          .select('cover_image_url')
+          .eq('id', bookId)
+          .single();
+      final oldPhotoUrl = response['cover_image_url'] as String;
+      final oldFileName = oldPhotoUrl.split('/').last;
+      await Supabase.instance.client.storage
+          .from('book_covers')
+          .remove([oldFileName]);
+      final responsed = await Supabase.instance.client
+          .from('books')
+          .select('cover_book_url2')
+          .eq('id', bookId)
+          .single();
+      final oldPhotoUrlI = responsed['cover_book_url2'] as String;
+      final oldFileNameI = oldPhotoUrlI.split('/').last;
+
+      await Supabase.instance.client.storage
+          .from('book_covers')
+          .remove([oldFileNameI]);
+      await Supabase.instance.client.from('conversations').delete().eq(
+            'book_id',
+            bookId,
+          );
+
+      await supabase.from('books').delete().eq(
+            'id',
+            bookId,
+          );
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   ///

@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,15 +19,18 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
     required String otherId,
     required String titleBook,
     required String bookImg,
-    required BuildContext context,
+    required String bookId,
   }) async {
     emit(CreateConversationLoading());
     try {
       final userId = supabase.auth.currentUser!.id;
       otherUserId = otherId;
 
-      final response =
-          await supabase.from('conversations').select('id').single();
+      final response = await supabase
+          .from('conversations')
+          .insert({'book_id': bookId})
+          .select('id')
+          .single();
       conversationId = response['id'] as int;
       // إضافة المستخدمين إلى المحادثة
       await supabase.from('conversation_participants').insert([
@@ -37,22 +39,24 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
           'user_id': userId,
           'book_image': bookImg,
           'title_book': titleBook,
+          'book_id': bookId,
         },
         {
           'conversation_id': conversationId,
           'user_id': otherId,
           'book_image': bookImg,
           'title_book': titleBook,
+          'book_id': bookId,
         },
       ]);
 
       emit(CreateConversationSeccess());
-    } on AuthException catch (e) {
+    } on PostgrestException catch (e) {
       log(e.toString());
       if (e.message ==
-          'ClientException: Connection closed before full header was received') {
-        await context.read<AuthCubit>().signOut(context);
-      }
+          'JSON object requested, multiple (or no) rows returned') {}
+    } on AuthException catch (e) {
+      log(e.toString());
       emit(CreateConversationError(e.message));
     } catch (e) {
       log(e.toString());

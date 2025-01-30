@@ -1,4 +1,4 @@
-import 'package:biblio/screens/orders_page/widgets/conversation_card.dart';
+import 'package:biblio/screens/chat/conversation_card.dart';
 import 'package:flutter/material.dart';
 
 class IncomingRequests extends StatelessWidget {

@@ -2,9 +2,9 @@ import 'package:biblio/cubit/favorite_function/my_favorite_books_list/my_list_cu
 import 'package:biblio/screens/favorites_page/widgets/empty_favorite_books.dart';
 import 'package:biblio/screens/favorites_page/widgets/favorite_grid_books.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/login_user_not_found.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
-import 'package:biblio/widgets/login_user_not_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

@@ -38,6 +38,8 @@ class _UserPageState extends State<UserPage> {
         return '${difference.inHours} ساعة';
       } else if (difference.inDays < 7) {
         return '${difference.inDays} يوم';
+      } else if (difference.inDays < 30) {
+        return '${difference.inDays} شهر';
       } else {
         return DateFormat('yyyy-MM-dd').format(createdAt); // تاريخ واضح
       }
@@ -51,21 +53,6 @@ class _UserPageState extends State<UserPage> {
         final cubit = context.read<GetUserQtyBooksCubit>();
         return Scaffold(
           appBar: AppBar(
-            /// actions
-            actions: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.sp),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.message_rounded,
-                    size: 28.sp,
-                    color: kMainColor,
-                  ),
-                ),
-              ),
-            ],
-
             /// Leading
             leading: IconButton(
               onPressed: () {

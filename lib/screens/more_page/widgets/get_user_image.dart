@@ -21,9 +21,13 @@ class _GetUserImageState extends State<GetUserImage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CircleAvatar(
-          backgroundColor: kLightBlue,
-          radius: size / 2.sp,
+        Container(
+          width: size.sp,
+          height: size.sp,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(320),
+          ),
           child: FutureBuilder<String?>(
             future: getUserPhoto(context),
             builder: (context, snapshot) {
@@ -44,23 +48,15 @@ class _GetUserImageState extends State<GetUserImage> {
                 );
               }
 
-              return Container(
+              return CachedNetworkImage(
+                progressIndicatorBuilder: (context, url, progress) =>
+                    AppIndicator(
+                  size: indicatorSize.sp,
+                ),
+                imageUrl: photoUrl,
+                fit: BoxFit.cover,
                 width: size.sp,
                 height: size.sp,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(320),
-                ),
-                child: CachedNetworkImage(
-                  progressIndicatorBuilder: (context, url, progress) =>
-                      AppIndicator(
-                    size: indicatorSize.sp,
-                  ),
-                  imageUrl: photoUrl,
-                  fit: BoxFit.cover,
-                  width: size.sp,
-                  height: size.sp,
-                ),
               );
             },
           ),

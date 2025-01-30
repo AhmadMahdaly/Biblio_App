@@ -9,6 +9,7 @@ import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -116,13 +117,16 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                                   ),
                                   child: updateUserImageCubit.userImage == null
                                       ? const GetUserImage()
-                                      : CircleAvatar(
-                                          backgroundColor: kDisableButtonColor,
-                                          radius: 40.sp,
-                                          child: Image.file(
-                                            updateUserImageCubit.userImage!,
-                                            fit: BoxFit.cover,
+                                      : CachedNetworkImage(
+                                          progressIndicatorBuilder:
+                                              (context, url, progress) =>
+                                                  AppIndicator(
+                                            size: 10.sp,
                                           ),
+                                          imageUrl: updateUserImageCubit
+                                              .userImage!
+                                              .toString(),
+                                          fit: BoxFit.cover,
                                         ),
                                 ),
                               ),
