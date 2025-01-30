@@ -113,7 +113,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
             }
             if (state is CreateConversationSeccess) {
               showSnackBar(context, 'تم ارسال الرسالة بنجاح');
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const NavigationBarApp(),
