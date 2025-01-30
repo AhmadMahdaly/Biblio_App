@@ -1,12 +1,29 @@
-import 'package:biblio/screens/more_page/personal_info_setting.dart';
+import 'package:biblio/cubit/user/fetch_user_data/fetch_user_data_cubit.dart';
+import 'package:biblio/screens/more_page/personal_info_settings.dart';
 import 'package:biblio/screens/more_page/widgets/category_for_more.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AcountManegmentScreen extends StatelessWidget {
+class AcountManegmentScreen extends StatefulWidget {
   const AcountManegmentScreen({super.key});
+
+  @override
+  State<AcountManegmentScreen> createState() => _AcountManegmentScreenState();
+}
+
+class _AcountManegmentScreenState extends State<AcountManegmentScreen> {
+  @override
+  void initState() {
+    super.initState();
+    fetchDate();
+  }
+
+  Future<void> fetchDate() async {
+    await context.read<FetchUserDataCubit>().fetchUserData();
+  }
 
   @override
   Widget build(BuildContext context) {

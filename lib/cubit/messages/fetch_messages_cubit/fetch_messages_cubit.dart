@@ -19,7 +19,7 @@ class FetchMessagesCubit extends Cubit<FetchMessagesState> {
           .from('messages')
           .select('content, created_at, user_id')
           .eq('conversation_id', conversationId)
-          .order('created_at', ascending: true);
+          .order('created_at', ascending: false);
       messages = List<Map<String, dynamic>>.from(response);
       // for (var i = 0; i < messages.length; i++) {
       //   if (messages[i]['is_read'] == false) {
