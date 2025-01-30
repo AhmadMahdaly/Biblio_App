@@ -13,123 +13,135 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
   static String id = 'HomePage';
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Future<void> fetchDate() async {
+    await context.read<FetchLocatedBooksCubit>().fetchLocatedBooks(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            /// Search bar
-            SliverAppBar(
-              toolbarHeight: 80.sp,
-              automaticallyImplyLeading: false,
-              title: const Column(
-                children: [
-                  H(h: 10),
-                  SearchTextfield(),
-                ],
-              ),
-            ),
-
-            /// Home Banner
-            const SliverToBoxAdapter(
-              child: HomeBanner(),
-            ),
-
-            /// Books Categories
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.sp),
-                child: Row(
+      child: RefreshIndicator(
+        strokeWidth: 0.9,
+        color: kMainColor,
+        onRefresh: fetchDate,
+        child: Scaffold(
+          body: CustomScrollView(
+            slivers: [
+              /// Search bar
+              SliverAppBar(
+                toolbarHeight: 80.sp,
+                automaticallyImplyLeading: false,
+                title: const Column(
                   children: [
-                    const TitleHeaderHome(
-                      text: 'فئات الكتب',
-                    ),
-                    const Spacer(),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const CategorySeeAll();
-                            },
+                    H(h: 10),
+                    SearchTextfield(),
+                  ],
+                ),
+              ),
+
+              /// Home Banner
+              const SliverToBoxAdapter(
+                child: HomeBanner(),
+              ),
+
+              /// Books Categories
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.sp),
+                  child: Row(
+                    children: [
+                      const TitleHeaderHome(
+                        text: 'فئات الكتب',
+                      ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const CategorySeeAll();
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'عرض الكل',
+                          style: TextStyle(
+                            color: const Color(0xFFA4CFC3),
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w800,
+                            decoration: TextDecoration.underline,
+                            decorationColor: const Color(0xFFA4CFC3),
                           ),
-                        );
-                      },
-                      child: Text(
-                        'عرض الكل',
-                        style: TextStyle(
-                          color: const Color(0xFFA4CFC3),
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w800,
-                          decoration: TextDecoration.underline,
-                          decorationColor: const Color(0xFFA4CFC3),
                         ),
                       ),
-                    ),
-                    const W(w: 16),
-                  ],
+                      const W(w: 16),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            /// Categories ListView
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 110.sp,
-                width: 80.sp,
-                child: const CategoryListview(),
-              ),
-            ),
-
-            /// New books title
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  right: 16.sp,
-                  left: 16.sp,
-                  top: 16.sp,
-                  bottom: 12.sp,
+              /// Categories ListView
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 110.sp,
+                  width: 80.sp,
+                  child: const CategoryListview(),
                 ),
-                child: Row(
-                  spacing: 10.sp,
-                  children: [
-                    Text(
-                      'أحدث الكتب',
-                      style: TextStyle(
-                        color: kMainColor,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w800,
+              ),
+
+              /// New books title
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: 16.sp,
+                    left: 16.sp,
+                    top: 16.sp,
+                    bottom: 12.sp,
+                  ),
+                  child: Row(
+                    spacing: 10.sp,
+                    children: [
+                      Text(
+                        'أحدث الكتب',
+                        style: TextStyle(
+                          color: kMainColor,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                    SvgPicture.asset(
-                      'assets/svg/logo.svg',
-                      height: 18.5.sp,
-                    ),
-                  ],
+                      SvgPicture.asset(
+                        'assets/svg/logo.svg',
+                        height: 18.5.sp,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            /// New Books ListView
-            SliverToBoxAdapter(
-              child: SizedBox(
-                width: 140.sp,
-                height: 280.sp,
-                child: BlocProvider<FetchLocatedBooksCubit>(
-                  create: (context) => FetchLocatedBooksCubit(),
+              /// New Books ListView
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  width: 140.sp,
+                  height: 280.sp,
                   child: const NewBooksListview(),
                 ),
               ),
-            ),
-            const SliverToBoxAdapter(
-              child: H(h: 16),
-            ),
-          ],
+              const SliverToBoxAdapter(
+                child: H(h: 16),
+              ),
+            ],
+          ),
         ),
       ),
     );

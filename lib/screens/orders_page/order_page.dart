@@ -20,14 +20,22 @@ class _OrderPageState extends State<OrderPage> {
     context.read<FetchUserConversationsCubit>().fetchUserConversations();
   }
 
+  Future<void> fetchDate() async {
+    await context.read<FetchUserConversationsCubit>().fetchUserConversations();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FetchUserConversationsCubit,
-            FetchUserConversationsState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          final fetchUserConCubit = context.read<FetchUserConversationsCubit>();
-          return Scaffold(
+        FetchUserConversationsState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        final fetchUserConCubit = context.read<FetchUserConversationsCubit>();
+        return RefreshIndicator(
+          strokeWidth: 0.9,
+          color: kMainColor,
+          onRefresh: fetchDate,
+          child: Scaffold(
             appBar: AppBar(
               toolbarHeight: 80.sp,
               centerTitle: true,
@@ -48,7 +56,9 @@ class _OrderPageState extends State<OrderPage> {
                 : IncomingRequests(
                     conversation: fetchUserConCubit.conversations,
                   ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
