@@ -1,4 +1,4 @@
-import 'package:biblio/cubit/favorite_button_cubit/favorite_button_cubit.dart';
+import 'package:biblio/cubit/favorite_function/favorite_button_cubit/favorite_button_cubit.dart';
 import 'package:biblio/screens/book_item/edit_my_book.dart';
 import 'package:biblio/screens/home_page/widgets/title_header_home.dart';
 import 'package:biblio/screens/my_lib_page/widgets/favorate_button.dart';
@@ -247,6 +247,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
                               Icon(
                                 Icons.wb_sunny_outlined,
                                 size: 12.sp,
+                                color: const Color(0xFF4DC591),
                               ),
                               Text(
                                 widget.book['offer_type'].toString(),

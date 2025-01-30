@@ -1,11 +1,11 @@
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/cubit/books/upload_book_cubit/upload_book_cubit.dart';
-import 'package:biblio/cubit/favorite_button_cubit/favorite_button_cubit.dart';
+import 'package:biblio/cubit/favorite_function/favorite_button_cubit/favorite_button_cubit.dart';
 import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversation_cubit.dart';
 import 'package:biblio/cubit/messages/fetch_messages_cubit/fetch_messages_cubit.dart';
 import 'package:biblio/cubit/messages/fetch_user_conversations_cubit/fetch_user_conversations_cubit.dart';
 import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
-import 'package:biblio/cubit/my_list/my_list_cubit.dart';
+import 'package:biblio/cubit/favorite_function/my_favorite_books_list/my_list_cubit.dart';
 import 'package:biblio/cubit/user/fetch_user_data/fetch_user_data_cubit.dart';
 import 'package:biblio/cubit/user/get_user_qty_books_cubit/get_user_qty_books_cubit.dart';
 import 'package:biblio/cubit/user/update_user_image_cubit/update_user_image_cubit.dart';

@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:biblio/cubit/favorite_button_cubit/favorite_button_cubit.dart';
+import 'package:biblio/cubit/favorite_function/favorite_button_cubit/favorite_button_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';

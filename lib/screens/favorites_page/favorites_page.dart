@@ -1,4 +1,4 @@
-import 'package:biblio/cubit/my_list/my_list_cubit.dart';
+import 'package:biblio/cubit/favorite_function/my_favorite_books_list/my_list_cubit.dart';
 import 'package:biblio/screens/favorites_page/widgets/empty_favorite_books.dart';
 import 'package:biblio/screens/favorites_page/widgets/favorite_grid_books.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
