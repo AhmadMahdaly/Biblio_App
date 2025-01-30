@@ -1,6 +1,6 @@
 import 'package:biblio/cubit/messages/fetch_user_conversations_cubit/fetch_user_conversations_cubit.dart';
-import 'package:biblio/screens/orders_page/incoming_requests.dart';
-import 'package:biblio/screens/orders_page/submitted_requests.dart';
+import 'package:biblio/screens/orders_page/widgets/incoming_requests.dart';
+import 'package:biblio/screens/orders_page/widgets/submitted_requests.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
