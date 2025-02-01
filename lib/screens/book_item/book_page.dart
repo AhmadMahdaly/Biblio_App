@@ -80,6 +80,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
     }
   }
 
+  final CarouselSliderController? controller = CarouselSliderController();
   @override
   Widget build(BuildContext context) {
     final id = widget.book['id'];
@@ -121,11 +122,8 @@ class _ShowBookItemState extends State<ShowBookItem> {
             else if (widget.book['user_id'] != _user)
 
               /// Favorite button
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.sp),
-                child: FavoriteButton(
-                  bookId: widget.book['id'].toString(),
-                ),
+              FavoriteButton(
+                bookId: widget.book['id'].toString(),
               )
             else
               const SizedBox(),
@@ -152,6 +150,7 @@ class _ShowBookItemState extends State<ShowBookItem> {
                 borderRadius: borderRadius(),
               ),
               child: CarouselSlider.builder(
+                carouselController: controller,
                 itemCount: images.length,
                 itemBuilder: (
                   BuildContext context,
@@ -179,6 +178,8 @@ class _ShowBookItemState extends State<ShowBookItem> {
                   ),
                 ),
                 options: CarouselOptions(
+                  viewportFraction: 1,
+                  autoPlay: true,
                   height: double.infinity,
                   enlargeCenterPage: true,
                 ),

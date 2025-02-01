@@ -14,11 +14,15 @@ class FavoritesGridBooks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 16.sp),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      padding: EdgeInsets.symmetric(
+        horizontal: 16.sp,
+        vertical: 16.sp,
+      ),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 1 / 1.9,
-        crossAxisSpacing: 10,
+        crossAxisSpacing: 16.sp,
+        mainAxisSpacing: 16.sp,
       ),
       itemCount: cubit.books.length,
       itemBuilder: (context, index) {

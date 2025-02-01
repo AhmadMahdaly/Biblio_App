@@ -57,7 +57,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: kMainColor,
-        toolbarHeight: 100.sp,
+        toolbarHeight: 60.sp,
 
         /// Title
         title: Text(

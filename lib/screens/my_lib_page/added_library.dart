@@ -9,11 +9,15 @@ class AddedLibrary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: GridView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 16.sp),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16.sp,
+          vertical: 16.sp,
+        ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1 / 1.9,
-          crossAxisSpacing: 10,
+          crossAxisSpacing: 16.sp,
+          mainAxisSpacing: 16.sp,
         ),
         itemBuilder: (context, index) {
           final book = books[index];

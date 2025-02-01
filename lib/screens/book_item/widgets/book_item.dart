@@ -17,68 +17,84 @@ class BookItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          InkWell(
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ShowBookItem(
-                    book: book,
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          color: kLightBlue,
+          borderRadius: borderRadius(),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShowBookItem(
+                      book: book,
+                    ),
+                  ),
+                ).then((_) {
+                  context.read<MyListCubit>().showMyFavoriteBooks();
+                });
+              },
+              child: Container(
+                clipBehavior: Clip.hardEdge,
+                width: 170.sp,
+                height: 250.sp,
+                decoration: BoxDecoration(
+                  color: kDisableButtonColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.sp),
+                    topRight: Radius.circular(15.sp),
                   ),
                 ),
-              ).then((_) {
-                context.read<MyListCubit>().showMyFavoriteBooks();
-              });
-            },
-            child: Container(
-              clipBehavior: Clip.hardEdge,
+                child: Image.network(
+                  book['cover_image_url'].toString(),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const H(h: 6),
+
+            /// book name
+            SizedBox(
               width: 170.sp,
-              height: 250.sp,
-              decoration: BoxDecoration(
-                color: kDisableButtonColor,
-                borderRadius: borderRadius(),
-              ),
-              child: Image.network(
-                book['cover_image_url'].toString(),
-                fit: BoxFit.cover,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.sp),
+                child: Text(
+                  book['title'].toString(),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: const Color(0xFF333333),
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ),
-          ),
-          const H(h: 6),
 
-          /// book name
-          SizedBox(
-            width: 170.sp,
-            child: Text(
-              book['title'].toString(),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: TextStyle(
-                color: const Color(0xFF333333),
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
+            /// writer name
+            SizedBox(
+              width: 170.sp,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.sp),
+                child: Text(
+                  book['author'].toString(),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: const Color(0xFF969697),
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ),
-          ),
-
-          /// writer name
-          SizedBox(
-            width: 170.sp,
-            child: Text(
-              book['author'].toString(),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: TextStyle(
-                color: const Color(0xFF969697),
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
