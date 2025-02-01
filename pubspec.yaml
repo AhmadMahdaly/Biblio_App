@@ -66,6 +66,8 @@ flutter:
     - family: Nunito
       fonts:
         - asset: assets/fonts/Nunito-Regular.ttf
+        - asset: assets/fonts/Nunito-Light.ttf
+          weight: 200
   
 icons_launcher:
   image_path: "assets/icons/logo.png"
