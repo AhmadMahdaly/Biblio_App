@@ -28,9 +28,10 @@ class SaveUserLocationCubit extends Cubit<SaveUserLocationState> {
           'city': selectedCity,
         }).eq('user_id', userId);
       }
-      await Navigator.pushReplacementNamed(
+      await Navigator.pushNamedAndRemoveUntil(
         context,
         NavigationBarApp.id,
+        (route) => false,
       );
       emit(SaveUserLocationSuccess());
     } on AuthException catch (e) {

@@ -30,6 +30,8 @@ class CustomTextformfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      cursorWidth: 0.5.sp,
+      cursorColor: kMainColor,
       inputFormatters: inputFormatters,
       minLines: 1,
       maxLines: maxLines,

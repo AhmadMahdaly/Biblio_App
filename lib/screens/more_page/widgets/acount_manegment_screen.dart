@@ -1,6 +1,7 @@
 import 'package:biblio/cubit/user/fetch_user_data/fetch_user_data_cubit.dart';
 import 'package:biblio/screens/more_page/personal_info_settings.dart';
 import 'package:biblio/screens/more_page/widgets/category_for_more.dart';
+import 'package:biblio/screens/more_page/widgets/favorite_location_to_meet.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -66,13 +67,27 @@ class _AcountManegmentScreenState extends State<AcountManegmentScreen> {
           ),
           CategoryForMore(
             text: 'تغيير الموقع الجغرافي للمشاركة',
-            icon: Icons.mode_edit_outline_outlined,
+            icon: Icons.location_searching_rounded,
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) {
                     return const SelectYourLocationScreen();
+                  },
+                ),
+              );
+            },
+          ),
+          CategoryForMore(
+            text: 'أماكن اللقاء المفضلة',
+            icon: Icons.location_on_outlined,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const FavoriteLocationToMeet();
                   },
                 ),
               );

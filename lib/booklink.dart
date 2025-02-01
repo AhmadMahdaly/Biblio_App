@@ -9,7 +9,9 @@ import 'package:biblio/cubit/messages/fetch_user_conversations_cubit/fetch_user_
 import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
 import 'package:biblio/cubit/user/fetch_user_data/fetch_user_data_cubit.dart';
 import 'package:biblio/cubit/user/get_user_qty_books_cubit/get_user_qty_books_cubit.dart';
+import 'package:biblio/cubit/user/update_user_favorite_location_cubit/update_user_favorite_location_cubit.dart';
 import 'package:biblio/cubit/user/update_user_image_cubit/update_user_image_cubit.dart';
+import 'package:biblio/cubit/user/user_favorite_location_cubit/user_favorite_location_cubit.dart';
 import 'package:biblio/cubit/user/user_location_cubit/save_user_location_cubit.dart';
 import 'package:biblio/screens/add_book_page/add_book.dart';
 import 'package:biblio/screens/book_item/edit_my_book.dart';
@@ -89,6 +91,12 @@ class Biblio extends StatelessWidget {
             ),
             BlocProvider<UpdateUserImageCubit>(
               create: (context) => UpdateUserImageCubit(),
+            ),
+            BlocProvider<UserFavoriteLocationCubit>(
+              create: (context) => UserFavoriteLocationCubit(),
+            ),
+            BlocProvider<UpdateUserFavoriteLocationCubit>(
+              create: (context) => UpdateUserFavoriteLocationCubit(),
             ),
           ],
 
