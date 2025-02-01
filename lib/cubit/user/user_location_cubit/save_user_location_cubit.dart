@@ -28,11 +28,11 @@ class SaveUserLocationCubit extends Cubit<SaveUserLocationState> {
           'city': selectedCity,
         }).eq('user_id', userId);
       }
-      emit(SaveUserLocationSuccess());
       await Navigator.pushReplacementNamed(
         context,
         NavigationBarApp.id,
       );
+      emit(SaveUserLocationSuccess());
     } on AuthException catch (e) {
       log(e.toString());
       emit(SaveUserLocationError(e.message));
