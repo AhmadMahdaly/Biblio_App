@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -12,25 +11,7 @@ class UpdateUserImageCubit extends Cubit<UpdateUserImageState> {
   UpdateUserImageCubit() : super(UpdateUserImageInitial());
   final supabase = Supabase.instance.client;
 
-  File? userImage;
-  Future<void> pickImage() async {
-    emit(PickUserImageLoading());
-    try {
-      final pickedFile = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 20,
-      );
-      if (pickedFile != null) {
-        userImage = File(pickedFile.path);
-      }
-      emit(PickUserImageSuccess());
-    } catch (e) {
-      log(e.toString());
-      emit(PickUserImageError(e.toString()));
-    }
-  }
-
-  Future<void> uploadImage() async {
+  Future<void> uploadImage(File userImage) async {
     emit(UpdateUserImageInitial());
     try {
       if (userImage == null) {
@@ -41,7 +22,7 @@ class UpdateUserImageCubit extends Cubit<UpdateUserImageState> {
       final fileName = DateTime.now().toIso8601String();
       await supabase.storage.from('user-photos').upload(
             fileName,
-            userImage!,
+            userImage,
           );
       final imageUrl =
           supabase.storage.from('user-photos').getPublicUrl(fileName);

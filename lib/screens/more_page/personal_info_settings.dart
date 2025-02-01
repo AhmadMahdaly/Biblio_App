@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:biblio/cubit/user/fetch_user_data/fetch_user_data_cubit.dart';
 import 'package:biblio/cubit/user/update_user_image_cubit/update_user_image_cubit.dart';
 import 'package:biblio/screens/add_book_page/widgets/title_form_add_book.dart';
@@ -9,10 +12,10 @@ import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 
 class PersonalInfoSetting extends StatefulWidget {
@@ -27,6 +30,22 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
   void initState() {
     super.initState();
     fetchDate();
+  }
+
+  File? userImage;
+  Future<void> pickImage() async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 20,
+      );
+
+      setState(() {
+        userImage = File(pickedFile!.path);
+      });
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   final TextEditingController _nameController = TextEditingController();
@@ -85,7 +104,8 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                   ),
                 ),
               ),
-              body: state is FetchUserDataLoading
+              body: state is FetchUserDataLoading ||
+                      state is UpdateUserImageLoading
                   ? const AppIndicator()
                   : Padding(
                       padding: EdgeInsets.symmetric(
@@ -96,12 +116,15 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                         children: [
                           /// Upload user image
                           Row(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const TitleFormAddBook(title: 'الصورة الشخصية'),
                               InkWell(
-                                onTap: updateUserImageCubit.pickImage,
+                                onTap: pickImage,
                                 child: Container(
+                                  height: 82.sp,
+                                  width: 82.sp,
                                   clipBehavior: Clip.antiAlias,
                                   alignment: Alignment.center,
                                   decoration: const BoxDecoration(
@@ -115,17 +138,10 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(320)),
                                   ),
-                                  child: updateUserImageCubit.userImage == null
+                                  child: userImage == null
                                       ? const GetUserImage()
-                                      : CachedNetworkImage(
-                                          progressIndicatorBuilder:
-                                              (context, url, progress) =>
-                                                  AppIndicator(
-                                            size: 10.sp,
-                                          ),
-                                          imageUrl: updateUserImageCubit
-                                              .userImage!
-                                              .toString(),
+                                      : Image.file(
+                                          userImage!,
                                           fit: BoxFit.cover,
                                         ),
                                 ),
@@ -186,7 +202,8 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                     ),
 
               /// Save
-              bottomNavigationBar: state is FetchUserDataLoading
+              bottomNavigationBar: state is FetchUserDataLoading ||
+                      state is UpdateUserImageLoading
                   ? const SizedBox()
                   : Padding(
                       padding: EdgeInsets.symmetric(vertical: 24.sp),
@@ -194,7 +211,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                         padding: 16,
                         text: 'حفظ',
                         onTap: () async {
-                          await updateUserImageCubit.uploadImage();
+                          await updateUserImageCubit.uploadImage(userImage!);
                           await fetchUserDateCubit.updateUserData(
                             inName: _nameController.text,
                             inEmail: _emailController.text,

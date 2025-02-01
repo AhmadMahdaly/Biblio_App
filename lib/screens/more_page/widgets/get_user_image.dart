@@ -47,16 +47,16 @@ class _GetUserImageState extends State<GetUserImage> {
                   color: kMainColor,
                 );
               }
-
               return CachedNetworkImage(
+                errorWidget: (context, url, error) => AppIndicator(
+                  size: 10.sp,
+                ),
                 progressIndicatorBuilder: (context, url, progress) =>
                     AppIndicator(
                   size: indicatorSize.sp,
                 ),
                 imageUrl: photoUrl,
                 fit: BoxFit.cover,
-                width: size.sp,
-                height: size.sp,
               );
             },
           ),
