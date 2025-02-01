@@ -1,10 +1,10 @@
+import 'package:biblio/animations/animate_do.dart';
 import 'package:biblio/services/auth_check.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // this splash screen for my app //
 class SplashScreen extends StatefulWidget {
@@ -40,22 +40,25 @@ class _SplashScreenState extends State<SplashScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              'assets/svg/logo.svg',
-              colorFilter: const ColorFilter.mode(
-                Colors.white,
-                BlendMode.srcIn,
+            CustomFadeInDown(
+              duration: 600,
+              child: SizedBox(
+                height: 100.sp,
+                width: 140.sp,
+                child: Image.asset(
+                  'assets/icons/icon.png',
+                  width: 140.sp,
+                ),
               ),
-              width: 140.sp,
             ),
             const H(h: 10),
             Text(
               'BookLink',
               style: TextStyle(
-                color: Colors.white,
-                fontSize: 40.sp,
+                color: kLightBlue,
+                fontSize: 32.sp,
                 fontFamily: 'Nunito',
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w100,
               ),
             ),
           ],
