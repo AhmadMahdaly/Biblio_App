@@ -27,7 +27,10 @@ class _NewBooksListviewState extends State<NewBooksListview> {
     return BlocConsumer<FetchLocatedBooksCubit, FetchLocatedBooksState>(
       listener: (context, state) {
         if (state is FetchLocatedBooksError) {
-          showSnackBar(context, state.message);
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          }
         }
       },
       builder: (context, state) {

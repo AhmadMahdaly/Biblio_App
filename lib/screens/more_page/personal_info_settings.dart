@@ -71,11 +71,24 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FetchUserDataCubit, FetchUserDataState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is FetchUserDataError) {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          }
+        }
+      },
       builder: (context, state) {
         final fetchUserDateCubit = context.read<FetchUserDataCubit>();
         return BlocConsumer<UpdateUserImageCubit, UpdateUserImageState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if (state is UpdateUserImageError) {
+              if (state.message == 'Connection refused') {
+                showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+              }
+            }
+          },
           builder: (context, state) {
             final updateUserImageCubit = context.read<UpdateUserImageCubit>();
             return Scaffold(

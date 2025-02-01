@@ -1,6 +1,7 @@
 import 'package:biblio/cubit/user/get_user_qty_books_cubit/get_user_qty_books_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -36,18 +37,21 @@ class _UserPageState extends State<UserPage> {
         return '${difference.inMinutes} دقيقة';
       } else if (difference.inHours < 24) {
         return '${difference.inHours} ساعة';
-      } else if (difference.inDays < 7) {
-        return '${difference.inDays} يوم';
       } else if (difference.inDays < 30) {
-        return '${difference.inDays} شهر';
+        return '${difference.inDays} يوم';
       } else {
-        return DateFormat('yyyy-MM-dd').format(createdAt); // تاريخ واضح
+        return DateFormat('yyyy-MM').format(createdAt); // تاريخ واضح
       }
     }
 
     return BlocConsumer<GetUserQtyBooksCubit, GetUserQtyBooksState>(
       listener: (context, state) {
-        if (state is GetUserQtyBooksLoading) {}
+        if (state is GetUserQtyBooksError) {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          }
+        }
       },
       builder: (context, state) {
         final cubit = context.read<GetUserQtyBooksCubit>();

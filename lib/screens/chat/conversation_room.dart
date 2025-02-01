@@ -53,12 +53,12 @@ class _ConversationRoomState extends State<ConversationRoom> {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
-    if (difference.inDays == 0) {
+    if (difference.inHours == 0) {
       // اليوم
-      return DateFormat('hh:mm a', 'ar').format(dateTime);
-    } else if (difference.inDays == 1) {
-      // أمس
-      return "أمس - ${DateFormat('hh:mm a', 'ar').format(dateTime)}";
+      return 'اليوم - ${DateFormat('hh:mm a', 'ar').format(dateTime)}';
+      // } else if (difference.inHours == 22) {
+      //   // أمس
+      //   return "أمس - ${DateFormat('hh:mm a', 'ar').format(dateTime)}";
     } else if (difference.inDays < 7) {
       // أيام الأسبوع
       return "${DateFormat('EEEE', 'ar').format(dateTime)} - ${DateFormat('hh:mm a', 'ar').format(dateTime)}";
@@ -72,7 +72,12 @@ class _ConversationRoomState extends State<ConversationRoom> {
   Widget build(BuildContext context) {
     return BlocConsumer<FetchMessagesCubit, FetchMessagesState>(
       listener: (context, state) {
-        if (state is FetchMessagesError) showSnackBar(context, state.message);
+        if (state is FetchMessagesError) {
+          if (state.message == 'Connection refused') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          }
+          showSnackBar(context, state.message);
+        }
       },
       builder: (context, state) {
         context
@@ -82,6 +87,10 @@ class _ConversationRoomState extends State<ConversationRoom> {
         return BlocConsumer<SendMessagesCubit, SendMessagesState>(
           listener: (context, state) {
             if (state is SendMessagesError) {
+              if (state.message == 'Connection refused' ||
+                  state.message == 'Connection reset by peer') {
+                showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+              }
               showSnackBar(context, state.message);
             }
           },
