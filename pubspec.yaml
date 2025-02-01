@@ -70,9 +70,10 @@ flutter:
           weight: 200
   
 icons_launcher:
-  image_path: "assets/icons/logo.png"
+  image_path: "assets/icons/icon app.png"
   platforms:
     android:
       enable: true
     ios:
       enable: true
+# dart run icons_launcher:create
