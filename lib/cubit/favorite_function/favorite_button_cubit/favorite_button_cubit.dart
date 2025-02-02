@@ -15,9 +15,9 @@ class FavoriteButtonCubit extends Cubit<FavoriteButtonState> {
   Future<void> loadFavoriteState({
     required String bookId,
   }) async {
+    isFavorite = false;
     emit(FavoriteButtonLoading());
     try {
-      isFavorite = false;
       if (user != null) {
         final userId = user!.id;
         final response = await supabase

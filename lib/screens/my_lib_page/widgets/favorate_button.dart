@@ -31,7 +31,6 @@ class _FavoriteButtonState extends State<FavoriteButton> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<FavoriteButtonCubit>();
     return BlocConsumer<FavoriteButtonCubit, FavoriteButtonState>(
       listener: (context, state) {
         if (state is FavoriteButtonError) {
@@ -39,17 +38,18 @@ class _FavoriteButtonState extends State<FavoriteButton> {
         }
       },
       builder: (context, state) {
-        return InkWell(
-          borderRadius: circleBorder(),
-          onTap: () => cubit.toggleFavorite(bookId: widget.bookId),
-          child: state is FavoriteButtonLoading
-              ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.sp),
-                  child: const AppIndicator(
-                    size: 10,
-                  ),
-                )
-              : AnimatedCrossFade(
+        final cubit = context.read<FavoriteButtonCubit>();
+        return state is FavoriteButtonLoading
+            ? Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.sp),
+                child: const AppIndicator(
+                  size: 10,
+                ),
+              )
+            : InkWell(
+                borderRadius: circleBorder(),
+                onTap: () => cubit.toggleFavorite(bookId: widget.bookId),
+                child: AnimatedCrossFade(
                   duration: const Duration(milliseconds: 300), // مدة الانتقال
                   crossFadeState: cubit.isFavorite
                       ? CrossFadeState.showFirst
@@ -71,7 +71,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
                     ),
                   ), // أيقونة غير مفضلة
                 ),
-        );
+              );
       },
     );
   }

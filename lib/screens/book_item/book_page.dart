@@ -32,12 +32,11 @@ class _ShowBookItemState extends State<ShowBookItem> {
   @override
   void initState() {
     super.initState();
-    isLoading = true;
-    fetchUserId();
-
     context.read<FavoriteButtonCubit>().loadFavoriteState(
           bookId: widget.book['id'].toString(),
         );
+    isLoading = true;
+    fetchUserId();
   }
 
   String? _user;
