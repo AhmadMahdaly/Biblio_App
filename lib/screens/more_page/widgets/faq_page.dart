@@ -24,7 +24,7 @@ class FAQPage extends StatelessWidget {
       {
         'question': 'كيف أضيف كتابًا إلى قائمة التبادل الخاصة بي؟',
         'answer':
-            '1. افتح التطبيق واضغط على زر "إضافة كتاب".\n2. أدخل تفاصيل الكتاب (العنوان، المؤلف، الحالة، وصف قصير).\n3. أضف صورة غلاف الكتاب.\n4. اضغط على "حفظ"، وسيتم عرض الكتاب في قائمتك.',
+            '1. افتح التطبيق واضغط على زر "إضافة كتاب".\n2. أضف صورة غلاف الكتاب.\n3. أدخل تفاصيل الكتاب (العنوان، المؤلف، الحالة، وصف قصير).\n4. اضغط على "حفظ"، وسيتم عرض الكتاب في قائمتك.',
       },
       {
         'question': 'كيف أبحث عن كتب متاحة للتبادل؟',
@@ -69,7 +69,7 @@ class FAQPage extends StatelessWidget {
       {
         'question': 'كيف أتواصل مع فريق الدعم الفني؟',
         'answer':
-            'يمكنك التواصل معنا من خلال البريد الإلكتروني: booklink.app@outlook.com، أو استخدام ميزة الدردشة داخل التطبيق في قسم "الدعم الفني".',
+            'يمكنك التواصل معنا من خلال البريد الإلكتروني: booklink.app@gmail.com، أو استخدام ميزة الدردشة داخل التطبيق في قسم "الدعم الفني".',
       },
     ];
 
@@ -78,8 +78,10 @@ class FAQPage extends StatelessWidget {
         // centerTitle: true,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_new_rounded,
+            size: 22.sp,
+            color: kMainColor,
           ),
         ),
         title: Text(
@@ -94,6 +96,9 @@ class FAQPage extends StatelessWidget {
         ),
       ),
       body: ListView.builder(
+        padding: EdgeInsets.symmetric(
+          vertical: 16.sp,
+        ),
         itemCount: faqList.length,
         itemBuilder: (context, index) {
           return ExpansionTile(

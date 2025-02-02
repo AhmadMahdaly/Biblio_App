@@ -4,6 +4,7 @@ import 'package:biblio/screens/more_page/widgets/terms_and_conditions_page.dart'
 import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/custom_button.dart';
+import 'package:biblio/utils/components/height.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,8 +17,7 @@ class MoreWithoutLogin extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
         children: [
           /// Personal card
           Container(
@@ -51,6 +51,9 @@ class MoreWithoutLogin extends StatelessWidget {
               );
             },
           ),
+
+          const H(h: 12),
+
           CategoryForMore(
             text: 'الشروط والأحكام',
             icon: Icons.text_snippet_outlined,

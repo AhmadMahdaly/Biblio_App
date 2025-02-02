@@ -46,7 +46,7 @@ class TermsAndConditionsPage extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 16.sp,
-              vertical: 5.sp,
+              vertical: 8.sp,
             ),
             child: Card(
               color: const Color(0xFFFCFCFC),
