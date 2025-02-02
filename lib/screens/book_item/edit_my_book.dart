@@ -1,15 +1,12 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:biblio/screens/add_book_page/widgets/get_book_image.dart';
 import 'package:biblio/screens/add_book_page/widgets/title_form_add_book.dart';
-import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/services/update_my_book.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
-import 'package:biblio/utils/components/show_dialog.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,7 +42,6 @@ class _EditBookState extends State<EditBook> {
   List<String> offerTypes = [];
   late int bookId = 0;
 
-  ///
   @override
   void initState() {
     super.initState();
@@ -202,7 +198,9 @@ class _EditBookState extends State<EditBook> {
 
         newprice = response['price'] as String;
       }
-
+      await supabase.from('coversation_participants').update({
+        'book_title': newTitle,
+      }).eq('book_id', bookId);
       if (mounted) {
         setState(() {
           isLoading = false;
@@ -298,6 +296,9 @@ class _EditBookState extends State<EditBook> {
       await supabase.from('books').update({
         'cover_book_url2': imageUrlI,
       }).eq('id', bookId);
+      await supabase.from('coversation_participants').update({
+        'book_image': imageUrl,
+      }).eq('book_id', bookId);
       if (mounted) {
         setState(() {
           isLoading = false;
@@ -316,44 +317,6 @@ class _EditBookState extends State<EditBook> {
     }
   }
 
-  Future<void> deleteBook() async {
-    try {
-      final response = await Supabase.instance.client
-          .from('books')
-          .select('cover_image_url')
-          .eq('id', bookId)
-          .single();
-      final oldPhotoUrl = response['cover_image_url'] as String;
-      final oldFileName = oldPhotoUrl.split('/').last;
-      await Supabase.instance.client.storage
-          .from('book_covers')
-          .remove([oldFileName]);
-      final responsed = await Supabase.instance.client
-          .from('books')
-          .select('cover_book_url2')
-          .eq('id', bookId)
-          .single();
-      final oldPhotoUrlI = responsed['cover_book_url2'] as String;
-      final oldFileNameI = oldPhotoUrlI.split('/').last;
-
-      await Supabase.instance.client.storage
-          .from('book_covers')
-          .remove([oldFileNameI]);
-      await Supabase.instance.client.from('conversations').delete().eq(
-            'book_id',
-            bookId,
-          );
-
-      await supabase.from('books').delete().eq(
-            'id',
-            bookId,
-          );
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  ///
   @override
   void dispose() {
     _titleController.dispose();
@@ -371,32 +334,6 @@ class _EditBookState extends State<EditBook> {
       progressIndicator: const AppIndicator(),
       child: Scaffold(
         appBar: AppBar(
-          actions: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.sp),
-              child: IconButton(
-                onPressed: () async {
-                  final shouldExit = await showCustomDialog(
-                    context,
-                    'ستقوم بحذف الكتاب؟',
-                  );
-                  // return shouldExit!;
-                  if (shouldExit!) {
-                    await deleteBook();
-                    await Navigator.pushReplacementNamed(
-                      context,
-                      NavigationBarApp.id,
-                    );
-                  }
-                },
-                icon: Icon(
-                  Icons.delete_rounded,
-                  color: kMainColor,
-                  size: 22.sp,
-                ),
-              ),
-            ),
-          ],
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: Icon(

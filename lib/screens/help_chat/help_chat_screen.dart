@@ -21,7 +21,6 @@ class HelpChatScreen extends StatefulWidget {
 }
 
 class _HelpChatScreenState extends State<HelpChatScreen> {
-  final supabase = Supabase.instance.client;
   final _messageController = TextEditingController();
 
   @override
@@ -36,60 +35,30 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
   String country = '';
   String city = '';
   Future<void> _fetchBooks() async {
-    try {
-      final user = supabase.auth.currentUser;
-      if (user == null) {
-        ///
-        return;
-      }
+    final supabase = Supabase.instance.client;
+
+    final user = supabase.auth.currentUser;
+
+    if (user != null) {
       final response = await supabase
           .from('users')
-          .select('username')
-          .eq('id', supabase.auth.currentUser!.id)
-          .single();
+          .select('username, image, email, country, city')
+          .eq('id', user.id)
+          .maybeSingle();
 
-      final responseImage = await supabase
-          .from('users')
-          .select('image')
-          .eq(
-            'id',
-            'f1cb63c2-a07f-41c9-b6fe-fb2f46872be9',
-          )
-          .single();
-
-      final responseEmail = await supabase
-          .from('users')
-          .select('email')
-          .eq('id', supabase.auth.currentUser!.id)
-          .single();
-
-      final responseCountry = await supabase
-          .from('users')
-          .select('country')
-          .eq('id', supabase.auth.currentUser!.id)
-          .single();
-
-      final senderResponse = await supabase
-          .from('users')
-          .select('city')
-          .eq('id', supabase.auth.currentUser!.id)
-          .single();
-
-      setState(() {
-        final username = response['username'];
-        final userImage = responseImage['image'];
-        final useremail = responseEmail['email'];
-        final userCountry = responseCountry['country'];
-        final userCity = senderResponse['city'];
-        name = username.toString();
-        image = userImage.toString();
-        email = useremail.toString();
-        country = userCountry.toString();
-        city = userCity.toString();
-      });
-    } catch (e) {
-      if (mounted) {
-        //
+      if (response != null) {
+        setState(() {
+          name = response['username'].toString();
+          final userImage = response['image'];
+          final useremail = response['email'];
+          final userCountry = response['country'];
+          final userCity = response['city'];
+          // name = username.toString();
+          image = userImage.toString();
+          email = useremail.toString();
+          country = userCountry.toString();
+          city = userCity.toString();
+        });
       }
     }
   }

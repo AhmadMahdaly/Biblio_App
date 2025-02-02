@@ -20,16 +20,16 @@ class IncomingRequests extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.messenger_outline_rounded,
-                    size: 50.sp,
-                    color: kMainColor,
+                    Icons.email_outlined,
+                    size: 46.sp,
+                    color: kBorderColor,
                   ),
                   Text(
                     'لا توجد طلبات جديدة',
                     style: TextStyle(
-                      color: kTextColor,
+                      color: kTextShadowColor,
                       fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 ],

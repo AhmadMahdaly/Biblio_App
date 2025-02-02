@@ -39,49 +39,61 @@ class MessageCard extends StatelessWidget {
         child: Row(
           spacing: 20.sp,
           children: [
-            Container(
-              margin: EdgeInsets.all(8.sp),
-              height: 60.sp,
-              width: 60.sp,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(320),
-              ),
-              child: CachedNetworkImage(
-                imageUrl: conversation['book_image'].toString(),
-                fit: BoxFit.cover,
+            if (conversation['sender'] == 'الدعم الفني')
+              Container(
+                margin: EdgeInsets.all(8.sp),
                 height: 60.sp,
                 width: 60.sp,
-                errorListener: (_) => Container(
-                  height: 60.sp,
-                  width: 60.sp,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: kLightBlue,
-                    borderRadius: BorderRadius.circular(320),
-                  ),
-                  child: Icon(
-                    Icons.archive_outlined,
-                    size: 24.sp,
-                    color: kMainColor,
-                  ),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(320),
                 ),
-                errorWidget: (context, url, error) => Container(
+                child: Image.asset('assets/icons/icon app.png'),
+              )
+            else
+              Container(
+                margin: EdgeInsets.all(8.sp),
+                height: 60.sp,
+                width: 60.sp,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(320),
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: conversation['book_image'].toString(),
+                  fit: BoxFit.cover,
                   height: 60.sp,
                   width: 60.sp,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: kLightBlue,
-                    borderRadius: BorderRadius.circular(320),
+                  errorListener: (_) => Container(
+                    height: 60.sp,
+                    width: 60.sp,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: kLightBlue,
+                      borderRadius: BorderRadius.circular(320),
+                    ),
+                    child: Icon(
+                      Icons.archive_outlined,
+                      size: 24.sp,
+                      color: kMainColor,
+                    ),
                   ),
-                  child: Icon(
-                    Icons.archive_outlined,
-                    size: 24.sp,
-                    color: kMainColor,
+                  errorWidget: (context, url, error) => Container(
+                    height: 60.sp,
+                    width: 60.sp,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: kLightBlue,
+                      borderRadius: BorderRadius.circular(320),
+                    ),
+                    child: Icon(
+                      Icons.archive_outlined,
+                      size: 24.sp,
+                      color: kMainColor,
+                    ),
                   ),
                 ),
               ),
-            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,18 +110,32 @@ class MessageCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
-                  child: Text(
-                    'طلب كتاب: ${conversation['title_book']}',
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: kMainColor,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      height: 1.70,
+                if (conversation['sender'] == 'الدعم الفني')
+                  SizedBox(
+                    child: Text(
+                      'متابعة شكوى أو مقترح',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: kMainColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        height: 1.70,
+                      ),
+                    ),
+                  )
+                else
+                  SizedBox(
+                    child: Text(
+                      'طلب كتاب: ${conversation['title_book']}',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: kMainColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        height: 1.70,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ],

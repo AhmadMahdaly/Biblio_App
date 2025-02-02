@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:biblio/cubit/favorite_function/favorite_button_cubit/favorite_button_cubit.dart';
 import 'package:biblio/screens/book_item/edit_my_book.dart';
 import 'package:biblio/screens/home_page/widgets/title_header_home.dart';
 import 'package:biblio/screens/my_lib_page/widgets/favorate_button.dart';
+import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/orders_page/order_the_book_page.dart';
 import 'package:biblio/screens/user_page/user_page.dart';
 import 'package:biblio/services/fetch_email.dart';
@@ -9,6 +12,7 @@ import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_dialog.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -17,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ShowBookItem extends StatefulWidget {
   const ShowBookItem({required this.book, super.key});
@@ -63,6 +68,43 @@ class _ShowBookItemState extends State<ShowBookItem> {
     }
   }
 
+  Future<void> deleteBook() async {
+    try {
+      final response = await Supabase.instance.client
+          .from('books')
+          .select('cover_image_url')
+          .eq('id', widget.book['id'].toString())
+          .single();
+      final oldPhotoUrl = response['cover_image_url'] as String;
+      final oldFileName = oldPhotoUrl.split('/').last;
+      await Supabase.instance.client.storage
+          .from('book_covers')
+          .remove([oldFileName]);
+      final responsed = await Supabase.instance.client
+          .from('books')
+          .select('cover_book_url2')
+          .eq('id', widget.book['id'].toString())
+          .single();
+      final oldPhotoUrlI = responsed['cover_book_url2'] as String;
+      final oldFileNameI = oldPhotoUrlI.split('/').last;
+
+      await Supabase.instance.client.storage
+          .from('book_covers')
+          .remove([oldFileNameI]);
+      await Supabase.instance.client.from('conversations').delete().eq(
+            'book_id',
+            widget.book['id'].toString(),
+          );
+
+      await supabase.from('books').delete().eq(
+            'id',
+            widget.book['id'].toString(),
+          );
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   String getTimeDifference() {
     final now = DateTime.now();
     final specificDate = widget.book['created_at'];
@@ -101,23 +143,100 @@ class _ShowBookItemState extends State<ShowBookItem> {
             if (_user == null)
               const SizedBox()
             else if (widget.book['user_id'] == _user)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.sp),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(
+              PopupMenuButton<String>(
+                color: kLightBlue,
+                onSelected: (value) async {
+                  if (value == 'edit') {
+                    await Navigator.pushNamed(
                       context,
                       EditBook.id,
                       arguments: {'bookId': id},
                     );
-                  },
-                  icon: Icon(
-                    Icons.mode_edit_outline_outlined,
-                    size: 24.sp,
-                    color: kMainColor,
-                  ),
-                ),
+                  } else if (value == 'delete') {
+                    final shouldExit = await showCustomDialog(
+                      context,
+                      'ستقوم بحذف الكتاب؟',
+                    );
+                    // return shouldExit!;
+                    if (shouldExit!) {
+                      await deleteBook();
+                      await Navigator.pushReplacementNamed(
+                        context,
+                        NavigationBarApp.id,
+                      );
+                    }
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  return [
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.mode_edit_outline_outlined,
+                            size: 24.sp,
+                            color: kMainColor,
+                          ),
+                          SizedBox(width: 8),
+                          Text('تعديل'),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'delete',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.delete_rounded,
+                            color: kMainColor,
+                            size: 22.sp,
+                          ),
+                          SizedBox(width: 8),
+                          Text('مسح'),
+                        ],
+                      ),
+                    ),
+                  ];
+                },
               )
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 12.sp),
+            //   child: RotatedBox(
+            //     quarterTurns: 1,
+            //     child: IconButton(
+            //       onPressed: () {
+            //         Navigator.pushNamed(
+            //           context,
+            //           EditBook.id,
+            //           arguments: {'bookId': id},
+            //         );
+            //       },
+            //       icon: Icon(
+            //         Icons.more_horiz_sharp,
+            //         size: 24.sp,
+            //         color: kMainColor,
+            //       ),
+            //     ),
+            //   ),
+            // )
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 12.sp),
+            //   child: IconButton(
+            //     onPressed: () {
+            //       Navigator.pushNamed(
+            //         context,
+            //         EditBook.id,
+            //         arguments: {'bookId': id},
+            //       );
+            //     },
+            //     icon: Icon(
+            //       Icons.mode_edit_outline_outlined,
+            //       size: 24.sp,
+            //       color: kMainColor,
+            //     ),
+            //   ),
+            // )
             else if (widget.book['user_id'] != _user)
 
               /// Favorite button
@@ -520,9 +639,11 @@ class _ShowBookItemState extends State<ShowBookItem> {
             ? const SizedBox()
             : widget.book['user_id'] != _user
                 ? Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.sp,
-                      vertical: 8.sp,
+                    padding: EdgeInsets.only(
+                      right: 16.sp,
+                      left: 16.sp,
+                      bottom: 16.sp,
+                      top: 8.sp,
                     ),
                     child: CustomButton(
                       onTap: () {
