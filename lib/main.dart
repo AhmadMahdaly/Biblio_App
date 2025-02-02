@@ -34,7 +34,7 @@ void main() async {
           path: 'assets/translations',
           fallbackLocale: const Locale('ar'),
           startLocale: const Locale('ar'),
-          child: const Biblio(),
+          child: const Booklink(),
         ),
       );
     },
