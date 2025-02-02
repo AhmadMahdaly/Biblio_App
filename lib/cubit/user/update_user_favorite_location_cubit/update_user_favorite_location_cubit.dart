@@ -19,11 +19,14 @@ class UpdateUserFavoriteLocationCubit
   }) async {
     emit(UpdateUserFavoriteLocationLoading());
     try {
+      await supabase.from('books').update({
+        'location_url': url,
+        'fav_location': favoriteLocations,
+      }).eq('user_id', userId);
       await supabase.from('users').update({
         'location_url': url,
         'fav_location': favoriteLocations,
       }).eq('id', userId);
-
       emit(UpdateUserFavoriteLocationSuccess());
     } catch (e) {
       log(e.toString());

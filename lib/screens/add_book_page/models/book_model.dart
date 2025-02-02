@@ -14,6 +14,8 @@ class BookModel {
     required this.offerType,
     required this.userCountry,
     required this.userCreatedAt,
+    required this.url,
+    required this.favLocation,
     this.price,
   });
   final int? price;
@@ -31,6 +33,8 @@ class BookModel {
   final String offerType;
   final String userCountry;
   final String userCreatedAt;
+  final String url;
+  final String favLocation;
 
   Map<String, dynamic> toJson() {
     return {
@@ -49,6 +53,8 @@ class BookModel {
       'offer_type': offerType,
       'cover_book_url2': coverImageUrlI,
       'user_created_at': userCreatedAt,
+      'fav_location': favLocation,
+      'location_url': url,
     };
   }
 }

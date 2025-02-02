@@ -76,6 +76,20 @@ class UploadBookCubit extends Cubit<UploadBookState> {
           .single();
       final userCountry = userCountryResponse['country'];
 
+      final favlocationResponse = await supabase
+          .from('users')
+          .select('fav_location')
+          .eq('id', Supabase.instance.client.auth.currentUser!.id)
+          .single();
+      final favLocation = favlocationResponse['fav_location'];
+
+      final urlResponse = await supabase
+          .from('users')
+          .select('location_url')
+          .eq('id', Supabase.instance.client.auth.currentUser!.id)
+          .single();
+      final url = urlResponse['location_url'];
+
       final userCreateAtResponse = await supabase
           .from('users')
           .select('created_at')
@@ -99,6 +113,8 @@ class UploadBookCubit extends Cubit<UploadBookState> {
         userCity: userLocation.toString(),
         userCountry: userCountry.toString(),
         userCreatedAt: userCreatedAt.toString(),
+        url: url.toString(),
+        favLocation: favLocation.toString(),
       );
       // إضافة بيانات الكتاب إلى الجدول
       await supabase.from('books').insert([book.toJson()]);

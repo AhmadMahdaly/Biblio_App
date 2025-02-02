@@ -17,19 +17,18 @@ class UserFavoriteLocationCubit extends Cubit<UserFavoriteLocationState> {
     emit(UserFavoriteLocationLoading());
     try {
       final response = await supabase
-          .from('users')
+          .from('books')
           .select('fav_location')
-          .eq('id', userId)
+          .eq('book_id', userId)
           .single();
       favoriteLocation = response['fav_location'].toString();
 
       final urlLocationResponse = await supabase
-          .from('users')
+          .from('books')
           .select('location_url')
-          .eq('id', userId)
+          .eq('user_id', userId)
           .single();
       urlLocation = urlLocationResponse['location_url'].toString();
-
       emit(UserFavoriteLocationSuccess());
     } catch (e) {
       log(e.toString());

@@ -300,7 +300,7 @@ class _AddBookState extends State<AddBook> {
                               }
                               return null;
                             },
-                            text: '',
+                            text: 'مستعمل، جديد، بحالة جيدة...إلخ',
                             controller: _conditionController,
                           ),
                           const TitleFormAddBook(title: 'نوع العرض'),

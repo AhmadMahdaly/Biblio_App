@@ -20,7 +20,8 @@ class FetchUserConversationsCubit extends Cubit<FetchUserConversationsState> {
           .select(
             'conversation_id, book_image, title_book, receiver, sender, conversations(created_at)',
           )
-          .eq('user_id', userId);
+          .eq('user_id', userId)
+          .order('conversation_id', ascending: false);
       conversations = List<Map<String, dynamic>>.from(response);
       emit(FetchUserConversationsSuccess());
     } on AuthException catch (e) {
