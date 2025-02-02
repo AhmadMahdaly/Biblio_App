@@ -27,6 +27,19 @@ Future<bool?> showCustomDialog(
           ),
           actions: [
             ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(
+                false,
+              ),
+              child: Text(
+                'لا',
+                style: TextStyle(
+                  color: kMainColor,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            ElevatedButton(
               onPressed: () => Navigator.of(
                 context,
               ).pop(
@@ -38,19 +51,6 @@ Future<bool?> showCustomDialog(
                   color: kMainColor,
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w300,
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(
-                false,
-              ),
-              child: Text(
-                'لا',
-                style: TextStyle(
-                  color: kMainColor,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
