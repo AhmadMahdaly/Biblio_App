@@ -3,7 +3,6 @@ import 'package:biblio/screens/chat/conversation_card.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class IncomingRequests extends StatelessWidget {
   const IncomingRequests({required this.conversation, super.key});
@@ -17,18 +16,20 @@ class IncomingRequests extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               child: Column(
+                spacing: 10.sp,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    'assets/svg/Messages-pana.svg',
-                    height: 100.sp,
+                  Icon(
+                    Icons.messenger_outline_rounded,
+                    size: 50.sp,
+                    color: kMainColor,
                   ),
                   Text(
                     'لا توجد طلبات جديدة',
                     style: TextStyle(
                       color: kTextColor,
                       fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],

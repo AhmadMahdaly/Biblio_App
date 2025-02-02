@@ -1,11 +1,12 @@
+import 'package:biblio/screens/help_chat/help_chat_screen.dart';
 import 'package:biblio/screens/more_page/widgets/acount_manegment_screen.dart';
 import 'package:biblio/screens/more_page/widgets/category_for_more.dart';
 import 'package:biblio/screens/more_page/widgets/faq_page.dart';
 import 'package:biblio/screens/more_page/widgets/personal_card.dart';
 import 'package:biblio/screens/more_page/widgets/sign_out_button.dart';
 import 'package:biblio/screens/more_page/widgets/terms_and_conditions_page.dart';
+import 'package:biblio/utils/components/height.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MoreWithLogin extends StatelessWidget {
   const MoreWithLogin({super.key});
@@ -16,11 +17,10 @@ class MoreWithLogin extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        spacing: 12.sp,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
         children: [
           const PersonalCard(),
+          const H(h: 12),
           CategoryForMore(
             text: 'إدارة الحساب',
             icon: Icons.mode_edit_outline_outlined,
@@ -35,9 +35,10 @@ class MoreWithLogin extends StatelessWidget {
               );
             },
           ),
+          const H(h: 12),
           CategoryForMore(
             text: 'الأسئلة الشائعة',
-            icon: Icons.live_help_outlined,
+            icon: Icons.help_outline_sharp,
             onTap: () {
               Navigator.push(
                 context,
@@ -49,6 +50,7 @@ class MoreWithLogin extends StatelessWidget {
               );
             },
           ),
+          const H(h: 12),
           CategoryForMore(
             text: 'الشروط والأحكام',
             icon: Icons.text_snippet_outlined,
@@ -63,6 +65,22 @@ class MoreWithLogin extends StatelessWidget {
               );
             },
           ),
+          const H(h: 12),
+          CategoryForMore(
+            text: 'الدعم الفني',
+            icon: Icons.headset_mic_outlined,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const HelpChatScreen();
+                  },
+                ),
+              );
+            },
+          ),
+          const H(h: 12),
           const SignOutButton(),
         ],
       ),

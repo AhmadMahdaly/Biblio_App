@@ -17,10 +17,10 @@ class SendMessagesCubit extends Cubit<SendMessagesState> {
   }) async {
     emit(SendMessagesLoading());
     try {
-      final userId = supabase.auth.currentUser!.id;
+      final userId = supabase.auth.currentUser?.id;
       await supabase.from('messages').insert({
         'conversation_id': conversationId,
-        'user_id': userId,
+        'user_id': userId ?? 11111,
         'content': content,
       });
       emit(SendMessagesSuccess());
