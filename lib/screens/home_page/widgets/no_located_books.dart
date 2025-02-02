@@ -14,8 +14,7 @@ class NoLocatedBooks extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(16.sp),
         child: Column(
-          spacing: 2.sp,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 4.sp,
           children: [
             Text(
               'لا توجد كتب في منطقتك حاليًا.',
@@ -26,6 +25,7 @@ class NoLocatedBooks extends StatelessWidget {
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'جرب استكشاف ',
