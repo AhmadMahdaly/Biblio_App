@@ -1,6 +1,7 @@
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +25,47 @@ class SignOutButton extends StatelessWidget {
             ? const AppIndicator()
             : TextButton(
                 onPressed: () async {
-                  await cubit.signOut(context);
+                  try {
+                    // ignore: inference_failure_on_function_invocation
+                    await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        backgroundColor: kLightBlue,
+                        content: const Text(
+                          'هل تريد تسجيل الخروج؟',
+                          style: TextStyle(
+                            color: kMainColor,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        actions: [
+                          ///
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text(
+                              'إلغاء',
+                              style: TextStyle(
+                                color: kMainColor,
+                              ),
+                            ),
+                          ),
+
+                          ///
+                          ElevatedButton(
+                            onPressed: () async {
+                              await cubit.signOut(context);
+                            },
+                            child: const Text(
+                              'تسجيل الخروج',
+                              style: TextStyle(
+                                color: kMainColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } catch (_) {}
                 },
                 child: Text(
                   'تسجيل الخروج',
