@@ -20,7 +20,7 @@ class BookItem extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: kLightBlue,
+          // color: kLightBlue,
           borderRadius: borderRadius(),
         ),
         child: Column(
