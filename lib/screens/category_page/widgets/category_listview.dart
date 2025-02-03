@@ -26,10 +26,6 @@ class _CategoryListviewState extends State<CategoryListview> {
   }
 
   Future<void> fetchCategories() async {
-    await Future.delayed(
-      const Duration(seconds: 2),
-    );
-
     try {
       final response = await supabase
           .from('categories')
