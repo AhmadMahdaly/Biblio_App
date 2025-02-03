@@ -1,5 +1,6 @@
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/screens/login/register_page.dart';
+import 'package:biblio/screens/login/widgets/forget_password_screen.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/app_regex.dart';
@@ -162,7 +163,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    // resetPassword();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ForgetPasswordPage(),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'نسيت كلمة المرور؟',
