@@ -1,4 +1,5 @@
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
+import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
@@ -18,6 +19,16 @@ class SignOutButton extends StatelessWidget {
       listener: (context, state) {
         if (state is SignOutError) {
           showSnackBar(context, state.message);
+        }
+        if (state is SignOutSuccess) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const OnboardScreen();
+              },
+            ),
+          );
         }
       },
       builder: (context, state) {

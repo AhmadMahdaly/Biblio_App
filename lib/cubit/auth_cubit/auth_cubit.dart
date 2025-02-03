@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,17 +72,11 @@ class AuthCubit extends Cubit<AuthState> {
     emit(SignOutLoading());
     try {
       await user.auth.signOut();
-      await Navigator.pushReplacementNamed(
-        context,
-        OnboardScreen.id,
-      );
       emit(SignOutSuccess());
     } on AuthException catch (e) {
       log(e.toString());
       if (e.message ==
-          'ClientException: Connection closed before full header was received') {
-        await context.read<AuthCubit>().signOut(context);
-      }
+          'ClientException: Connection closed before full header was received') {}
       emit(SignOutError(e.message));
     } catch (e) {
       log(e.toString());
