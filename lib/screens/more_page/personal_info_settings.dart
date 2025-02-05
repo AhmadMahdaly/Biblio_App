@@ -224,7 +224,10 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                         padding: 16,
                         text: 'حفظ',
                         onTap: () async {
-                          await updateUserImageCubit.uploadImage(userImage!);
+                          if (userImage == null) {
+                          } else {
+                            await updateUserImageCubit.uploadImage(userImage!);
+                          }
                           await fetchUserDateCubit.updateUserData(
                             inName: _nameController.text,
                             inEmail: _emailController.text,
