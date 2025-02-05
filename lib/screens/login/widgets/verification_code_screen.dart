@@ -1,12 +1,58 @@
+import 'dart:async';
+
+import 'package:biblio/cubit/user/request_otp_cubit/request_otp_cubit.dart';
 import 'package:biblio/screens/login/widgets/custom_verification_code.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class VerificationCodePage extends StatelessWidget {
-  const VerificationCodePage({super.key});
+class VerificationCodePage extends StatefulWidget {
+  const VerificationCodePage({
+    required this.email,
+    super.key,
+  });
+  final String email;
+
+  @override
+  State<VerificationCodePage> createState() => _VerificationCodePageState();
+}
+
+class _VerificationCodePageState extends State<VerificationCodePage> {
+  bool isButtonDisabled = false; // لمنع الضغط على الزر أثناء العد التنازلي
+  int timeLeft = 1000; // المدة بالثواني
+  Timer? timer;
+  @override
+  void initState() {
+    super.initState();
+    startTimer(); // بدء العد التنازلي
+  }
+
+  void startTimer() {
+    setState(() {
+      isButtonDisabled = true;
+      timeLeft = 1000;
+    });
+
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (timeLeft > 0) {
+          timeLeft--;
+        } else {
+          isButtonDisabled = false;
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,33 +91,52 @@ class VerificationCodePage extends StatelessWidget {
                   ),
                 ),
                 const H(h: 16),
-                const CustomVerificationCode(),
+                CustomVerificationCode(
+                  email: widget.email,
+                ),
                 const H(h: 10),
 
                 /// Button
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'لم يصلك الرمز؟',
-                        style: TextStyle(
-                          color: kHeader1Color,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
+                Row(
+                  children: [
+                    Text(
+                      'لم يصلك الرمز؟',
+                      style: TextStyle(
+                        color: kHeader1Color,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
                       ),
-                      TextSpan(
-                        text: ' إرسال مرة أخرى',
-                        style: TextStyle(
-                          color: kMainColor,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                          decorationColor: kMainColor,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    InkWell(
+                      onTap: isButtonDisabled
+                          ? null
+                          : () async {
+                              await context
+                                  .read<RequestOtpCubit>()
+                                  .requestOtp(widget.email, context);
+                              startTimer();
+                            },
+                      child: isButtonDisabled
+                          ? Text(
+                              '⏳ انتظر $timeLeft ثانية',
+                              style: TextStyle(
+                                color: kMainColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          : Text(
+                              ' إرسال مرة أخرى',
+                              style: TextStyle(
+                                color: kMainColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                                decoration: TextDecoration.underline,
+                                decorationColor: kMainColor,
+                              ),
+                            ),
+                    ),
+                  ],
                 ),
               ],
             ),

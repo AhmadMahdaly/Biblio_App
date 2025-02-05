@@ -1,6 +1,6 @@
 name: biblio
 description: "A new Flutter project."
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.6.0
@@ -33,6 +33,8 @@ dependencies:
   carousel_slider: ^5.0.0
   connectivity_plus: ^5.0.2
   flutter_bloc: ^9.0.0
+  http: ^1.3.0
+
 
   
 

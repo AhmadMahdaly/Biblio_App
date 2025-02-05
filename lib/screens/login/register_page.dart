@@ -2,6 +2,7 @@ import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/more_page/widgets/terms_and_conditions_page.dart';
 import 'package:biblio/screens/select_your_location_screen.dart';
+import 'package:biblio/services/emailjs.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/app_regex.dart';
 import 'package:biblio/utils/components/custom_button.dart';
@@ -51,6 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             context,
             'تم التسجيل',
           );
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -58,6 +60,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 return const SelectYourLocationScreen();
               },
             ),
+          );
+          sendEmail(
+            _emailController.text,
+            'Welcome to Our App',
+            'Your account has been created successfully!',
           );
         }
       },

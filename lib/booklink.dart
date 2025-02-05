@@ -9,6 +9,7 @@ import 'package:biblio/cubit/messages/fetch_user_conversations_cubit/fetch_user_
 import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
 import 'package:biblio/cubit/user/fetch_user_data/fetch_user_data_cubit.dart';
 import 'package:biblio/cubit/user/get_user_qty_books_cubit/get_user_qty_books_cubit.dart';
+import 'package:biblio/cubit/user/request_otp_cubit/request_otp_cubit.dart';
 import 'package:biblio/cubit/user/update_user_favorite_location_cubit/update_user_favorite_location_cubit.dart';
 import 'package:biblio/cubit/user/update_user_image_cubit/update_user_image_cubit.dart';
 import 'package:biblio/cubit/user/user_favorite_location_cubit/user_favorite_location_cubit.dart';
@@ -97,6 +98,9 @@ class Booklink extends StatelessWidget {
             ),
             BlocProvider<UpdateUserFavoriteLocationCubit>(
               create: (context) => UpdateUserFavoriteLocationCubit(),
+            ),
+            BlocProvider<RequestOtpCubit>(
+              create: (context) => RequestOtpCubit(),
             ),
           ],
 
