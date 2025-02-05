@@ -21,13 +21,10 @@ class SignOutButton extends StatelessWidget {
           showSnackBar(context, state.message);
         }
         if (state is SignOutSuccess) {
-          Navigator.pushReplacement(
+          Navigator.pushNamedAndRemoveUntil(
             context,
-            MaterialPageRoute(
-              builder: (context) {
-                return const OnboardScreen();
-              },
-            ),
+            OnboardScreen.id,
+            (route) => false,
           );
         }
       },
