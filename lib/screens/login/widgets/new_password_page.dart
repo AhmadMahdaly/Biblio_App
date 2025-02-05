@@ -2,10 +2,12 @@ import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NewPasswordPage extends StatefulWidget {
   const NewPasswordPage({super.key});
@@ -15,7 +17,16 @@ class NewPasswordPage extends StatefulWidget {
 }
 
 class _NewPasswordPageState extends State<NewPasswordPage> {
+  final SupabaseClient supabase = Supabase.instance.client;
   final formKey = GlobalKey<FormState>();
+  final TextEditingController _controller = TextEditingController();
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  bool isShowPassword = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,17 +81,30 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                     ],
                   ),
                   CustomTextformfield(
+                    controller: _controller,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'هذا الحقل مطلوب';
                       }
                       return null;
                     },
-                    obscureText: true,
+                    obscureText: isShowPassword,
                     text: 'كلمة المرور',
-                    icon: Icon(
-                      Icons.remove_red_eye_rounded,
-                      size: 24.sp,
+                    icon: IconButton(
+                      onPressed: () => setState(() {
+                        isShowPassword = !isShowPassword;
+                      }),
+                      icon: isShowPassword
+                          ? Icon(
+                              Icons.visibility_off_outlined,
+                              size: 24.sp,
+                              color: kHeader1Color,
+                            )
+                          : Icon(
+                              Icons.visibility_outlined,
+                              size: 24.sp,
+                              color: kHeader1Color,
+                            ),
                     ),
                   ),
 
@@ -102,13 +126,28 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       if (value == null || value.isEmpty) {
                         return 'هذا الحقل مطلوب';
                       }
+                      if (value != _controller.text) {
+                        return 'كلمة المرور غير مطابقة';
+                      }
                       return null;
                     },
-                    obscureText: true,
+                    obscureText: isShowPassword,
                     text: 'كلمة المرور',
-                    icon: Icon(
-                      Icons.remove_red_eye_rounded,
-                      size: 24.sp,
+                    icon: IconButton(
+                      onPressed: () => setState(() {
+                        isShowPassword = !isShowPassword;
+                      }),
+                      icon: isShowPassword
+                          ? Icon(
+                              Icons.visibility_off_outlined,
+                              size: 24.sp,
+                              color: kHeader1Color,
+                            )
+                          : Icon(
+                              Icons.visibility_outlined,
+                              size: 24.sp,
+                              color: kHeader1Color,
+                            ),
                     ),
                   ),
 
@@ -117,9 +156,25 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                   /// Login Button
                   CustomButton(
                     text: 'حفظ كلمة المرور',
-                    onTap: () {
+                    onTap: () async {
                       if (formKey.currentState!.validate()) {
-                        Navigator.pushReplacementNamed(context, LoginScreen.id);
+                        try {
+                          final password = _controller.text;
+                          await supabase.auth.updateUser(
+                            UserAttributes(
+                              password: password,
+                            ),
+                          );
+                          await Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            LoginScreen.id,
+                            (route) => false,
+                          );
+                        } on AuthException catch (authError) {
+                          showSnackBar(context, authError.message);
+                        } catch (e) {
+                          showSnackBar(context, e.toString());
+                        }
                       }
                     },
                   ),
