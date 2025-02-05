@@ -22,7 +22,7 @@ class VerificationCodePage extends StatefulWidget {
 
 class _VerificationCodePageState extends State<VerificationCodePage> {
   bool isButtonDisabled = false; // لمنع الضغط على الزر أثناء العد التنازلي
-  int timeLeft = 1000; // المدة بالثواني
+  int timeLeft = 60; // المدة بالثواني
   Timer? timer;
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
   void startTimer() {
     setState(() {
       isButtonDisabled = true;
-      timeLeft = 1000;
+      timeLeft = 60;
     });
 
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
