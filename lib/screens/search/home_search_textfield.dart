@@ -1,14 +1,20 @@
+import 'package:biblio/screens/search/search_screen.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class SearchTextfield extends StatelessWidget {
-  const SearchTextfield({super.key});
+class HomeSearchTextfield extends StatelessWidget {
+  const HomeSearchTextfield({super.key});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const BookSearchScreen()),
+      ),
+      readOnly: true,
       cursorColor: kMainColor,
       decoration: InputDecoration(
         hintText: 'ابحث هنا “مائة عام من العزلة”',
@@ -23,7 +29,6 @@ class SearchTextfield extends StatelessWidget {
           width: 32.sp,
           height: 32.sp,
           decoration: BoxDecoration(
-            // color: Colors.white,
             borderRadius: BorderRadius.circular(
               15.sp,
             ),
@@ -53,7 +58,7 @@ class SearchTextfield extends StatelessWidget {
           0xFFF4F4F4,
         ),
       ),
-      borderRadius: BorderRadius.circular(10.sp),
+      borderRadius: BorderRadius.circular(12.sp),
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:biblio/screens/category_page/widgets/category_listview.dart';
 import 'package:biblio/screens/category_page/widgets/see_all.dart';
 import 'package:biblio/screens/home_page/widgets/home_banner.dart';
 import 'package:biblio/screens/home_page/widgets/new_books_listview.dart';
-import 'package:biblio/screens/home_page/widgets/search_textfield.dart';
+import 'package:biblio/screens/search/home_search_textfield.dart';
 import 'package:biblio/screens/home_page/widgets/title_header_home.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/width.dart';
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                 title: const Column(
                   children: [
                     H(h: 10),
-                    SearchTextfield(),
+                    HomeSearchTextfield(),
                   ],
                 ),
               ),
