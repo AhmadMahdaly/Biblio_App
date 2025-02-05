@@ -52,7 +52,6 @@ class AuthCubit extends Cubit<AuthState> {
         'id': user.auth.currentUser!.id,
         'username': name,
         'email': email,
-        'password': password,
       });
       emit(SignUpSuccess());
     } on AuthException catch (e) {
