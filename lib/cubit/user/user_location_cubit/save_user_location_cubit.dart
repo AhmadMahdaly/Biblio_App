@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -12,11 +11,11 @@ class SaveUserLocationCubit extends Cubit<SaveUserLocationState> {
   SaveUserLocationCubit() : super(SaveUserLocationInitial());
   String? selectedCountry;
   String? selectedCity;
-  Future<void> saveUserData(BuildContext context) async {
+  Future<void> saveUserData() async {
     emit(SaveUserLocationLoading());
     try {
       final supabase = Supabase.instance.client;
-      final user = Supabase.instance.client.auth.currentUser;
+      final user = supabase.auth.currentUser;
       if (user != null) {
         final userId = user.id;
         await supabase.from('users').update({
@@ -28,11 +27,7 @@ class SaveUserLocationCubit extends Cubit<SaveUserLocationState> {
           'city': selectedCity,
         }).eq('user_id', userId);
       }
-      await Navigator.pushNamedAndRemoveUntil(
-        context,
-        NavigationBarApp.id,
-        (route) => false,
-      );
+
       emit(SaveUserLocationSuccess());
     } on AuthException catch (e) {
       log(e.toString());

@@ -1,4 +1,5 @@
 import 'package:biblio/cubit/user/user_location_cubit/save_user_location_cubit.dart';
+import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
@@ -19,9 +20,7 @@ class SelectYourLocationScreen extends StatefulWidget {
 
 class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
   bool isActive = false;
-
   final List<String> countries = ['مصر', 'السعودية'];
-  // قائمة الدول
   final Map<String, List<String>> cities = {
     'مصر': [
       'القاهرة',
@@ -70,15 +69,21 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
       'الأحساء',
     ],
   };
-
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SaveUserLocationCubit>();
     return BlocConsumer<SaveUserLocationCubit, SaveUserLocationState>(
       listener: (context, state) {
         if (state is SaveUserLocationError) {}
+        if (state is SaveUserLocationSuccess) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            NavigationBarApp.id,
+            (route) => false,
+          );
+        }
       },
       builder: (context, state) {
+        final cubit = context.read<SaveUserLocationCubit>();
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -191,7 +196,7 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
                         ),
                         items: cubit.selectedCountry == null
                             ? []
-                            : cities[cubit.selectedCountry!]!.map((city) {
+                            : cities[cubit.selectedCountry]!.map((city) {
                                 return DropdownMenuItem(
                                   value: city,
                                   child: Text(city),
@@ -218,7 +223,7 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
             child: isActive
                 ? CustomButton(
                     text: 'ابدأ التصفح',
-                    onTap: () => cubit.saveUserData(context),
+                    onTap: cubit.saveUserData,
                   )
                 : const CustomButton(
                     text: 'ابدأ التصفح',
