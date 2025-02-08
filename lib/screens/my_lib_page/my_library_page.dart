@@ -58,14 +58,15 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
         automaticallyImplyLeading: false,
         backgroundColor: kMainColor,
         toolbarHeight: 60.sp,
+        centerTitle: true,
 
         /// Title
         title: Text(
           'مكتبتك',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
             height: 1.sp,
           ),
         ),
@@ -77,7 +78,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
-            size: 22.sp,
+            size: 20.sp,
             color: Colors.white,
           ),
         ),
