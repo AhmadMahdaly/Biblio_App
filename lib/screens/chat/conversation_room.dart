@@ -132,10 +132,11 @@ class _ConversationRoomState extends State<ConversationRoom> {
                     Navigator.pop(context);
                   },
                   icon: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 8.sp),
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: kLightBlue,
                       borderRadius: BorderRadius.circular(320),
                     ),
                     child: Icon(

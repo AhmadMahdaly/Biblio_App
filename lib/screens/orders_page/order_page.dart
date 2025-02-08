@@ -51,9 +51,8 @@ class _OrderPageState extends State<OrderPage> {
                       'طلبات الكتب',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        height: 1.sp,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),

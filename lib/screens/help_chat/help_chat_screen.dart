@@ -83,9 +83,8 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
                   'الدعم الفني',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    height: 1.sp,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 leading: IconButton(
