@@ -171,7 +171,7 @@ class _UserPageState extends State<UserPage> {
                         child: Text(
                           'انضم للمكتبة منذ ${getTimeDifference()}',
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.w600,
                             color: kTextColor,
                           ),
@@ -181,7 +181,7 @@ class _UserPageState extends State<UserPage> {
                         child: Text(
                           'عدد الكتب: ${cubit.qtyBooks.length}',
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.w600,
                             color: kTextColor,
                           ),
@@ -193,41 +193,58 @@ class _UserPageState extends State<UserPage> {
                       else
                         widget.book['location_url'] == null ||
                                 widget.book['location_url'].toString().isEmpty
-                            ? SizedBox(
-                                child: Row(
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'أماكن اللقاء المفضلة: ',
+                                    style: TextStyle(
+                                      color: kTextColor,
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const H(h: 6),
+                                  SizedBox(
+                                    width: 330.sp,
+                                    child: Text(
+                                      '${widget.book['fav_location']}',
+                                      style: TextStyle(
+                                        color: kTextColor,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(
+                                child: Column(
                                   children: [
                                     Text(
                                       'أماكن اللقاء المفضلة: ',
                                       style: TextStyle(
                                         color: kTextColor,
-                                        fontSize: 14.sp,
+                                        fontSize: 15.sp,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    Text(
-                                      '${widget.book['fav_location']}',
-                                      style: TextStyle(
-                                        color: kTextColor,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w500,
+                                    const H(h: 6),
+                                    InkWell(
+                                      onTap: _launchUrl,
+                                      child: SizedBox(
+                                        width: 330.sp,
+                                        child: Text(
+                                          '${widget.book['fav_location']}',
+                                          style: TextStyle(
+                                            color: kTextColor,
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
-                                ),
-                              )
-                            : SizedBox(
-                                child: InkWell(
-                                  onTap: _launchUrl,
-                                  child: Text(
-                                    'أماكن اللقاء المفضلة: ${widget.book['location_url']}',
-                                    style: TextStyle(
-                                      color: kTextColor,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w500,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: kMainColor,
-                                    ),
-                                  ),
                                 ),
                               ),
                     ],
