@@ -35,8 +35,10 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
         return;
       }
 
+      // ignore: avoid_redundant_argument_values
       final response = await supabase.from('books').select('*').or(
-          'title.ilike.%$query%,author.ilike.%$query%'); // بحث في العنوان أو المؤلف
+            'title.ilike.%$query%,author.ilike.%$query%',
+          ); // بحث في العنوان أو المؤلف
 
       setState(() {
         books = response;
@@ -56,9 +58,18 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 100.sp,
+        // leading: InkWell(
+        //   onTap: () => Navigator.pop(context),
+        //   child: Icon(
+        //     Icons.close,
+        //     size: 22.sp,
+        //     color: kMainColor,
+        //   ),
+        // ),
         title: TextField(
           onChanged: searchBooks,
           controller: searchController,
+          autofocus: true,
           cursorWidth: 0.5.sp,
           cursorColor: kMainColor,
           decoration: InputDecoration(
@@ -70,7 +81,7 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
             ),
             filled: true,
             fillColor: const Color(0xFFECECEC),
-            contentPadding: EdgeInsets.all(8.sp),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20.sp),
             border: border(),
             enabledBorder: border(),
             focusedBorder: OutlineInputBorder(
@@ -82,8 +93,8 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
             suffixIcon: InkWell(
               onTap: () => searchBooks(searchController.text),
               child: Container(
-                margin: EdgeInsets.all(8.sp),
-                padding: EdgeInsets.all(5.sp),
+                margin: EdgeInsets.symmetric(horizontal: 16.sp),
+                padding: EdgeInsets.symmetric(horizontal: 5.sp),
                 width: 32.sp,
                 height: 32.sp,
                 decoration: BoxDecoration(
