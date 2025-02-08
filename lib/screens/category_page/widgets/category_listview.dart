@@ -56,7 +56,7 @@ class _CategoryListviewState extends State<CategoryListview> {
     return isLoading
         ? const AppIndicator()
         : ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 8.sp),
+            padding: EdgeInsets.symmetric(horizontal: 11.sp),
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               final book = books[index];
