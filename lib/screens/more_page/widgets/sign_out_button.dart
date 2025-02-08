@@ -49,7 +49,9 @@ class SignOutButton extends StatelessWidget {
                         actions: [
                           ///
                           TextButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.of(context).pop(
+                              false,
+                            ),
                             child: const Text(
                               'إلغاء',
                               style: TextStyle(
@@ -62,6 +64,11 @@ class SignOutButton extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () async {
                               await cubit.signOut(context);
+                              Navigator.of(
+                                context,
+                              ).pop(
+                                true,
+                              );
                             },
                             child: const Text(
                               'تسجيل الخروج',

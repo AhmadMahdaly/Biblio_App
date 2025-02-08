@@ -39,6 +39,7 @@ class NavigationBarAppState extends State<NavigationBarApp> {
     return await showDialog(
           context: context,
           builder: (context) => AlertDialog(
+            backgroundColor: kLightBlue,
             title: Text(
               'تأكيد',
               style: TextStyle(
@@ -51,11 +52,24 @@ class NavigationBarAppState extends State<NavigationBarApp> {
               'هل تريد الخروج من التطبيق؟',
               style: TextStyle(
                 color: kMainColor,
-                fontSize: 13.sp,
-                fontWeight: FontWeight.bold,
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w700,
               ),
             ),
             actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(
+                  false,
+                ),
+                child: Text(
+                  'لا',
+                  style: TextStyle(
+                    color: kMainColor,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
               ElevatedButton(
                 onPressed: () => Navigator.of(
                   context,
@@ -68,19 +82,6 @@ class NavigationBarAppState extends State<NavigationBarApp> {
                     color: kMainColor,
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w300,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(
-                  false,
-                ),
-                child: Text(
-                  'لا',
-                  style: TextStyle(
-                    color: kMainColor,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
