@@ -51,9 +51,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 'قائمة الكتب المفضلة',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  height: 1.sp,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
