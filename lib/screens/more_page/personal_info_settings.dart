@@ -176,6 +176,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                           /// Email
                           const TitleFormAddBook(title: 'البريد الإلكتروني'),
                           CustomTextformfield(
+                            enabled: false,
                             controller: _emailController,
                             text: _emailController.text,
                           ),
