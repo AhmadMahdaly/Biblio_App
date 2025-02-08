@@ -16,7 +16,7 @@ class TitleHeaderHome extends StatelessWidget {
         text,
         style: TextStyle(
           color: kMainColor,
-          fontSize: 18.sp,
+          fontSize: 16.sp,
           fontWeight: FontWeight.w800,
         ),
       ),
