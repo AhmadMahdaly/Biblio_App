@@ -1,4 +1,4 @@
-import 'package:biblio/screens/add_book_page/add_book.dart';
+import 'package:biblio/screens/book/add_book_page/add_book.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
@@ -18,7 +18,7 @@ class EmptyLibrary extends StatelessWidget {
         children: [
           SvgPicture.asset(
             'assets/svg/Reading glasses-cuate.svg',
-            height: 100.sp,
+            height: 80.sp,
           ),
           Text(
             'مكتبتك فارغة! لم تتم إضافة كتب بعد',

@@ -1,5 +1,5 @@
 import 'package:biblio/cubit/books/fetch_located_books_cubit/fetch_located_books_cubit.dart';
-import 'package:biblio/screens/book_item/book_page.dart';
+import 'package:biblio/screens/book/book_page/book_page.dart';
 import 'package:biblio/screens/home_page/widgets/no_located_books.dart';
 import 'package:biblio/screens/home_page/widgets/show_book.dart';
 import 'package:biblio/utils/components/app_indicator.dart';

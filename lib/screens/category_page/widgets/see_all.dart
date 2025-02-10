@@ -27,10 +27,6 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
   }
 
   Future<void> fetchCategories() async {
-    await Future.delayed(
-      const Duration(seconds: 2),
-    );
-
     try {
       final response = await supabase
           .from('categories')
@@ -58,13 +54,15 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 80.sp,
+        centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text(
           'فئات الكتب',
           style: TextStyle(
             color: kTextColor,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
             height: 1.sp,
           ),
         ),

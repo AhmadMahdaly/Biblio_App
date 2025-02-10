@@ -1,4 +1,5 @@
 import 'package:biblio/cubit/books/fetch_located_books_cubit/fetch_located_books_cubit.dart';
+import 'package:biblio/cubit/messages/fetch_unread_message_cubit/fetch_unread_message_cubit.dart';
 import 'package:biblio/screens/category_page/widgets/category_listview.dart';
 import 'package:biblio/screens/category_page/widgets/see_all.dart';
 import 'package:biblio/screens/home_page/widgets/home_banner.dart';
@@ -24,6 +25,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Future<void> fetchDate() async {
     await context.read<FetchLocatedBooksCubit>().fetchLocatedBooks(context);
+    await context.read<FetchUnreadMessageCubit>().fetchUnreadMessages();
   }
 
   @override

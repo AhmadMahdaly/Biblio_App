@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:biblio/cubit/user/fetch_user_data/fetch_user_data_cubit.dart';
 import 'package:biblio/cubit/user/update_user_image_cubit/update_user_image_cubit.dart';
-import 'package:biblio/screens/add_book_page/widgets/title_form_add_book.dart';
+import 'package:biblio/screens/book/add_book_page/widgets/title_form_add_book.dart';
 import 'package:biblio/screens/more_page/widgets/get_user_image.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/services/delete_user.dart';
