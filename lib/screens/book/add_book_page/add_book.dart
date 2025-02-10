@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:biblio/cubit/books/fetch_book_category_cubit/fetch_book_category_cubit.dart';
 import 'package:biblio/cubit/books/fetch_order_type_book_cubit/fetch_order_type_book_cubit.dart';
 import 'package:biblio/cubit/books/upload_book_cubit/upload_book_cubit.dart';
-import 'package:biblio/screens/add_book_page/widgets/add_book_image.dart';
-import 'package:biblio/screens/add_book_page/widgets/title_form_add_book.dart';
+import 'package:biblio/screens/book/add_book_page/widgets/add_book_image.dart';
+import 'package:biblio/screens/book/add_book_page/widgets/title_form_add_book.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
@@ -140,6 +140,8 @@ class _AddBookState extends State<AddBook> {
               ? const AppIndicator()
               : Scaffold(
                   appBar: AppBar(
+                    centerTitle: true,
+                    toolbarHeight: 80.sp,
                     leading: IconButton(
                       onPressed: () => Navigator.pushReplacementNamed(
                         context,
@@ -155,8 +157,8 @@ class _AddBookState extends State<AddBook> {
                       'إضافة كتاب جديد',
                       style: TextStyle(
                         color: kMainColor,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w800,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -167,7 +169,7 @@ class _AddBookState extends State<AddBook> {
                       child: ListView(
                         children: [
                           Text(
-                            'من فضلك أضف صورتين: لوجه وظهر الكتاب',
+                            'أضف صورتين: لوجه وظهر الكتاب',
                             style: TextStyle(
                               color: kTextColor,
                               fontSize: 14.sp,

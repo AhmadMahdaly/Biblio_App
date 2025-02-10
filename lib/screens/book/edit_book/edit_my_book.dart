@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:biblio/screens/add_book_page/widgets/get_book_image.dart';
-import 'package:biblio/screens/add_book_page/widgets/title_form_add_book.dart';
+import 'package:biblio/screens/book/add_book_page/widgets/get_book_image.dart';
+import 'package:biblio/screens/book/add_book_page/widgets/title_form_add_book.dart';
 import 'package:biblio/services/update_my_book.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
