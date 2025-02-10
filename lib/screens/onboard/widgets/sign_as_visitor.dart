@@ -1,4 +1,4 @@
-import 'package:biblio/screens/select_your_location_screen.dart';
+import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,14 +11,16 @@ class SignAsVisitor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return const SelectYourLocationScreen();
-          },
-        ),
-      ),
+      onTap: () async {
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const NavigationBarApp();
+            },
+          ),
+        );
+      },
       child: Text(
         'تخطي الآن',
         textAlign: TextAlign.center,

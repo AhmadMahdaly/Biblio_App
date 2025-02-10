@@ -1,4 +1,4 @@
-import 'package:biblio/screens/help_chat/help_chat_screen.dart';
+import 'package:biblio/screens/chat/help_chat/help_chat_screen.dart';
 import 'package:biblio/screens/more_page/widgets/acount_manegment_screen.dart';
 import 'package:biblio/screens/more_page/widgets/category_for_more.dart';
 import 'package:biblio/screens/more_page/widgets/faq_page.dart';

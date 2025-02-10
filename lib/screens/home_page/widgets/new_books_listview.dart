@@ -3,8 +3,10 @@ import 'package:biblio/screens/book/book_page/book_page.dart';
 import 'package:biblio/screens/home_page/widgets/no_located_books.dart';
 import 'package:biblio/screens/home_page/widgets/show_book.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/login_user_not_found.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,9 +28,29 @@ class _NewBooksListviewState extends State<NewBooksListview> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Supabase.instance.client.auth.currentUser;
-    return user == null || user.isAnonymous
-        ? const LoginUserNotFound()
+    String? user;
+    if (Supabase.instance.client.auth.currentUser?.id == null) {
+      user = null;
+    } else {
+      user = Supabase.instance.client.auth.currentUser!.id;
+    }
+    return user == null
+        ? Column(
+            spacing: 12.sp,
+            children: [
+              const H(h: 16),
+              Text(
+                'قم بتسجيل الدخول لرؤية الكتب المعروضة في منطقتك:',
+                style: TextStyle(
+                  color: kTextColor,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const LoginUserNotFound(),
+              const TryToDiscoverCategory(),
+            ],
+          )
         : BlocConsumer<FetchLocatedBooksCubit, FetchLocatedBooksState>(
             listener: (context, state) {
               if (state is FetchLocatedBooksError) {
