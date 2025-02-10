@@ -28,8 +28,13 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Supabase.instance.client.auth.currentUser;
-    return user == null || user.isAnonymous
+    String? user;
+    if (Supabase.instance.client.auth.currentUser?.id == null) {
+      user = null;
+    } else {
+      user = Supabase.instance.client.auth.currentUser?.id;
+    }
+    return user == null
         ? const LoginUserNotFound()
         : BlocConsumer<FetchUserConversationsCubit,
             FetchUserConversationsState>(

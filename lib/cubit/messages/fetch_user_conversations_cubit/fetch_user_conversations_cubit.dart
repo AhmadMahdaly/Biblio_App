@@ -14,15 +14,19 @@ class FetchUserConversationsCubit extends Cubit<FetchUserConversationsState> {
   Future<void> fetchUserConversations() async {
     emit(FetchUserConversationsLoading());
     try {
-      final userId = supabase.auth.currentUser!.id;
-      final response = await supabase
-          .from('conversation_participants')
-          .select(
-            'conversation_id, book_image, title_book, receiver, sender, conversations(created_at)',
-          )
-          .eq('user_id', userId)
-          .order('conversation_id', ascending: false);
-      conversations = List<Map<String, dynamic>>.from(response);
+      if (Supabase.instance.client.auth.currentUser?.id == null) {
+      } else {
+        final user = Supabase.instance.client.auth.currentUser!.id;
+
+        final response = await supabase
+            .from('conversation_participants')
+            .select(
+              'conversation_id, book_image, title_book, receiver, sender, conversations(created_at)',
+            )
+            .eq('user_id', user)
+            .order('conversation_id', ascending: false);
+        conversations = List<Map<String, dynamic>>.from(response);
+      }
       emit(FetchUserConversationsSuccess());
     } on AuthException catch (e) {
       log(e.toString());

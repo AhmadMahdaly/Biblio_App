@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
-import 'package:biblio/screens/add_book_page/models/book_model.dart';
+import 'package:biblio/screens/book/add_book_page/models/book_model.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';

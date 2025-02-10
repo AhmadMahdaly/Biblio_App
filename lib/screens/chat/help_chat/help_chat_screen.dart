@@ -1,6 +1,6 @@
 import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversation_cubit.dart';
 import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
-import 'package:biblio/screens/help_chat/widgets/help_chat.dart';
+import 'package:biblio/screens/chat/help_chat/widgets/help_chat.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
@@ -132,6 +132,8 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
                                   content: _messageController.text,
                                   conversationId:
                                       createConCubit.conversationId.toString(),
+                                  otherId:
+                                      createConCubit.otherUserId.toString(),
                                 );
                                 _messageController.clear();
                                 await Navigator.push(
@@ -141,6 +143,8 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
                                       conversationId: createConCubit
                                           .conversationId
                                           .toString(),
+                                      otherId:
+                                          createConCubit.otherUserId.toString(),
                                     ),
                                   ),
                                 );

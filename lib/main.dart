@@ -12,8 +12,22 @@ void main() async {
   /// تحقق من الإتصال بالشبكة
   await ConnectivityController.instance.init();
   await EasyLocalization.ensureInitialized();
-  // load env
+
+  /// load env
   await dotenv.load();
+
+  // /// Firebase
+  // Platform.isAndroid
+  //     ? await Firebase.initializeApp(
+  //         options: FirebaseOptions(
+  //           apiKey: dotenv.env['CURRENT_KEY'] ?? '',
+  //           appId: dotenv.env['MOBILE_SDK_APP_ID'] ?? '',
+  //           messagingSenderId: dotenv.env['PROJECT_NUMBER'] ?? '',
+  //           projectId: dotenv.env['PROJECT_ID'] ?? '',
+  //         ),
+  //       )
+  //     : await Firebase.initializeApp();
+
 // initialize supabase
   final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
   final supabaseKey = dotenv.env['SUPABASE_KEY'] ?? '';

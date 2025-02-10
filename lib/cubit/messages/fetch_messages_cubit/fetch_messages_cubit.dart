@@ -12,15 +12,12 @@ class FetchMessagesCubit extends Cubit<FetchMessagesState> {
   List<Map<String, dynamic>> messages = [];
   String name = '';
 
-  Future<void> fetchUserName({required String userName}) async {
+  Future<void> fetchUserName({required String userId}) async {
     emit(FetchMessagesLoading());
     try {
-      final response1 = await supabase
-          .from('users')
-          .select('username')
-          .eq('id', userName)
-          .single();
-      name = response1['username'] as String;
+      final response1 =
+          await supabase.from('users').select('username').eq('id', userId);
+      name = response1.toString();
       emit(FetchMessagesSuccess());
     } on PostgrestException catch (e) {
       log(e.toString());

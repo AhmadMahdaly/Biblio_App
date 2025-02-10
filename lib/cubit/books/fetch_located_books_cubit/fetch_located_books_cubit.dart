@@ -19,13 +19,15 @@ class FetchLocatedBooksCubit extends Cubit<FetchLocatedBooksState> {
     emit(FetchLocatedBooksLoading());
     final cubit = context.read<FetchLocatedBooksCubit>();
     try {
-      final user = supabase.auth.currentUser;
+      String? user;
+      if (Supabase.instance.client.auth.currentUser?.id == null) {
+        user = null;
+      } else {
+        user = Supabase.instance.client.auth.currentUser?.id;
+      }
       if (user != null) {
-        final responsed = await supabase
-            .from('users')
-            .select('city')
-            .eq('id', user.id)
-            .single();
+        final responsed =
+            await supabase.from('users').select('city').eq('id', user).single();
 
         final city = responsed['city'] as String;
         final response = await supabase
@@ -37,22 +39,6 @@ class FetchLocatedBooksCubit extends Cubit<FetchLocatedBooksState> {
         books = List<Map<String, dynamic>>.from(response);
       }
 
-      // final uuser = supabase.auth.currentUser;
-      // if (uuser != null) {
-      //   final getCountry = await supabase
-      //       .from('users')
-      //       .select('country')
-      //       .eq('id', uuser.id)
-      //       .single();
-      //   final country = getCountry['country'] as String;
-      //   final responsee = await supabase
-      //       .from('books')
-      //       // ignore: avoid_redundant_argument_values
-      //       .select('*')
-      //       .eq('country', country)
-      //       .order('created_at', ascending: false);
-      //   countryBooks = List<Map<String, dynamic>>.from(responsee);
-      // }
       emit(FetchLocatedBooksSuccess());
     } on AuthException catch (e) {
       log(e.toString());

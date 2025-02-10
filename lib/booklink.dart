@@ -1,10 +1,10 @@
 import 'package:biblio/screens/book/add_book_page/add_book.dart';
 import 'package:biblio/screens/book/edit_book/edit_my_book.dart';
+import 'package:biblio/screens/chat/order_the_book_page.dart';
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/login/register_page.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/onboard/onboard_screen.dart';
-import 'package:biblio/screens/orders_page/order_the_book_page.dart';
 import 'package:biblio/screens/splash_screen.dart';
 import 'package:biblio/services/providers/main_app_providers.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';

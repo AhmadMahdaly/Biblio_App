@@ -206,6 +206,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                                 content: _messageController.text,
                                 conversationId:
                                     createConCubit.conversationId.toString(),
+                                otherId: createConCubit.otherUserId.toString(),
                               );
                             } catch (e) {
                               log(e.toString());

@@ -81,7 +81,7 @@ class HomeBanner extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: InkWell(
                   onTap: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) {

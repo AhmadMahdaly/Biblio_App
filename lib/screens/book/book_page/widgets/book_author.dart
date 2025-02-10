@@ -13,7 +13,7 @@ class BookPageAuthor extends StatelessWidget {
         vertical: 5.sp,
       ),
       child: SizedBox(
-        width: 250.sp,
+        width: 225.sp,
         child: Row(
           children: [
             Text(

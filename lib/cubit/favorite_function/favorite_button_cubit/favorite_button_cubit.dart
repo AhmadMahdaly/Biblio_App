@@ -25,7 +25,7 @@ class FavoriteButtonCubit extends Cubit<FavoriteButtonState> {
             .select()
             .eq('user_id', userId)
             .eq('book_id', bookId)
-            .single();
+            .maybeSingle();
         if (response != null) {
           isFavorite = true;
         }

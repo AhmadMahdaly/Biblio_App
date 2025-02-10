@@ -11,8 +11,13 @@ import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HelpChat extends StatefulWidget {
-  const HelpChat({required this.conversationId, super.key});
+  const HelpChat({
+    required this.conversationId,
+    required this.otherId,
+    super.key,
+  });
   final String conversationId;
+  final String otherId;
   @override
   State<HelpChat> createState() => _HelpChatState();
 }
@@ -34,7 +39,7 @@ class _HelpChatState extends State<HelpChat> {
     if (message['user_id'] != null) {
       await context
           .read<FetchMessagesCubit>()
-          .fetchUserName(userName: message['user_id'].toString());
+          .fetchUserName(userId: message['user_id'].toString());
     }
   }
 
@@ -269,6 +274,7 @@ class _HelpChatState extends State<HelpChat> {
                           sendMessageCubit.sendMessage(
                             content: _messageController.text,
                             conversationId: widget.conversationId,
+                            otherId: widget.otherId,
                           );
                           cubit.fetchMessages(
                             conversationId: widget.conversationId,

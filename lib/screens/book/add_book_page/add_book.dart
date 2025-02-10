@@ -6,12 +6,12 @@ import 'package:biblio/cubit/books/fetch_order_type_book_cubit/fetch_order_type_
 import 'package:biblio/cubit/books/upload_book_cubit/upload_book_cubit.dart';
 import 'package:biblio/screens/book/add_book_page/widgets/add_book_image.dart';
 import 'package:biblio/screens/book/add_book_page/widgets/title_form_add_book.dart';
-import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/leading_icon.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -77,30 +77,13 @@ class _AddBookState extends State<AddBook> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    fetchUserId();
-  }
-
-  String? _user;
-  Future<void> fetchUserId() async {
-    try {
-      /// الحصول على المستخدم الحالي
-      final user = supabase.auth.currentUser;
-      if (user != null) {
-        if (mounted) {
-          setState(() {
-            _user = user.id;
-          });
-        }
-      }
-    } catch (e) {
-      ///
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    String? user;
+    if (Supabase.instance.client.auth.currentUser?.id == null) {
+      user = null;
+    } else {
+      user = Supabase.instance.client.auth.currentUser?.id;
+    }
     if (coverFirstImage == null ||
         coverSecondImage == null ||
         _titleController.text.isEmpty ||
@@ -134,35 +117,25 @@ class _AddBookState extends State<AddBook> {
             ..read<FetchBookCategoryCubit>().fetchCategories(context)
             ..read<FetchOrderTypeBookCubit>().fetchOrderType(context);
           final uploadCubit = context.read<UploadBookCubit>();
-          return state is UploadBookLoading ||
-                  state is FetchBookCategoryLoading ||
-                  state is FetchOrderTypeBookLoading
-              ? const AppIndicator()
-              : Scaffold(
-                  appBar: AppBar(
-                    centerTitle: true,
-                    toolbarHeight: 80.sp,
-                    leading: IconButton(
-                      onPressed: () => Navigator.pushReplacementNamed(
-                        context,
-                        NavigationBarApp.id,
-                      ),
-                      icon: Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        color: kMainColor,
-                        size: 22.sp,
-                      ),
-                    ),
-                    title: Text(
-                      'إضافة كتاب جديد',
-                      style: TextStyle(
-                        color: kMainColor,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  body: Padding(
+          return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              toolbarHeight: 80.sp,
+              leading: const LeadingIcon(),
+              title: Text(
+                'إضافة كتاب جديد',
+                style: TextStyle(
+                  color: kMainColor,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            body: state is UploadBookLoading ||
+                    state is FetchBookCategoryLoading ||
+                    state is FetchOrderTypeBookLoading
+                ? const AppIndicator()
+                : Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.sp),
                     child: Form(
                       key: formKey,
@@ -182,13 +155,11 @@ class _AddBookState extends State<AddBook> {
                             children: [
                               AddBookImages(
                                 icon: Icons.image_outlined,
-                                //  Icons.camera_alt_outlined,
                                 image: coverFirstImage,
                                 onTap: pickFirstImage,
                               ),
                               AddBookImages(
                                 icon: Icons.image_outlined,
-                                //  Icons.camera_alt_outlined,
                                 image: coverSecondImage,
                                 onTap: pickSocendImage,
                               ),
@@ -395,11 +366,14 @@ class _AddBookState extends State<AddBook> {
                       ),
                     ),
                   ),
-                  bottomNavigationBar: Padding(
+            bottomNavigationBar: state is UploadBookLoading ||
+                    state is FetchBookCategoryLoading ||
+                    state is FetchOrderTypeBookLoading
+                ? const SizedBox()
+                : Padding(
                     padding: EdgeInsets.all(16.sp),
-                    child: _user == null
+                    child: user == null
                         ? CustomBorderBotton(
-                            padding: 16,
                             text: 'تسجيل الدخول',
                             onTap: () {
                               Navigator.pushReplacementNamed(
@@ -433,7 +407,7 @@ class _AddBookState extends State<AddBook> {
                                 text: 'إضافة الكتاب',
                               ),
                   ),
-                );
+          );
         },
       ),
     );

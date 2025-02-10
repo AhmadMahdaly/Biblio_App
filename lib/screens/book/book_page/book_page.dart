@@ -9,8 +9,8 @@ import 'package:biblio/screens/book/book_page/widgets/book_user_label.dart';
 import 'package:biblio/screens/book/book_page/widgets/edit_and_delete_popup_menu_button.dart';
 import 'package:biblio/screens/book/book_page/widgets/offer_types_widget.dart';
 import 'package:biblio/screens/book/book_page/widgets/post_date_and_time.dart';
+import 'package:biblio/screens/chat/order_the_book_page.dart';
 import 'package:biblio/screens/my_lib_page/widgets/favorate_button.dart';
-import 'package:biblio/screens/orders_page/order_the_book_page.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/leading_icon.dart';
@@ -24,7 +24,12 @@ class ShowBookItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Supabase.instance.client.auth.currentUser!.id;
+    String? user;
+    if (Supabase.instance.client.auth.currentUser?.id == null) {
+      user = null;
+    } else {
+      user = Supabase.instance.client.auth.currentUser!.id;
+    }
     return Scaffold(
       appBar: AppBar(
         actions: [

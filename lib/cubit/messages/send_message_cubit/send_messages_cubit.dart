@@ -13,6 +13,7 @@ class SendMessagesCubit extends Cubit<SendMessagesState> {
   /// Send Message
   Future<void> sendMessage({
     required String conversationId,
+    required String otherId,
     required String content,
   }) async {
     emit(SendMessagesLoading());
@@ -20,8 +21,9 @@ class SendMessagesCubit extends Cubit<SendMessagesState> {
       final userId = supabase.auth.currentUser?.id;
       await supabase.from('messages').insert({
         'conversation_id': conversationId,
-        'user_id': userId ?? 11111,
+        'user_id': userId ?? 1,
         'content': content,
+        'other_id': otherId,
       });
       emit(SendMessagesSuccess());
     } on PostgrestException catch (e) {
