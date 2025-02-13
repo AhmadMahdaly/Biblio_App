@@ -2,12 +2,13 @@ import 'dart:developer';
 
 import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversation_cubit.dart';
 import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
-import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
+import 'package:biblio/screens/chat/conversation_room.dart';
 import 'package:biblio/services/fetch_user_name.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/leading_icon.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
       });
     } catch (e) {
       if (mounted) {
-        //
+        showSnackBar(context, e.toString());
       }
     }
   }
@@ -101,7 +102,12 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
     return BlocConsumer<SendMessagesCubit, SendMessagesState>(
       listener: (context, state) {
         if (state is SendMessagesError) {
-          showSnackBar(context, state.message);
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
+          }
         }
       },
       builder: (context, state) {
@@ -109,14 +115,27 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
         return BlocConsumer<CreateConversationCubit, CreateConversationState>(
           listener: (context, state) {
             if (state is CreateConversationError) {
-              showSnackBar(context, state.message);
+              if (state.message == 'Connection refused' ||
+                  state.message == 'Connection reset by peer') {
+                showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+              } else {
+                showSnackBar(context, state.message);
+              }
             }
             if (state is CreateConversationSeccess) {
-              showSnackBar(context, 'تم ارسال الرسالة بنجاح');
+              // showSnackBar(context, 'تم ارسال الرسالة بنجاح');
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const NavigationBarApp(),
+                  builder: (context) => ConversationRoom(
+                    conversationId: context
+                        .read<CreateConversationCubit>()
+                        .conversationId
+                        .toString(),
+                    titleBook: titleBook,
+                    userName: otherName,
+                    otherId: bookUser,
+                  ),
                 ),
               );
             }
@@ -136,15 +155,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                 ),
 
                 /// Leading
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context); // إزالة جميع الصفحات
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_new,
-                    size: 22.sp,
-                  ),
-                ),
+                leading: const LeadingIcon(),
               ),
               body: state is CreateConversationLoading ||
                       state is SendMessagesLoading
@@ -195,6 +206,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                           onTap: () async {
                             try {
                               await createConCubit.createConversation(
+                                context,
                                 sender: otherName,
                                 receiver: uuser,
                                 otherId: bookUser,
@@ -203,10 +215,10 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                                 bookId: bookId.toString(),
                               );
                               await sendMsgCubit.sendMessage(
+                                context,
                                 content: _messageController.text,
                                 conversationId:
                                     createConCubit.conversationId.toString(),
-                                otherId: createConCubit.otherUserId.toString(),
                               );
                             } catch (e) {
                               log(e.toString());

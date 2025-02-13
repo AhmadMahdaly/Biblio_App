@@ -1,4 +1,5 @@
 import 'package:biblio/cubit/messages/fetch_messages_cubit/fetch_messages_cubit.dart';
+import 'package:biblio/cubit/messages/fetch_unread_conversation_cubit/fetch_unread_conversation_cubit.dart';
 import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
@@ -37,13 +38,17 @@ class _ConversationRoomState extends State<ConversationRoom> {
 
   Map<String, dynamic> message = {};
   Future<void> fetchDate() async {
-    await context
-        .read<FetchMessagesCubit>()
-        .fetchMessages(conversationId: widget.conversationId);
-    if (message['user_id'] != null) {
+    try {
       await context
           .read<FetchMessagesCubit>()
-          .fetchUserName(userId: message['user_id'].toString());
+          .fetchMessages(conversationId: widget.conversationId);
+      if (message['user_id'] != null) {
+        await context
+            .read<FetchMessagesCubit>()
+            .fetchUserName(context, userId: message['user_id'].toString());
+      }
+    } catch (e) {
+      showSnackBar(context, e.toString());
     }
   }
 
@@ -74,16 +79,24 @@ class _ConversationRoomState extends State<ConversationRoom> {
     return BlocConsumer<FetchMessagesCubit, FetchMessagesState>(
       listener: (context, state) {
         if (state is FetchMessagesError) {
-          if (state.message == 'Connection refused') {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
           }
-          showSnackBar(context, state.message);
         }
       },
       builder: (context, state) {
         context
-            .read<FetchMessagesCubit>()
-            .fetchMessages(conversationId: widget.conversationId);
+          ..read<FetchMessagesCubit>()
+              .fetchMessages(conversationId: widget.conversationId)
+          ..read<FetchUnreadConversationCubit>().fetchUnreadCon(
+            context,
+            conversationId: widget.conversationId,
+            otherId: widget.otherId,
+          );
+
         final cubit = context.read<FetchMessagesCubit>();
         return BlocConsumer<SendMessagesCubit, SendMessagesState>(
           listener: (context, state) {
@@ -91,8 +104,9 @@ class _ConversationRoomState extends State<ConversationRoom> {
               if (state.message == 'Connection refused' ||
                   state.message == 'Connection reset by peer') {
                 showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+              } else {
+                showSnackBar(context, state.message);
               }
-              showSnackBar(context, state.message);
             }
           },
           builder: (context, state) {
@@ -281,9 +295,9 @@ class _ConversationRoomState extends State<ConversationRoom> {
                         onPressed: () {
                           if (_messageController.text.isEmpty) return;
                           sendMessageCubit.sendMessage(
+                            context,
                             content: _messageController.text,
                             conversationId: widget.conversationId,
-                            otherId: widget.otherId,
                           );
                           cubit.fetchMessages(
                             conversationId: widget.conversationId,

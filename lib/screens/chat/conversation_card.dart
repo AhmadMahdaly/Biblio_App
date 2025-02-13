@@ -2,6 +2,7 @@ import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversat
 import 'package:biblio/cubit/messages/fetch_unread_conversation_cubit/fetch_unread_conversation_cubit.dart';
 import 'package:biblio/cubit/messages/fetch_unread_message_cubit/fetch_unread_message_cubit.dart';
 import 'package:biblio/screens/chat/conversation_room.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -28,21 +29,41 @@ class _MessageCardState extends State<MessageCard> {
   }
 
   void fetchData() {
-    context.read<FetchUnreadConversationCubit>().fetchUnreadMessages(
-          conversationId: widget.conversation['conversation_id'].toString(),
-        );
-    context.read<FetchUnreadMessageCubit>().fetchUnreadMessages();
+    try {
+      context.read<FetchUnreadConversationCubit>().fetchUnreadCon(
+            context,
+            otherId: widget.conversation['user_id'].toString(),
+            conversationId: widget.conversation['conversation_id'].toString(),
+          );
+      context.read<FetchUnreadMessageCubit>().fetchUnreadMessages(
+            context,
+            otherId: widget.conversation['user_id'].toString(),
+          );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    context.read<FetchUnreadConversationCubit>().fetchUnreadMessages(
+    context.read<FetchUnreadConversationCubit>().fetchUnreadCon(
+          context,
+          otherId: widget.conversation['user_id'].toString(),
           conversationId: widget.conversation['conversation_id'].toString(),
         );
 
     return BlocConsumer<FetchUnreadConversationCubit,
         FetchUnreadConversationState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is FetchUnreadConversationError) {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
+          }
+        }
+      },
       builder: (context, state) {
         final cubit = context.read<FetchUnreadConversationCubit>();
 
@@ -68,12 +89,19 @@ class _MessageCardState extends State<MessageCard> {
               ),
             ).then((_) {
               fetchData();
-            });
-            context.read<FetchUnreadConversationCubit>().markMessagesAsRead(
+              context
+                ..read<FetchUnreadConversationCubit>().markMessagesAsRead(
                   context: context,
                   conversationId:
                       widget.conversation['conversation_id'].toString(),
+                )
+                ..read<FetchUnreadConversationCubit>().fetchUnreadCon(
+                  context,
+                  otherId: widget.conversation['user_id'].toString(),
+                  conversationId:
+                      widget.conversation['conversation_id'].toString(),
                 );
+            });
           },
           child: Container(
             margin: EdgeInsets.only(
@@ -194,16 +222,16 @@ class _MessageCardState extends State<MessageCard> {
                       ),
                   ],
                 ),
-                const Spacer(),
-                if (cubit.notificationCount >= 1)
-                  Padding(
-                    padding: EdgeInsets.all(16.sp),
-                    child: Icon(
-                      Icons.mark_email_unread_rounded,
-                      size: 18.sp,
-                      color: kMainColor,
-                    ),
-                  ),
+                // const Spacer(),
+                // if (cubit.notificationCount >= 1)
+                //   Padding(
+                //     padding: EdgeInsets.all(16.sp),
+                //     child: Icon(
+                //       Icons.mark_email_unread_rounded,
+                //       size: 18.sp,
+                //       color: kMainColor,
+                //     ),
+                //   ),
               ],
             ),
           ),
