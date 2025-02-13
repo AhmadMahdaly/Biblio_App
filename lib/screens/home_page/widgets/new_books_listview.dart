@@ -57,6 +57,8 @@ class _NewBooksListviewState extends State<NewBooksListview> {
                 if (state.message == 'Connection refused' ||
                     state.message == 'Connection reset by peer') {
                   showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+                } else {
+                  showSnackBar(context, state.message);
                 }
               }
             },
