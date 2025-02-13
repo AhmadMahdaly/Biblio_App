@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:biblio/screens/book/book_page/book_page.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,22 +29,26 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
 
   // دالة البحث مع تأخير (Debounce) لمنع البحث مع كل حرف يكتبه المستخدم
   void searchBooks(String query) {
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 700), () async {
-      if (query.isEmpty) {
-        setState(() => books = []);
-        return;
-      }
+    try {
+      if (_debounce?.isActive ?? false) _debounce!.cancel();
+      _debounce = Timer(const Duration(milliseconds: 700), () async {
+        if (query.isEmpty) {
+          setState(() => books = []);
+          return;
+        }
 
-      // ignore: avoid_redundant_argument_values
-      final response = await supabase.from('books').select('*').or(
-            'title.ilike.%$query%,author.ilike.%$query%',
-          ); // بحث في العنوان أو المؤلف
+        // ignore: avoid_redundant_argument_values
+        final response = await supabase.from('books').select('*').or(
+              'title.ilike.%$query%,author.ilike.%$query%',
+            ); // بحث في العنوان أو المؤلف
 
-      setState(() {
-        books = response;
+        setState(() {
+          books = response;
+        });
       });
-    });
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 
   @override
