@@ -19,7 +19,6 @@ class OnboardScreen extends StatelessWidget {
 
           /// Image header
           SizedBox(
-        height: 440,
         child: Image.asset(
           'assets/images/onboared_view_2.png',
           filterQuality: FilterQuality.high,
