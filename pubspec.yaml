@@ -1,6 +1,6 @@
 name: biblio
 description: "A new Flutter project."
-version: 1.0.1+2
+version: 1.0.3+4
 
 environment:
   sdk: ^3.6.0
