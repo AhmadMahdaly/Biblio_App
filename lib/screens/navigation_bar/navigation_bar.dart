@@ -1,10 +1,11 @@
 import 'package:biblio/animations/animate_do.dart';
+import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversation_cubit.dart';
 import 'package:biblio/cubit/messages/fetch_unread_message_cubit/fetch_unread_message_cubit.dart';
 import 'package:biblio/screens/book/add_book_page/add_book.dart';
 import 'package:biblio/screens/favorites_page/favorites_page.dart';
 import 'package:biblio/screens/home_page/home_page_screen.dart';
 import 'package:biblio/screens/more_page/more_page.dart';
-import 'package:biblio/screens/orders_page/order_page.dart';
+import 'package:biblio/screens/chat/order_page.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +37,11 @@ class NavigationBarAppState extends State<NavigationBarApp> {
   }
 
   Future<void> fetchDate() async {
-    await context.read<FetchUnreadMessageCubit>().fetchUnreadMessages();
+    await context.read<FetchUnreadMessageCubit>().fetchUnreadMessages(
+          context,
+          otherId:
+              context.read<CreateConversationCubit>().otherUserId.toString(),
+        );
   }
 
   void _onItemTapped(int index) {
@@ -103,7 +108,11 @@ class NavigationBarAppState extends State<NavigationBarApp> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<FetchUnreadMessageCubit>().fetchUnreadMessages();
+    context.read<FetchUnreadMessageCubit>().fetchUnreadMessages(
+          context,
+          otherId:
+              context.read<CreateConversationCubit>().otherUserId.toString(),
+        );
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
@@ -176,8 +185,8 @@ class NavigationBarAppState extends State<NavigationBarApp> {
                                     .notificationCount >
                                 0)
                               Positioned(
-                                right: 0,
-                                top: 0,
+                                left: 0,
+                                bottom: 0,
                                 child: Container(
                                   padding: EdgeInsets.all(1.sp),
                                   decoration: BoxDecoration(
