@@ -4,6 +4,7 @@ import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/leading_icon.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -29,14 +30,18 @@ class _FavoriteLocationToMeetState extends State<FavoriteLocationToMeet> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _linkController = TextEditingController();
   Future<void> getData() async {
-    final favoriteLocation =
-        context.read<UserFavoriteLocationCubit>().favoriteLocation ?? '';
-    final urlLocation =
-        context.read<UserFavoriteLocationCubit>().urlLocation ?? '';
-    setState(() {
-      _controller.text = favoriteLocation;
-      _linkController.text = urlLocation;
-    });
+    try {
+      final favoriteLocation =
+          context.read<UserFavoriteLocationCubit>().favoriteLocation ?? '';
+      final urlLocation =
+          context.read<UserFavoriteLocationCubit>().urlLocation ?? '';
+      setState(() {
+        _controller.text = favoriteLocation;
+        _linkController.text = urlLocation;
+      });
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 
   @override
@@ -44,6 +49,14 @@ class _FavoriteLocationToMeetState extends State<FavoriteLocationToMeet> {
     return BlocConsumer<UpdateUserFavoriteLocationCubit,
         UpdateUserFavoriteLocationState>(
       listener: (context, state) {
+        if (state is UpdateUserFavoriteLocationError) {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
+          }
+        }
         if (state is UpdateUserFavoriteLocationSuccess) {
           showSnackBar(context, 'تم الحفظ');
           Navigator.pop(context);
@@ -55,7 +68,12 @@ class _FavoriteLocationToMeetState extends State<FavoriteLocationToMeet> {
             UserFavoriteLocationState>(
           listener: (context, state) {
             if (state is UserFavoriteLocationError) {
-              showSnackBar(context, state.message);
+              if (state.message == 'Connection refused' ||
+                  state.message == 'Connection reset by peer') {
+                showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+              } else {
+                showSnackBar(context, state.message);
+              }
             }
             if (state is UserFavoriteLocationSuccess) {
               Navigator.pop(context);
@@ -70,12 +88,7 @@ class _FavoriteLocationToMeetState extends State<FavoriteLocationToMeet> {
             return Scaffold(
               appBar: AppBar(
                 backgroundColor: kScaffoldBackgroundColor,
-                leading: IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                  ),
-                ),
+                leading: const LeadingIcon(),
               ),
               body: state is UserFavoriteLocationLoading
                   ? const AppIndicator()
@@ -105,25 +118,32 @@ class _FavoriteLocationToMeetState extends State<FavoriteLocationToMeet> {
                             ],
                           ),
                           const H(h: 5),
-                          Text(
-                            'لا تشارك معلومات خاصة، فقط الأماكن العامة للقاء',
-                            style: TextStyle(
-                              color: kTextColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
+                          SizedBox(
+                            width: 358.sp,
+                            child: Text(
+                              'لا تشارك معلومات خاصة (اختياري)',
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                           CustomTextformfield(
                             maxLines: 3,
                             controller: _controller,
+                            text: 'أماكن عامة للقاء',
                           ),
                           const H(h: 5),
-                          Text(
-                            'أضف لينك للموقع الجغرافي -إن أمكن-',
-                            style: TextStyle(
-                              color: kTextColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
+                          SizedBox(
+                            width: 360.sp,
+                            child: Text(
+                              'أضف لينك للموقع الجغرافي (اختياري)',
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                           CustomTextformfield(
