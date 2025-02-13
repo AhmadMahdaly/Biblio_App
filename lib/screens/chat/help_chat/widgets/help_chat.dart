@@ -39,7 +39,7 @@ class _HelpChatState extends State<HelpChat> {
     if (message['user_id'] != null) {
       await context
           .read<FetchMessagesCubit>()
-          .fetchUserName(userId: message['user_id'].toString());
+          .fetchUserName(context, userId: message['user_id'].toString());
     }
   }
 
@@ -71,10 +71,12 @@ class _HelpChatState extends State<HelpChat> {
     return BlocConsumer<FetchMessagesCubit, FetchMessagesState>(
       listener: (context, state) {
         if (state is FetchMessagesError) {
-          if (state.message == 'Connection refused') {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
           }
-          showSnackBar(context, state.message);
         }
       },
       builder: (context, state) {
@@ -88,8 +90,9 @@ class _HelpChatState extends State<HelpChat> {
               if (state.message == 'Connection refused' ||
                   state.message == 'Connection reset by peer') {
                 showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+              } else {
+                showSnackBar(context, state.message);
               }
-              showSnackBar(context, state.message);
             }
           },
           builder: (context, state) {
@@ -272,9 +275,9 @@ class _HelpChatState extends State<HelpChat> {
                         onPressed: () {
                           if (_messageController.text.isEmpty) return;
                           sendMessageCubit.sendMessage(
+                            context,
                             content: _messageController.text,
                             conversationId: widget.conversationId,
-                            otherId: widget.otherId,
                           );
                           cubit.fetchMessages(
                             conversationId: widget.conversationId,

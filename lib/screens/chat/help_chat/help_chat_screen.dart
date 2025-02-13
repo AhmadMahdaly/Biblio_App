@@ -5,6 +5,7 @@ import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/leading_icon.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -66,11 +67,29 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CreateConversationCubit, CreateConversationState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is CreateConversationError) {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
+          }
+        }
+      },
       builder: (context, state) {
         final createConCubit = context.read<CreateConversationCubit>();
         return BlocConsumer<SendMessagesCubit, SendMessagesState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if (state is SendMessagesError) {
+              if (state.message == 'Connection refused' ||
+                  state.message == 'Connection reset by peer') {
+                showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+              } else {
+                showSnackBar(context, state.message);
+              }
+            }
+          },
           builder: (context, state) {
             final sendMsgCubit = context.read<SendMessagesCubit>();
             return Scaffold(
@@ -87,14 +106,7 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                leading: IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    size: 22.sp,
-                    color: Colors.white,
-                  ),
-                ),
+                leading: const LeadingIcon(),
               ),
               body: state is SendMessagesLoading ||
                       state is CreateConversationLoading
@@ -121,6 +133,7 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
                               try {
                                 if (_messageController.text.isEmpty) return;
                                 await createConCubit.createConversation(
+                                  context,
                                   sender: 'الدعم الفني',
                                   receiver: name,
                                   otherId: dotenv.env['ADMIN'] ?? '',
@@ -129,11 +142,10 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
                                   bookId: 1.toString(),
                                 );
                                 await sendMsgCubit.sendMessage(
+                                  context,
                                   content: _messageController.text,
                                   conversationId:
                                       createConCubit.conversationId.toString(),
-                                  otherId:
-                                      createConCubit.otherUserId.toString(),
                                 );
                                 _messageController.clear();
                                 await Navigator.push(
