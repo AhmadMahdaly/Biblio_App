@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +44,11 @@ class FetchLocatedBooksCubit extends Cubit<FetchLocatedBooksState> {
       log(e.toString());
       if (e.message ==
           'ClientException: Connection closed before full header was received') {
-        await context.read<AuthCubit>().signOut(context);
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
+      }
+      if (e.message ==
+          'HandshakeException: Connection terminated during handshake') {
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
       }
       emit(FetchLocatedBooksError(e.message));
     } catch (e) {

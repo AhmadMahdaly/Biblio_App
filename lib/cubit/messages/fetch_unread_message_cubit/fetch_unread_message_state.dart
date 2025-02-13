@@ -9,4 +9,8 @@ final class FetchUnreadMessageLoading extends FetchUnreadMessageState {}
 
 final class FetchUnreadMessageSuccess extends FetchUnreadMessageState {}
 
-final class FetchUnreadMessageError extends FetchUnreadMessageState {}
+final class FetchUnreadMessageError extends FetchUnreadMessageState {
+  FetchUnreadMessageError(this.message);
+
+  final String message;
+}

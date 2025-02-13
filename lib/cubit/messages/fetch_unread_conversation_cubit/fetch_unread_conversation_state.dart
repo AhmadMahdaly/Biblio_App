@@ -6,7 +6,11 @@ sealed class FetchUnreadConversationState {}
 final class FetchUnreadConversationInitial
     extends FetchUnreadConversationState {}
 
-final class FetchUnreadConversationError extends FetchUnreadConversationState {}
+final class FetchUnreadConversationError extends FetchUnreadConversationState {
+  FetchUnreadConversationError(this.message);
+
+  final String message;
+}
 
 final class FetchUnreadConversationLoading
     extends FetchUnreadConversationState {}

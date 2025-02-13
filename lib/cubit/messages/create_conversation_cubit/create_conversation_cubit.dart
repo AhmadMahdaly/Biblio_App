@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,8 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
   String? otherUserId;
 
   /// Create Conversation
-  Future<void> createConversation({
+  Future<void> createConversation(
+    BuildContext context, {
     required String otherId,
     required String titleBook,
     required String bookImg,
@@ -36,26 +38,18 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
       conversationId = response['id'] as int;
 
       // إضافة المستخدمين إلى المحادثة
-      await supabase.from('conversation_participants').insert([
+      await supabase.from('conversation_participants').insert(
         {
+          'receiver_id': otherId,
           'conversation_id': conversationId,
           'user_id': userId,
           'book_image': bookImg,
           'title_book': titleBook,
           'book_id': bookId,
-          'receiver': sender,
+          'receiver': receiver,
           'sender': sender,
         },
-        {
-          'conversation_id': conversationId,
-          'user_id': otherId,
-          'book_image': bookImg,
-          'title_book': titleBook,
-          'book_id': bookId,
-          'receiver': receiver,
-          'sender': receiver,
-        },
-      ]);
+      );
 
       emit(CreateConversationSeccess());
     } on PostgrestException catch (e) {
@@ -64,6 +58,14 @@ class CreateConversationCubit extends Cubit<CreateConversationState> {
           'JSON object requested, multiple (or no) rows returned') {}
     } on AuthException catch (e) {
       log(e.toString());
+      if (e.message ==
+          'ClientException: Connection closed before full header was received') {
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
+      }
+      if (e.message ==
+          'HandshakeException: Connection terminated during handshake') {
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
+      }
       emit(CreateConversationError(e.message));
     } catch (e) {
       log(e.toString());

@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -12,7 +14,8 @@ class FetchMessagesCubit extends Cubit<FetchMessagesState> {
   List<Map<String, dynamic>> messages = [];
   String name = '';
 
-  Future<void> fetchUserName({required String userId}) async {
+  Future<void> fetchUserName(BuildContext context,
+      {required String userId}) async {
     emit(FetchMessagesLoading());
     try {
       final response1 =
@@ -25,6 +28,14 @@ class FetchMessagesCubit extends Cubit<FetchMessagesState> {
           'JSON object requested, multiple (or no) rows returned') {}
     } on AuthException catch (e) {
       log(e.toString());
+      if (e.message ==
+          'ClientException: Connection closed before full header was received') {
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
+      }
+      if (e.message ==
+          'HandshakeException: Connection terminated during handshake') {
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
+      }
       emit(FetchMessagesError(e.message));
     } catch (e) {
       log(e.toString());
