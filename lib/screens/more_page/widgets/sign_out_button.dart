@@ -18,7 +18,12 @@ class SignOutButton extends StatelessWidget {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is SignOutError) {
-          showSnackBar(context, state.message);
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
+          }
         }
         if (state is SignOutSuccess) {
           Navigator.pushNamedAndRemoveUntil(
