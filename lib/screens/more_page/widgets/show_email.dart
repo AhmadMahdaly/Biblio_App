@@ -4,16 +4,11 @@ import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ShowEmail extends StatefulWidget {
+class ShowEmail extends StatelessWidget {
   const ShowEmail({
     super.key,
   });
 
-  @override
-  State<ShowEmail> createState() => _ShowEmailState();
-}
-
-class _ShowEmailState extends State<ShowEmail> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(

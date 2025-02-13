@@ -7,6 +7,7 @@ import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -213,7 +214,7 @@ class _EditBookState extends State<EditBook> {
         });
       }
       if (mounted) {
-        // showSnackBar(context, 'هناك خطأ! حاول مرة أخرى.');
+        showSnackBar(context, e.toString());
       }
     }
   }
@@ -311,9 +312,8 @@ class _EditBookState extends State<EditBook> {
         });
       }
       if (mounted) {
-        // showSnackBar(context, 'هناك خطأ! $e.');
+        showSnackBar(context, e.toString());
       }
-      //  $e
     }
   }
 

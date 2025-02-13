@@ -10,6 +10,7 @@ import 'package:biblio/services/delete_user.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
+import 'package:biblio/utils/components/leading_icon.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,8 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
           }
         }
       },
@@ -84,8 +87,11 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
         return BlocConsumer<UpdateUserImageCubit, UpdateUserImageState>(
           listener: (context, state) {
             if (state is UpdateUserImageError) {
-              if (state.message == 'Connection refused') {
+              if (state.message == 'Connection refused' ||
+                  state.message == 'Connection reset by peer') {
                 showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+              } else {
+                showSnackBar(context, state.message);
               }
             }
           },
@@ -105,17 +111,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                 ),
 
                 /// Leading
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(
-                      context,
-                    );
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_new,
-                    size: 22.sp,
-                  ),
-                ),
+                leading: const LeadingIcon(),
               ),
               body: state is FetchUserDataLoading ||
                       state is UpdateUserImageLoading

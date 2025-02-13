@@ -12,6 +12,7 @@ import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/leading_icon.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -111,7 +112,11 @@ class _AddBookState extends State<AddBook> {
         ),
       ],
       child: BlocConsumer<UploadBookCubit, UploadBookState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is UploadBookError) {
+            showSnackBar(context, state.message);
+          }
+        },
         builder: (context, state) {
           context
             ..read<FetchBookCategoryCubit>().fetchCategories(context)
@@ -192,7 +197,11 @@ class _AddBookState extends State<AddBook> {
                           const TitleFormAddBook(title: 'فئة الكتاب'),
                           BlocConsumer<FetchBookCategoryCubit,
                               FetchBookCategoryState>(
-                            listener: (context, state) {},
+                            listener: (context, state) {
+                              if (state is FetchBookCategoryError) {
+                                showSnackBar(context, state.message);
+                              }
+                            },
                             builder: (context, state) {
                               final cubit =
                                   context.read<FetchBookCategoryCubit>();
@@ -279,7 +288,11 @@ class _AddBookState extends State<AddBook> {
                           const TitleFormAddBook(title: 'نوع العرض'),
                           BlocConsumer<FetchOrderTypeBookCubit,
                               FetchOrderTypeBookState>(
-                            listener: (context, state) {},
+                            listener: (context, state) {
+                              if (state is FetchOrderTypeBookError) {
+                                showSnackBar(context, state.message);
+                              }
+                            },
                             builder: (context, state) {
                               final cubit =
                                   context.read<FetchOrderTypeBookCubit>();

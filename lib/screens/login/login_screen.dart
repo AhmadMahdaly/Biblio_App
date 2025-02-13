@@ -36,11 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
           }
-          showSnackBar(
-            context,
-            state.message,
-          );
         }
         if (state is LoginSuccess) {
           Navigator.pushReplacementNamed(

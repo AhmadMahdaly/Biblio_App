@@ -19,12 +19,16 @@ class _FavoritesPageState extends State<FavoritesPage> {
   @override
   void initState() {
     super.initState();
-    context.read<MyListCubit>().showMyFavoriteBooks();
+    context.read<MyListCubit>().showMyFavoriteBooks(
+          context,
+        );
   }
 
   /// دالة التحديث عند السحب
   Future<void> _refreshData() async {
-    await context.read<MyListCubit>().showMyFavoriteBooks();
+    await context.read<MyListCubit>().showMyFavoriteBooks(
+          context,
+        );
   }
 
   @override
@@ -33,7 +37,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return BlocConsumer<MyListCubit, MyListState>(
       listener: (context, state) {
         if (state is MyListError) {
-          showSnackBar(context, state.message);
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
+          }
         }
       },
       builder: (context, state) {

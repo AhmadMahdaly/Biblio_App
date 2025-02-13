@@ -1,6 +1,7 @@
 import 'package:biblio/screens/category_page/category_page.dart';
 import 'package:biblio/screens/category_page/widgets/category_item.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +16,6 @@ class CategorySeeAll extends StatefulWidget {
 
 class _CategorySeeAllState extends State<CategorySeeAll> {
   final SupabaseClient supabase = Supabase.instance.client;
-
   List<Map<String, dynamic>> books = [];
   bool isLoading = false;
 
@@ -42,8 +42,7 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
         isLoading = false;
       });
     } catch (e) {
-      // showSnackBar(context, 'هناك خطأ! $e.');
-
+      showSnackBar(context, 'هناك خطأ! $e.');
       setState(() {
         isLoading = false;
       });

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 
-class EditBookImages extends StatefulWidget {
+class EditBookImages extends StatelessWidget {
   const EditBookImages({
     required this.icon,
     required this.id,
@@ -18,14 +18,9 @@ class EditBookImages extends StatefulWidget {
   final int id;
 
   @override
-  State<EditBookImages> createState() => _EditBookImagesState();
-}
-
-class _EditBookImagesState extends State<EditBookImages> {
-  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: widget.onTap,
+      onTap: onTap,
       child: Container(
         width: 72,
         height: 72,
@@ -42,7 +37,7 @@ class _EditBookImagesState extends State<EditBookImages> {
           borderRadius: BorderRadius.all(Radius.circular(10.sp)),
         ),
         child: Image.file(
-          widget.image!,
+          image!,
           fit: BoxFit.cover,
         ),
       ),

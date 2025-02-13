@@ -12,7 +12,6 @@ class CategoryPage extends StatefulWidget {
     required this.category,
     super.key,
   });
-
   final String category;
   @override
   State<CategoryPage> createState() => _CategoryPageState();

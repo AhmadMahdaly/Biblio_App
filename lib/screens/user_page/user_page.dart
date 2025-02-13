@@ -1,6 +1,7 @@
 import 'package:biblio/cubit/user/get_user_qty_books_cubit/get_user_qty_books_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/leading_icon.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -73,15 +74,7 @@ class _UserPageState extends State<UserPage> {
         return Scaffold(
           appBar: AppBar(
             /// Leading
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context); // إزالة جميع الصفحات
-              },
-              icon: Icon(
-                Icons.arrow_back_ios_new,
-                size: 22.sp,
-              ),
-            ),
+            leading: const LeadingIcon(),
           ),
           body: state is GetUserQtyBooksLoading
               ? const AppIndicator()

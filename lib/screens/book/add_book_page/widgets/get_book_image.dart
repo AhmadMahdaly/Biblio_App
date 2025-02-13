@@ -5,24 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 
-class GetBookImage extends StatefulWidget {
+class GetBookImage extends StatelessWidget {
   const GetBookImage({
     required this.id,
     required this.onTap,
     super.key,
   });
   final int id;
-
   final void Function()? onTap;
-  @override
-  State<GetBookImage> createState() => _GetBookImageState();
-}
-
-class _GetBookImageState extends State<GetBookImage> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: widget.onTap,
+      onTap: onTap,
       child: Container(
         width: 144,
         height: 144,
@@ -41,7 +35,7 @@ class _GetBookImageState extends State<GetBookImage> {
         child: FutureBuilder<String?>(
           future: getBooksPhoto(
             context,
-            widget.id,
+            id,
           ),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

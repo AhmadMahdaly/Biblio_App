@@ -20,7 +20,6 @@ class BookItem extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          // color: kLightBlue,
           borderRadius: borderRadius(),
         ),
         child: Column(
@@ -36,7 +35,7 @@ class BookItem extends StatelessWidget {
                     ),
                   ),
                 ).then((_) {
-                  context.read<MyListCubit>().showMyFavoriteBooks();
+                  context.read<MyListCubit>().showMyFavoriteBooks(context);
                 });
               },
               child: Container(

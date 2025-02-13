@@ -1,5 +1,6 @@
 import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -65,7 +66,7 @@ class _DeleteUserState extends State<DeleteUser> {
         );
       }
     } catch (e) {
-      // showSnackBar(context, 'خطأ $e');
+      showSnackBar(context, 'خطأ $e');
       if (mounted) {
         setState(() {
           _isDeleting = false;

@@ -5,19 +5,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class GetUserImage extends StatefulWidget {
+class GetUserImage extends StatelessWidget {
   const GetUserImage({super.key});
 
   @override
-  State<GetUserImage> createState() => _GetUserImageState();
-}
-
-class _GetUserImageState extends State<GetUserImage> {
-  final int size = 80;
-  final int indicatorSize = 10;
-
-  @override
   Widget build(BuildContext context) {
+    const size = 80;
+    const indicatorSize = 10;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
