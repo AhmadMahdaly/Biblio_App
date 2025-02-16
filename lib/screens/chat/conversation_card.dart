@@ -12,11 +12,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MessageCard extends StatefulWidget {
   const MessageCard({
     required this.conversation,
+    required this.sender,
+    required this.receiver,
     super.key,
   });
 
   final Map<String, dynamic> conversation;
-
+  final String sender;
+  final String receiver;
   @override
   State<MessageCard> createState() => _MessageCardState();
 }
@@ -80,7 +83,8 @@ class _MessageCardState extends State<MessageCard> {
                   conversationId:
                       widget.conversation['conversation_id'].toString(),
                   titleBook: widget.conversation['title_book'].toString(),
-                  userName: widget.conversation['sender'].toString(),
+                  userName:
+                      widget.sender.isEmpty ? widget.receiver : widget.sender,
                   otherId: context
                       .read<CreateConversationCubit>()
                       .otherUserId
@@ -179,7 +183,7 @@ class _MessageCardState extends State<MessageCard> {
                   children: [
                     SizedBox(
                       child: Text(
-                        '${widget.conversation['sender']}',
+                        widget.sender.isEmpty ? widget.receiver : widget.sender,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: kMainColor,

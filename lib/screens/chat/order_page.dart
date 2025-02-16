@@ -35,10 +35,10 @@ class _OrderPageState extends State<OrderPage>
 
   void fetchDate() {
     context
-      ..read<FetchUserConversationsCubit>().fetchUserSendConversations(
+      ..read<FetchUserConversationsCubit>().fetchSendConversations(
         context,
       )
-      ..read<FetchUserConversationsCubit>().fetchUserConversations(
+      ..read<FetchUserConversationsCubit>().fetchReceiverConversations(
         context,
       );
   }

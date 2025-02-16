@@ -13,7 +13,9 @@ class IncomingRequests extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future<void> fetchDate() async {
-      await context.read<FetchUserConversationsCubit>().fetchUserConversations(
+      await context
+          .read<FetchUserConversationsCubit>()
+          .fetchReceiverConversations(
             context,
           );
     }
@@ -70,6 +72,8 @@ class IncomingRequests extends StatelessWidget {
 
                             return MessageCard(
                               conversation: conversations,
+                              sender: '',
+                              receiver: conversations['receiver'].toString(),
                             );
                           },
                         ),

@@ -13,9 +13,7 @@ class SubmittedRequests extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future<void> fetchDate() async {
-      await context
-          .read<FetchUserConversationsCubit>()
-          .fetchUserSendConversations(
+      await context.read<FetchUserConversationsCubit>().fetchSendConversations(
             context,
           );
     }
@@ -72,6 +70,8 @@ class SubmittedRequests extends StatelessWidget {
 
                             return MessageCard(
                               conversation: conversations,
+                              sender: conversations['sender'].toString(),
+                              receiver: '',
                             );
                           },
                         ),
