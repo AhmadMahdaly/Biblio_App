@@ -25,9 +25,8 @@ class SendMessagesCubit extends Cubit<SendMessagesState> {
           .from('conversation_participants')
           .select('receiver_id')
           .eq('conversation_id', conversationId)
-          .eq('user_id', userId!)
           .single();
-      final otherId = otherIdResponse['receiver_id'];
+      final otherId = otherIdResponse['receiver_id'].toString();
 
       await supabase.from('messages').insert({
         'conversation_id': conversationId,

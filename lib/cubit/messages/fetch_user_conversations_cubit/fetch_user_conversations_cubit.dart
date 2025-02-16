@@ -14,7 +14,7 @@ class FetchUserConversationsCubit extends Cubit<FetchUserConversationsState> {
   final supabase = Supabase.instance.client;
   List<Map<String, dynamic>> sendConversations = [];
   List<Map<String, dynamic>> conversations = [];
-  Future<void> fetchUserSendConversations(
+  Future<void> fetchSendConversations(
     BuildContext context,
   ) async {
     emit(FetchUserConversationsLoading());
@@ -50,7 +50,7 @@ class FetchUserConversationsCubit extends Cubit<FetchUserConversationsState> {
     }
   }
 
-  Future<void> fetchUserConversations(
+  Future<void> fetchReceiverConversations(
     BuildContext context,
   ) async {
     emit(FetchUserConversationsLoading());

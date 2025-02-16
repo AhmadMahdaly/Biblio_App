@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:biblio/cubit/messages/fetch_messages_cubit/fetch_messages_cubit.dart';
 import 'package:biblio/cubit/messages/fetch_unread_conversation_cubit/fetch_unread_conversation_cubit.dart';
 import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
@@ -294,15 +296,16 @@ class _ConversationRoomState extends State<ConversationRoom> {
                         ),
                         onPressed: () {
                           if (_messageController.text.isEmpty) return;
-                          sendMessageCubit.sendMessage(
-                            context,
-                            content: _messageController.text,
-                            conversationId: widget.conversationId,
-                          );
-                          cubit.fetchMessages(
-                            conversationId: widget.conversationId,
-                          );
-                          _messageController.clear();
+                          try {
+                            sendMessageCubit.sendMessage(
+                              context,
+                              content: _messageController.text,
+                              conversationId: widget.conversationId,
+                            );
+                            _messageController.clear();
+                          } catch (e) {
+                            log(e.toString());
+                          }
                         },
                       ),
                     ),
