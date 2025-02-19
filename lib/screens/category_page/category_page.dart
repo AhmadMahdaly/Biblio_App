@@ -1,4 +1,4 @@
-import 'package:biblio/screens/book_item/widgets/book_item.dart';
+import 'package:biblio/screens/book/book_item/book_item.dart';
 import 'package:biblio/services/update_password.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
@@ -12,7 +12,6 @@ class CategoryPage extends StatefulWidget {
     required this.category,
     super.key,
   });
-
   final String category;
   @override
   State<CategoryPage> createState() => _CategoryPageState();
@@ -52,12 +51,15 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 80.sp,
+        centerTitle: true,
         title: Text(
           widget.category,
           style: TextStyle(
-            color: kMainColor,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w800,
+            color: kTextColor,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            height: 1.sp,
           ),
         ),
         leading: IconButton(
@@ -79,7 +81,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     children: [
                       SvgPicture.asset(
                         'assets/svg/Reading glasses-cuate.svg',
-                        height: 100.sp,
+                        height: 80.sp,
                       ),
                       Text(
                         'هذه الفئة فارغة! لم تتم إضافة كتب بعد',

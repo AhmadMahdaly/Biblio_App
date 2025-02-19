@@ -16,6 +16,9 @@ class CustomTextformfield extends StatelessWidget {
     this.controller,
     this.maxLines = 1,
     this.inputFormatters,
+    this.enabled = true,
+    this.textInputAction,
+    this.autofillHints,
   });
   final String? text;
   final TextInputType? keyboardType;
@@ -27,9 +30,15 @@ class CustomTextformfield extends StatelessWidget {
   final TextEditingController? controller;
   final int? maxLines;
   final List<TextInputFormatter>? inputFormatters;
+  final bool? enabled;
+  final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textInputAction: textInputAction,
+      autofillHints: autofillHints,
+      enabled: enabled,
       cursorWidth: 0.5.sp,
       cursorColor: kMainColor,
       inputFormatters: inputFormatters,

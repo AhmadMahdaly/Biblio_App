@@ -20,7 +20,7 @@ class EmptyFavoriteBooks extends StatelessWidget {
           children: [
             SvgPicture.asset(
               'assets/svg/Reading glasses-cuate.svg',
-              height: 100.sp,
+              height: 80.sp,
             ),
             Text(
               'القائمة فارغة! لم تتم إضافة كتب بعد',

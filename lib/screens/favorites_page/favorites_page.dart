@@ -1,4 +1,5 @@
-import 'package:biblio/cubit/favorite_function/my_favorite_books_list/my_list_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/favorite_function/my_list_cubit.dart';
 import 'package:biblio/screens/favorites_page/widgets/empty_favorite_books.dart';
 import 'package:biblio/screens/favorites_page/widgets/favorite_grid_books.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
@@ -19,21 +20,30 @@ class _FavoritesPageState extends State<FavoritesPage> {
   @override
   void initState() {
     super.initState();
-    context.read<MyListCubit>().showMyFavoriteBooks();
+    context.read<MyListCubit>().showMyFavoriteBooks(
+          context,
+        );
   }
 
   /// دالة التحديث عند السحب
   Future<void> _refreshData() async {
-    await context.read<MyListCubit>().showMyFavoriteBooks();
+    await context.read<MyListCubit>().showMyFavoriteBooks(
+          context,
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<MyListCubit>();
-    return BlocConsumer<MyListCubit, MyListState>(
+    return BlocConsumer<MyListCubit, AppStates>(
       listener: (context, state) {
-        if (state is MyListError) {
-          showSnackBar(context, state.message);
+        if (state is AppErrorState) {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
+          }
         }
       },
       builder: (context, state) {
@@ -51,13 +61,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 'قائمة الكتب المفضلة',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  height: 1.sp,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            body: state is MyListLoading
+            body: state is AppLoadingState
                 ? const AppIndicator()
                 : context.read<MyListCubit>().supabase.auth.currentUser == null
                     ? const LoginUserNotFound()

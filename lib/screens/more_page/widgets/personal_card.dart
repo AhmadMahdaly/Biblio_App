@@ -41,7 +41,7 @@ class PersonalCard extends StatelessWidget {
                 children: [
                   SizedBox(height: 12.sp),
                   Text(
-                    'أهلـًا',
+                    'مرحبـًا',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       color: kMainColor,

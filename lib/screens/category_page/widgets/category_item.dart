@@ -19,10 +19,10 @@ class CategoryItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        alignment: Alignment.topCenter,
-        margin: EdgeInsets.symmetric(horizontal: 10.sp),
-        width: 80.sp,
-        height: 80.sp,
+        alignment: Alignment.center,
+        margin: EdgeInsets.symmetric(horizontal: 5.sp),
+        width: 82.sp,
+        height: 82.sp,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.sp),
           color: kLightBlue,

@@ -1,36 +1,39 @@
 import 'dart:developer';
 
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-part 'auth_state.dart';
-
-class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthInitial());
+class AuthCubit extends Cubit<AppStates> {
+  AuthCubit() : super(AppInitialState());
   SupabaseClient user = Supabase.instance.client;
   Future<void> login({
     required String email,
     required String password,
     required BuildContext context,
   }) async {
-    emit(LoginLoading());
+    emit(AppLoadingState());
     try {
       await user.auth.signInWithPassword(email: email, password: password);
 
-      emit(LoginSuccess());
+      emit(AppSuccessState());
     } on AuthException catch (e) {
       log(e.toString());
       if (e.message ==
           'ClientException: Connection closed before full header was received') {
-        await context.read<AuthCubit>().signOut(context);
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
       }
-      emit(LoginError(e.message));
+      if (e.message ==
+          'HandshakeException: Connection terminated during handshake') {
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
+      }
+      emit(AppErrorState(e.message));
     } catch (e) {
       log(e.toString());
-      emit(LoginError(e.toString()));
+      emit(AppErrorState(e.toString()));
     }
   }
 
@@ -40,7 +43,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
     required BuildContext context,
   }) async {
-    emit(SignUpLoading());
+    emit(AppLoadingState());
     try {
       await user.auth.signUp(
         email: email,
@@ -53,33 +56,46 @@ class AuthCubit extends Cubit<AuthState> {
         'username': name,
         'email': email,
       });
-      emit(SignUpSuccess());
+      emit(AppSuccessState());
     } on AuthException catch (e) {
       log(e.toString());
       if (e.message ==
           'ClientException: Connection closed before full header was received') {
         await signOut(context);
       }
-      emit(SignUpError(e.message));
+      emit(AppErrorState(e.message));
     } catch (e) {
       log(e.toString());
-      emit(SignUpError(e.toString()));
+      emit(AppErrorState(e.toString()));
     }
   }
 
   Future<void> signOut(BuildContext context) async {
-    emit(SignOutLoading());
+    emit(AppLoadingState());
     try {
       await user.auth.signOut();
-      emit(SignOutSuccess());
+      emit(AppSuccessState());
     } on AuthException catch (e) {
       log(e.toString());
-      if (e.message ==
-          'ClientException: Connection closed before full header was received') {}
-      emit(SignOutError(e.message));
+      if (e.message.contains(
+        'Connection reset by peer',
+      )) {
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
+      }
+      if (e.message.contains(
+        'Connection closed before full header was received',
+      )) {
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
+      }
+      if (e.message.contains(
+        'Connection terminated during handshake',
+      )) {
+        showSnackBar(context, 'قد تكون هناك مشكلة في اتصال الإنترنت');
+      }
+      emit(AppErrorState(e.message));
     } catch (e) {
       log(e.toString());
-      emit(SignOutError(e.toString()));
+      emit(AppErrorState(e.toString()));
     }
   }
 }

@@ -1,6 +1,8 @@
-import 'package:biblio/cubit/user/get_user_qty_books_cubit/get_user_qty_books_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/user/get_user_qty_books_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/leading_icon.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,7 +25,7 @@ class _UserPageState extends State<UserPage> {
   void initState() {
     context
         .read<GetUserQtyBooksCubit>()
-        .getUserQTYbooks(widget.book['user_id'].toString());
+        .getUserQTYbooks(widget.book['user_id'].toString(), context);
     super.initState();
   }
 
@@ -58,9 +60,9 @@ class _UserPageState extends State<UserPage> {
       }
     }
 
-    return BlocConsumer<GetUserQtyBooksCubit, GetUserQtyBooksState>(
+    return BlocConsumer<GetUserQtyBooksCubit, AppStates>(
       listener: (context, state) {
-        if (state is GetUserQtyBooksError) {
+        if (state is AppErrorState) {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -73,17 +75,9 @@ class _UserPageState extends State<UserPage> {
         return Scaffold(
           appBar: AppBar(
             /// Leading
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context); // إزالة جميع الصفحات
-              },
-              icon: Icon(
-                Icons.arrow_back_ios_new,
-                size: 22.sp,
-              ),
-            ),
+            leading: const LeadingIcon(),
           ),
-          body: state is GetUserQtyBooksLoading
+          body: state is AppLoadingState
               ? const AppIndicator()
               : Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.sp),
@@ -171,7 +165,7 @@ class _UserPageState extends State<UserPage> {
                         child: Text(
                           'انضم للمكتبة منذ ${getTimeDifference()}',
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.w600,
                             color: kTextColor,
                           ),
@@ -181,7 +175,7 @@ class _UserPageState extends State<UserPage> {
                         child: Text(
                           'عدد الكتب: ${cubit.qtyBooks.length}',
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.w600,
                             color: kTextColor,
                           ),
@@ -193,41 +187,58 @@ class _UserPageState extends State<UserPage> {
                       else
                         widget.book['location_url'] == null ||
                                 widget.book['location_url'].toString().isEmpty
-                            ? SizedBox(
-                                child: Row(
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'أماكن اللقاء المفضلة: ',
+                                    style: TextStyle(
+                                      color: kTextColor,
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const H(h: 6),
+                                  SizedBox(
+                                    width: 330.sp,
+                                    child: Text(
+                                      '${widget.book['fav_location']}',
+                                      style: TextStyle(
+                                        color: kTextColor,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(
+                                child: Column(
                                   children: [
                                     Text(
                                       'أماكن اللقاء المفضلة: ',
                                       style: TextStyle(
                                         color: kTextColor,
-                                        fontSize: 14.sp,
+                                        fontSize: 15.sp,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    Text(
-                                      '${widget.book['fav_location']}',
-                                      style: TextStyle(
-                                        color: kTextColor,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w500,
+                                    const H(h: 6),
+                                    InkWell(
+                                      onTap: _launchUrl,
+                                      child: SizedBox(
+                                        width: 330.sp,
+                                        child: Text(
+                                          '${widget.book['fav_location']}',
+                                          style: TextStyle(
+                                            color: kTextColor,
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
-                                ),
-                              )
-                            : SizedBox(
-                                child: InkWell(
-                                  onTap: _launchUrl,
-                                  child: Text(
-                                    'أماكن اللقاء المفضلة: ${widget.book['location_url']}',
-                                    style: TextStyle(
-                                      color: kTextColor,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w500,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: kMainColor,
-                                    ),
-                                  ),
                                 ),
                               ),
                     ],

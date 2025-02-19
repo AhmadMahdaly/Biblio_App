@@ -1,6 +1,8 @@
-import 'package:biblio/cubit/messages/fetch_messages_cubit/fetch_messages_cubit.dart';
-import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
-import 'package:biblio/utils/components/app_indicator.dart';
+import 'dart:developer';
+
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/messages/fetch_messages_cubit.dart';
+import 'package:biblio/cubit/messages/send_messages_cubit.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
@@ -15,11 +17,15 @@ class ConversationRoom extends StatefulWidget {
     required this.conversationId,
     required this.titleBook,
     required this.userName,
+    required this.otherId,
+    required this.messageType,
     super.key,
   });
   final String conversationId;
   final String titleBook;
   final String userName;
+  final String otherId;
+  final String messageType;
   @override
   State<ConversationRoom> createState() => _ConversationRoomState();
 }
@@ -34,18 +40,27 @@ class _ConversationRoomState extends State<ConversationRoom> {
     fetchDate();
   }
 
+  Map<String, dynamic> message = {};
   Future<void> fetchDate() async {
-    await context
-        .read<FetchMessagesCubit>()
-        .fetchMessages(conversationId: widget.conversationId);
-    if (message['user_id'] != null) {
-      await context
-          .read<FetchMessagesCubit>()
-          .fetchUserName(userName: message['user_id'].toString());
+    try {
+      await context.read<FetchMessagesCubit>().fetchMessages(
+            conversationId: widget.conversationId,
+            context: context,
+          );
+      await context.read<FetchMessagesCubit>().markMessagesAsRead(
+            conversationId: widget.conversationId,
+            context: context,
+          );
+      if (message['user_id'] != null) {
+        await context
+            .read<FetchMessagesCubit>()
+            .fetchUserName(context, userId: message['user_id'].toString());
+      }
+    } catch (e) {
+      // showSnackBar(context, e.toString());
     }
   }
 
-  Map<String, dynamic> message = {};
   String getTimeDifference() {
     final timestamp = message['created_at'].toString();
     final dateTime =
@@ -70,28 +85,33 @@ class _ConversationRoomState extends State<ConversationRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FetchMessagesCubit, FetchMessagesState>(
+    return BlocConsumer<FetchMessagesCubit, AppStates>(
       listener: (context, state) {
-        if (state is FetchMessagesError) {
-          if (state.message == 'Connection refused') {
+        if (state is AppErrorState) {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
           }
-          showSnackBar(context, state.message);
         }
       },
       builder: (context, state) {
-        context
-            .read<FetchMessagesCubit>()
-            .fetchMessages(conversationId: widget.conversationId);
+        context.read<FetchMessagesCubit>().fetchMessages(
+              conversationId: widget.conversationId,
+              context: context,
+            );
+
         final cubit = context.read<FetchMessagesCubit>();
-        return BlocConsumer<SendMessagesCubit, SendMessagesState>(
+        return BlocConsumer<SendMessagesCubit, AppStates>(
           listener: (context, state) {
-            if (state is SendMessagesError) {
+            if (state is AppErrorState) {
               if (state.message == 'Connection refused' ||
                   state.message == 'Connection reset by peer') {
                 showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+              } else {
+                showSnackBar(context, state.message);
               }
-              showSnackBar(context, state.message);
             }
           },
           builder: (context, state) {
@@ -131,133 +151,176 @@ class _ConversationRoomState extends State<ConversationRoom> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(320),
-                    ),
+                  icon: RotatedBox(
+                    quarterTurns: 3,
                     child: Icon(
-                      Icons.arrow_back_ios_new,
-                      size: 20.sp,
-                      color: kMainColor,
+                      Icons.expand_circle_down,
+                      size: 40.sp,
+                      color: Colors.white,
                     ),
                   ),
                 ),
               ),
-              body: state is FetchMessagesLoading ||
-                      state is SendMessagesLoading
-                  ? const AppIndicator()
-                  : ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      reverse: true,
-                      itemCount: cubit.messages.length,
-                      itemBuilder: (context, index) {
-                        message = cubit.messages[index];
+              body: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                reverse: true,
+                itemCount: cubit.messages.length,
+                itemBuilder: (context, index) {
+                  message = cubit.messages[index];
 
-                        return message['user_id'] ==
-                                supabase.auth.currentUser!.id
-                            ? Theme(
-                                data: Theme.of(context).copyWith(
-                                  dividerColor:
-                                      Colors.transparent, // إزالة الخطوط
+                  return widget.messageType == 'in' &&
+                          message['user_id'] == supabase.auth.currentUser!.id
+                      ? Theme(
+                          data: Theme.of(context).copyWith(
+                            dividerColor: Colors.transparent, // إزالة الخطوط
+                          ),
+                          child: SizedBox(
+                            child: ExpansionTile(
+                              backgroundColor: kLightBlue,
+                              tilePadding: EdgeInsets.zero,
+                              childrenPadding: EdgeInsets.zero,
+                              showTrailingIcon: false,
+                              title: Align(
+                                alignment: Alignment.centerRight,
+                                child: Container(
+                                  padding: EdgeInsets.all(8.sp),
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: 16.sp,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12.sp),
+                                      bottomLeft: Radius.circular(12.sp),
+                                      bottomRight: Radius.circular(12.sp),
+                                    ),
+                                    color: kMainColor,
+                                  ),
+                                  child: Text(
+                                    message['content'].toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
                                 ),
-                                child: SizedBox(
-                                  child: ExpansionTile(
-                                    backgroundColor: kLightBlue,
-                                    tilePadding: EdgeInsets.zero,
-                                    childrenPadding: EdgeInsets.zero,
-                                    showTrailingIcon: false,
-                                    title: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Container(
-                                        padding: EdgeInsets.all(8.sp),
-                                        margin: EdgeInsets.symmetric(
-                                          horizontal: 16.sp,
+                              ),
+                              children: [
+                                Text(
+                                  getTimeDifference(),
+                                  style: TextStyle(
+                                    color: kTextColor,
+                                    fontSize: 11.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : widget.messageType == 'out' &&
+                              message['user_id'] ==
+                                  supabase.auth.currentUser!.id
+                          ? Theme(
+                              data: Theme.of(context).copyWith(
+                                dividerColor:
+                                    Colors.transparent, // إزالة الخطوط
+                              ),
+                              child: SizedBox(
+                                child: ExpansionTile(
+                                  backgroundColor: kLightBlue,
+                                  tilePadding: EdgeInsets.zero,
+                                  childrenPadding: EdgeInsets.zero,
+                                  showTrailingIcon: false,
+                                  title: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                      padding: EdgeInsets.all(8.sp),
+                                      margin: EdgeInsets.symmetric(
+                                        horizontal: 16.sp,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(12.sp),
+                                          bottomLeft: Radius.circular(12.sp),
+                                          bottomRight: Radius.circular(12.sp),
                                         ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12.sp),
-                                            bottomLeft: Radius.circular(12.sp),
-                                            bottomRight: Radius.circular(12.sp),
-                                          ),
-                                          color: kMainColor,
-                                        ),
-                                        child: Text(
-                                          message['content'].toString(),
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w400,
-                                          ),
+                                        color: kMainColor,
+                                      ),
+                                      child: Text(
+                                        message['content'].toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ),
-                                    children: [
-                                      Text(
-                                        getTimeDifference(),
+                                  ),
+                                  children: [
+                                    Text(
+                                      getTimeDifference(),
+                                      style: TextStyle(
+                                        color: kTextColor,
+                                        fontSize: 11.sp,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : Theme(
+                              data: Theme.of(context).copyWith(
+                                dividerColor:
+                                    Colors.transparent, // إزالة الخطوط
+                              ),
+                              child: SizedBox(
+                                child: ExpansionTile(
+                                  backgroundColor: Colors.white,
+                                  tilePadding: EdgeInsets.zero,
+                                  childrenPadding: EdgeInsets.zero,
+                                  showTrailingIcon: false,
+                                  title: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      padding: EdgeInsets.all(8.sp),
+                                      margin: EdgeInsets.symmetric(
+                                        horizontal: 16.sp,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(12.sp),
+                                          bottomLeft: Radius.circular(12.sp),
+                                          bottomRight: Radius.circular(12.sp),
+                                        ),
+                                        color: kLightBlue,
+                                      ),
+                                      child: Text(
+                                        message['content'].toString(),
                                         style: TextStyle(
                                           color: kTextColor,
-                                          fontSize: 11.sp,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : Theme(
-                                data: Theme.of(context).copyWith(
-                                  dividerColor:
-                                      Colors.transparent, // إزالة الخطوط
-                                ),
-                                child: SizedBox(
-                                  child: ExpansionTile(
-                                    backgroundColor: Colors.white,
-                                    tilePadding: EdgeInsets.zero,
-                                    childrenPadding: EdgeInsets.zero,
-                                    showTrailingIcon: false,
-                                    title: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Container(
-                                        padding: EdgeInsets.all(8.sp),
-                                        margin: EdgeInsets.symmetric(
-                                          horizontal: 16.sp,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(12.sp),
-                                            bottomLeft: Radius.circular(12.sp),
-                                            bottomRight: Radius.circular(12.sp),
-                                          ),
-                                          color: kLightBlue,
-                                        ),
-                                        child: Text(
-                                          message['content'].toString(),
-                                          style: TextStyle(
-                                            color: kTextColor,
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w400,
-                                          ),
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ),
-                                    children: [
-                                      Text(
-                                        getTimeDifference(),
-                                        style: TextStyle(
-                                          color: kTextColor,
-                                          fontSize: 11.sp,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
                                   ),
+                                  children: [
+                                    Text(
+                                      getTimeDifference(),
+                                      style: TextStyle(
+                                        color: kTextColor,
+                                        fontSize: 11.sp,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                      },
-                    ),
+                              ),
+                            );
+                },
+              ),
               bottomNavigationBar: Padding(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -290,14 +353,22 @@ class _ConversationRoomState extends State<ConversationRoom> {
                         ),
                         onPressed: () {
                           if (_messageController.text.isEmpty) return;
-                          sendMessageCubit.sendMessage(
-                            content: _messageController.text,
-                            conversationId: widget.conversationId,
-                          );
-                          cubit.fetchMessages(
-                            conversationId: widget.conversationId,
-                          );
-                          _messageController.clear();
+                          try {
+                            widget.messageType == 'in'
+                                ? sendMessageCubit.sendIncomeMessage(
+                                    context,
+                                    content: _messageController.text,
+                                    conversationId: widget.conversationId,
+                                  )
+                                : sendMessageCubit.sendOutgoingMessage(
+                                    context,
+                                    content: _messageController.text,
+                                    conversationId: widget.conversationId,
+                                  );
+                            _messageController.clear();
+                          } catch (e) {
+                            log(e.toString());
+                          }
                         },
                       ),
                     ),

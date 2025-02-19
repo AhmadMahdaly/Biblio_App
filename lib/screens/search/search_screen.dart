@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:biblio/screens/book_item/book_page.dart';
+import 'package:biblio/screens/book/book_page/book_page.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,20 +29,26 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
 
   // دالة البحث مع تأخير (Debounce) لمنع البحث مع كل حرف يكتبه المستخدم
   void searchBooks(String query) {
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 700), () async {
-      if (query.isEmpty) {
-        setState(() => books = []);
-        return;
-      }
+    try {
+      if (_debounce?.isActive ?? false) _debounce!.cancel();
+      _debounce = Timer(const Duration(milliseconds: 700), () async {
+        if (query.isEmpty) {
+          setState(() => books = []);
+          return;
+        }
 
-      final response = await supabase.from('books').select('*').or(
-          'title.ilike.%$query%,author.ilike.%$query%'); // بحث في العنوان أو المؤلف
+        // ignore: avoid_redundant_argument_values
+        final response = await supabase.from('books').select('*').or(
+              'title.ilike.%$query%,author.ilike.%$query%',
+            ); // بحث في العنوان أو المؤلف
 
-      setState(() {
-        books = response;
+        setState(() {
+          books = response;
+        });
       });
-    });
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 
   @override
@@ -56,9 +63,19 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 100.sp,
+        leadingWidth: 30.sp,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            size: 22.sp,
+            color: kMainColor,
+          ),
+        ),
         title: TextField(
           onChanged: searchBooks,
           controller: searchController,
+          autofocus: true,
           cursorWidth: 0.5.sp,
           cursorColor: kMainColor,
           decoration: InputDecoration(
@@ -70,7 +87,7 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
             ),
             filled: true,
             fillColor: const Color(0xFFECECEC),
-            contentPadding: EdgeInsets.all(8.sp),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20.sp),
             border: border(),
             enabledBorder: border(),
             focusedBorder: OutlineInputBorder(
@@ -82,8 +99,8 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
             suffixIcon: InkWell(
               onTap: () => searchBooks(searchController.text),
               child: Container(
-                margin: EdgeInsets.all(8.sp),
-                padding: EdgeInsets.all(5.sp),
+                margin: EdgeInsets.symmetric(horizontal: 16.sp),
+                padding: EdgeInsets.symmetric(horizontal: 5.sp),
                 width: 32.sp,
                 height: 32.sp,
                 decoration: BoxDecoration(
@@ -115,7 +132,7 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                         children: [
                           SvgPicture.asset(
                             'assets/svg/Reading glasses-cuate.svg',
-                            height: 100.sp,
+                            height: 80.sp,
                           ),
                           Text(
                             'لا توجد نتائج',
@@ -133,14 +150,17 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                       itemBuilder: (context, index) {
                         final book = books[index];
                         return Card(
+                          margin: EdgeInsets.only(bottom: 12.sp),
                           color: kLightBlue,
                           child: ListTile(
                             onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ShowBookItem(
-                                          book: book,
-                                        ))),
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShowBookItem(
+                                  book: book,
+                                ),
+                              ),
+                            ),
                             leading: book['cover_image_url'] != null
                                 ? Container(
                                     clipBehavior: Clip.antiAlias,
@@ -159,7 +179,9 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                             title: Text(
                               book['title'].toString(),
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16.sp),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.sp,
+                              ),
                             ),
                             subtitle: Text("✍ ${book['author']}"),
                           ),

@@ -1,30 +1,82 @@
+import 'package:biblio/cubit/messages/create_conversation_cubit.dart';
+import 'package:biblio/cubit/messages/fetch_unread_message_cubit.dart';
+import 'package:biblio/cubit/messages/fetch_user_conversations_cubit.dart';
 import 'package:biblio/screens/chat/conversation_room.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class MessageCard extends StatelessWidget {
+class MessageCard extends StatefulWidget {
   const MessageCard({
     required this.conversation,
+    required this.sender,
+    required this.receiver,
     super.key,
   });
-
   final Map<String, dynamic> conversation;
+  final String sender;
+  final String receiver;
+  @override
+  State<MessageCard> createState() => _MessageCardState();
+}
+
+class _MessageCardState extends State<MessageCard> {
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
+  void fetchData() {
+    try {
+      context.read<FetchUnreadMessageCubit>().fetchUnreadMessages(
+            context,
+            otherId: widget.conversation['user_id'].toString(),
+          );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final user = Supabase.instance.client.auth.currentUser!.id;
+
     return InkWell(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ConversationRoom(
-            conversationId: conversation['conversation_id'].toString(),
-            titleBook: conversation['title_book'].toString(),
-            userName: conversation['sender'].toString(),
+      focusColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ConversationRoom(
+              messageType: widget.sender.isEmpty ? 'in' : 'out',
+              conversationId: widget.conversation['conversation_id'].toString(),
+              titleBook: widget.conversation['title_book'].toString(),
+              userName: widget.sender.isEmpty ? widget.receiver : widget.sender,
+              otherId: context
+                  .read<CreateConversationCubit>()
+                  .otherUserId
+                  .toString(),
+            ),
           ),
-        ),
-      ),
+        ).then((_) {
+          fetchData();
+          context
+            ..read<FetchUserConversationsCubit>().fetchReceiverConversations(
+              context,
+            )
+            ..read<FetchUserConversationsCubit>().fetchSendConversations(
+              context,
+            );
+        });
+      },
       child: Container(
         margin: EdgeInsets.only(
           right: 16.sp,
@@ -39,7 +91,7 @@ class MessageCard extends StatelessWidget {
         child: Row(
           spacing: 20.sp,
           children: [
-            if (conversation['sender'] == 'الدعم الفني')
+            if (widget.conversation['sender'] == 'الدعم الفني')
               Container(
                 margin: EdgeInsets.all(8.sp),
                 height: 60.sp,
@@ -60,7 +112,7 @@ class MessageCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(320),
                 ),
                 child: CachedNetworkImage(
-                  imageUrl: conversation['book_image'].toString(),
+                  imageUrl: widget.conversation['book_image'].toString(),
                   fit: BoxFit.cover,
                   height: 60.sp,
                   width: 60.sp,
@@ -101,16 +153,21 @@ class MessageCard extends StatelessWidget {
               children: [
                 SizedBox(
                   child: Text(
-                    '${conversation['sender']}',
+                    widget.sender.isEmpty ? widget.receiver : widget.sender,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: kMainColor,
                       fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: widget.conversation['receiver_id'] == user &&
+                                  widget.conversation['is_read_out'] == false ||
+                              widget.conversation['user_id'] == user &&
+                                  widget.conversation['is_read_in'] == false
+                          ? FontWeight.bold
+                          : FontWeight.w400,
                     ),
                   ),
                 ),
-                if (conversation['sender'] == 'الدعم الفني')
+                if (widget.conversation['sender'] == 'الدعم الفني')
                   SizedBox(
                     child: Text(
                       'متابعة شكوى أو مقترح',
@@ -118,7 +175,13 @@ class MessageCard extends StatelessWidget {
                       style: TextStyle(
                         color: kMainColor,
                         fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: widget.conversation['user_id'] == user &&
+                                    widget.conversation['is_read_in'] ==
+                                        false ||
+                                widget.conversation['receiver_id'] == user &&
+                                    widget.conversation['is_read_out'] == false
+                            ? FontWeight.bold
+                            : FontWeight.w500,
                         height: 1.70,
                       ),
                     ),
@@ -126,12 +189,18 @@ class MessageCard extends StatelessWidget {
                 else
                   SizedBox(
                     child: Text(
-                      'طلب كتاب: ${conversation['title_book']}',
+                      'طلب كتاب: ${widget.conversation['title_book']}',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: kMainColor,
                         fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: widget.conversation['user_id'] == user &&
+                                    widget.conversation['is_read_in'] ==
+                                        false ||
+                                widget.conversation['receiver_id'] == user &&
+                                    widget.conversation['is_read_out'] == false
+                            ? FontWeight.bold
+                            : FontWeight.w500,
                         height: 1.70,
                       ),
                     ),

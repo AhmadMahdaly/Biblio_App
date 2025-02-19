@@ -9,6 +9,7 @@ Future<bool?> showCustomDialog(
   return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          backgroundColor: kLightBlue,
           title: Text(
             'تأكيد',
             style: TextStyle(
@@ -26,7 +27,7 @@ Future<bool?> showCustomDialog(
             ),
           ),
           actions: [
-            ElevatedButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(
                 false,
               ),

@@ -1,5 +1,5 @@
-import 'package:biblio/cubit/favorite_function/my_favorite_books_list/my_list_cubit.dart';
-import 'package:biblio/screens/book_item/widgets/book_item.dart';
+import 'package:biblio/cubit/favorite_function/my_list_cubit.dart';
+import 'package:biblio/screens/book/book_item/book_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

@@ -1,6 +1,7 @@
 import 'package:biblio/screens/my_lib_page/added_library.dart';
 import 'package:biblio/screens/my_lib_page/empty_library.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,8 +43,7 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
         books = List<Map<String, dynamic>>.from(response);
       });
     } catch (e) {
-      // showSnackBar(context, 'يوجد خطأ في تحميل البيانات   ');
-      // $e
+      showSnackBar(context, e.toString());
     } finally {
       setState(() {
         isLoading = false;
@@ -57,15 +57,16 @@ class _MyLibraryPageState extends State<MyLibraryPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: kMainColor,
-        toolbarHeight: 60.sp,
+        toolbarHeight: 80.sp,
+        centerTitle: true,
 
         /// Title
         title: Text(
           'مكتبتك',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
             height: 1.sp,
           ),
         ),

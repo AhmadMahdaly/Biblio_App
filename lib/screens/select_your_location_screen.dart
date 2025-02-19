@@ -1,9 +1,12 @@
-import 'package:biblio/cubit/user/user_location_cubit/save_user_location_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/user/save_user_location_cubit.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/leading_icon.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,10 +74,17 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
   };
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SaveUserLocationCubit, SaveUserLocationState>(
+    return BlocConsumer<SaveUserLocationCubit, AppStates>(
       listener: (context, state) {
-        if (state is SaveUserLocationError) {}
-        if (state is SaveUserLocationSuccess) {
+        if (state is AppErrorState) {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
+          }
+        }
+        if (state is AppSuccessState) {
           Navigator.pushNamedAndRemoveUntil(
             context,
             NavigationBarApp.id,
@@ -87,8 +97,9 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
+            leading: const LeadingIcon(),
           ),
-          body: state is SaveUserLocationLoading
+          body: state is AppLoadingState
               ? const AppIndicator()
               : Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.sp),
@@ -115,12 +126,15 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
                           ),
                         ],
                       ),
-                      Text(
-                        'من فضلك اختار الدولة والمدينة التي تود مشاركة الكتب بها',
-                        style: TextStyle(
-                          color: kTextColor,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
+                      SizedBox(
+                        width: 351.sp,
+                        child: Text(
+                          'من فضلك اختار الدولة والمدينة التي تود مشاركة الكتب بها',
+                          style: TextStyle(
+                            color: kTextColor,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                       const H(h: 5),
@@ -135,6 +149,7 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
                         ),
                       ),
                       DropdownButtonFormField<String>(
+                        dropdownColor: kLightBlue,
                         decoration: InputDecoration(
                           border: border(),
                           focusedBorder: border(),
@@ -178,6 +193,7 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
                         ),
                       ),
                       DropdownButtonFormField<String>(
+                        dropdownColor: kLightBlue,
                         decoration: InputDecoration(
                           border: border(),
                           focusedBorder: border(),
@@ -223,7 +239,7 @@ class _SelectYourLocationScreenState extends State<SelectYourLocationScreen> {
             child: isActive
                 ? CustomButton(
                     text: 'ابدأ التصفح',
-                    onTap: cubit.saveUserData,
+                    onTap: () => cubit.saveUserData(context),
                   )
                 : const CustomButton(
                     text: 'ابدأ التصفح',

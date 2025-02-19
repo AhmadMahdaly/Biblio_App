@@ -1,10 +1,13 @@
-import 'package:biblio/cubit/books/fetch_located_books_cubit/fetch_located_books_cubit.dart';
-import 'package:biblio/screens/book_item/book_page.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/books/fetch_located_books_cubit.dart';
+import 'package:biblio/screens/book/book_page/book_page.dart';
 import 'package:biblio/screens/home_page/widgets/no_located_books.dart';
 import 'package:biblio/screens/home_page/widgets/show_book.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/login_user_not_found.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
+import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,21 +29,43 @@ class _NewBooksListviewState extends State<NewBooksListview> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Supabase.instance.client.auth.currentUser;
-    return user == null || user.isAnonymous
-        ? const LoginUserNotFound()
-        : BlocConsumer<FetchLocatedBooksCubit, FetchLocatedBooksState>(
+    String? user;
+    if (Supabase.instance.client.auth.currentUser?.id == null) {
+      user = null;
+    } else {
+      user = Supabase.instance.client.auth.currentUser!.id;
+    }
+    return user == null
+        ? Column(
+            spacing: 12.sp,
+            children: [
+              const H(h: 16),
+              Text(
+                'قم بتسجيل الدخول لرؤية الكتب المعروضة في منطقتك:',
+                style: TextStyle(
+                  color: kTextColor,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const LoginUserNotFound(),
+              const TryToDiscoverCategory(),
+            ],
+          )
+        : BlocConsumer<FetchLocatedBooksCubit, AppStates>(
             listener: (context, state) {
-              if (state is FetchLocatedBooksError) {
+              if (state is AppErrorState) {
                 if (state.message == 'Connection refused' ||
                     state.message == 'Connection reset by peer') {
                   showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+                } else {
+                  showSnackBar(context, state.message);
                 }
               }
             },
             builder: (context, state) {
               final cubit = context.read<FetchLocatedBooksCubit>();
-              return state is FetchLocatedBooksLoading
+              return state is AppLoadingState
                   ? const AppIndicator()
                   : cubit.books.isNotEmpty
                       ? ListView.builder(

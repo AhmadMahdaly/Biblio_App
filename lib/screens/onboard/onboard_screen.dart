@@ -1,5 +1,6 @@
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/login/register_page.dart';
+import 'package:biblio/screens/onboard/widgets/sign_as_visitor.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/components/width.dart';
@@ -18,7 +19,6 @@ class OnboardScreen extends StatelessWidget {
 
           /// Image header
           SizedBox(
-        // height: 410.sp,
         child: Image.asset(
           'assets/images/onboared_view_2.png',
           filterQuality: FilterQuality.high,
@@ -85,10 +85,10 @@ class OnboardScreen extends StatelessWidget {
               Navigator.pushReplacementNamed(context, RegisterScreen.id);
             },
           ),
-          // const H(h: 10),
+          const H(h: 10),
 
           /// To HomePage as visitor
-          // const SignAsVisitor(),
+          const SignAsVisitor(),
           const H(h: 34),
         ],
       ),

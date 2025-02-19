@@ -1,15 +1,17 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:biblio/cubit/user/fetch_user_data/fetch_user_data_cubit.dart';
-import 'package:biblio/cubit/user/update_user_image_cubit/update_user_image_cubit.dart';
-import 'package:biblio/screens/add_book_page/widgets/title_form_add_book.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/user/fetch_user_data_cubit.dart';
+import 'package:biblio/cubit/user/update_user_image_cubit.dart';
+import 'package:biblio/screens/book/add_book_page/widgets/title_form_add_book.dart';
 import 'package:biblio/screens/more_page/widgets/get_user_image.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/services/delete_user.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
+import 'package:biblio/utils/components/leading_icon.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -70,22 +72,27 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FetchUserDataCubit, FetchUserDataState>(
+    return BlocConsumer<FetchUserDataCubit, AppStates>(
       listener: (context, state) {
-        if (state is FetchUserDataError) {
+        if (state is AppErrorState) {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
           }
         }
       },
       builder: (context, state) {
         final fetchUserDateCubit = context.read<FetchUserDataCubit>();
-        return BlocConsumer<UpdateUserImageCubit, UpdateUserImageState>(
+        return BlocConsumer<UpdateUserImageCubit, AppStates>(
           listener: (context, state) {
-            if (state is UpdateUserImageError) {
-              if (state.message == 'Connection refused') {
+            if (state is AppErrorState) {
+              if (state.message == 'Connection refused' ||
+                  state.message == 'Connection reset by peer') {
                 showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+              } else {
+                showSnackBar(context, state.message);
               }
             }
           },
@@ -105,20 +112,9 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                 ),
 
                 /// Leading
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(
-                      context,
-                    );
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_new,
-                    size: 22.sp,
-                  ),
-                ),
+                leading: const LeadingIcon(),
               ),
-              body: state is FetchUserDataLoading ||
-                      state is UpdateUserImageLoading
+              body: state is AppLoadingState
                   ? const AppIndicator()
                   : Padding(
                       padding: EdgeInsets.symmetric(
@@ -176,6 +172,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                           /// Email
                           const TitleFormAddBook(title: 'البريد الإلكتروني'),
                           CustomTextformfield(
+                            enabled: false,
                             controller: _emailController,
                             text: _emailController.text,
                           ),
@@ -215,8 +212,7 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                     ),
 
               /// Save
-              bottomNavigationBar: state is FetchUserDataLoading ||
-                      state is UpdateUserImageLoading
+              bottomNavigationBar: state is AppLoadingState
                   ? const SizedBox()
                   : Padding(
                       padding: EdgeInsets.symmetric(vertical: 24.sp),
@@ -226,9 +222,13 @@ class _PersonalInfoSettingState extends State<PersonalInfoSetting> {
                         onTap: () async {
                           if (userImage == null) {
                           } else {
-                            await updateUserImageCubit.uploadImage(userImage!);
+                            await updateUserImageCubit.uploadImage(
+                              userImage!,
+                              context,
+                            );
                           }
                           await fetchUserDateCubit.updateUserData(
+                            context: context,
                             inName: _nameController.text,
                             inEmail: _emailController.text,
                             inPassword: _passwordController.text,

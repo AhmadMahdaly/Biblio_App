@@ -15,7 +15,7 @@ Future<void> sendEmail(String email, String subject, String message) async {
     body: json.encode({
       'service_id': 'service_l34ibgn',
       'template_id': 'template_clyw3or',
-      'user_id': 't9cuPuWkit9--lEt-', // استبدل بـ User ID الخاص بـ EmailJS
+      'user_id': 't9cuPuWkit9--lEt-',
       'template_params': {
         'to_email': email,
         'subject': subject,

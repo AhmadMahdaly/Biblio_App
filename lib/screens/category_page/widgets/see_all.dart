@@ -1,6 +1,7 @@
 import 'package:biblio/screens/category_page/category_page.dart';
 import 'package:biblio/screens/category_page/widgets/category_item.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +16,6 @@ class CategorySeeAll extends StatefulWidget {
 
 class _CategorySeeAllState extends State<CategorySeeAll> {
   final SupabaseClient supabase = Supabase.instance.client;
-
   List<Map<String, dynamic>> books = [];
   bool isLoading = false;
 
@@ -27,10 +27,6 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
   }
 
   Future<void> fetchCategories() async {
-    await Future.delayed(
-      const Duration(seconds: 2),
-    );
-
     try {
       final response = await supabase
           .from('categories')
@@ -46,8 +42,7 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
         isLoading = false;
       });
     } catch (e) {
-      // showSnackBar(context, 'هناك خطأ! $e.');
-
+      showSnackBar(context, 'هناك خطأ! $e.');
       setState(() {
         isLoading = false;
       });
@@ -58,13 +53,15 @@ class _CategorySeeAllState extends State<CategorySeeAll> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 80.sp,
+        centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text(
           'فئات الكتب',
           style: TextStyle(
             color: kTextColor,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
             height: 1.sp,
           ),
         ),

@@ -1,8 +1,10 @@
-import 'package:biblio/cubit/user/request_otp_cubit/request_otp_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/user/request_otp_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
+import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,12 +25,21 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RequestOtpCubit, RequestOtpState>(
-      listener: (context, state) {},
+    return BlocConsumer<RequestOtpCubit, AppStates>(
+      listener: (context, state) {
+        if (state is AppErrorState) {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
+          }
+        }
+      },
       builder: (context, state) {
         final cubit = context.read<RequestOtpCubit>();
         return Scaffold(
-          body: state is RequestOtpLoading
+          body: state is AppLoadingState
               ? const AppIndicator()
               : SingleChildScrollView(
                   child: Center(
@@ -79,6 +90,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             ],
                           ),
                           CustomTextformfield(
+                            keyboardType: TextInputType.emailAddress,
+                            autofillHints: const [AutofillHints.email],
                             controller: _emailController,
                             text: 'البريد الإلكتروني',
                           ),

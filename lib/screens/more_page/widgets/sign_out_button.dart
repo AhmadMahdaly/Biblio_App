@@ -1,3 +1,4 @@
+import 'package:biblio/cubit/app_states.dart';
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
@@ -15,12 +16,17 @@ class SignOutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AuthCubit>();
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocConsumer<AuthCubit, AppStates>(
       listener: (context, state) {
-        if (state is SignOutError) {
-          showSnackBar(context, state.message);
+        if (state is AppErrorState) {
+          if (state.message == 'Connection refused' ||
+              state.message == 'Connection reset by peer') {
+            showSnackBar(context, 'لا يوجد اتصال بالانترنت');
+          } else {
+            showSnackBar(context, state.message);
+          }
         }
-        if (state is SignOutSuccess) {
+        if (state is AppSuccessState) {
           Navigator.pushNamedAndRemoveUntil(
             context,
             OnboardScreen.id,
@@ -29,7 +35,7 @@ class SignOutButton extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return state is SignOutLoading
+        return state is AppLoadingState
             ? const AppIndicator()
             : TextButton(
                 onPressed: () async {
@@ -49,7 +55,9 @@ class SignOutButton extends StatelessWidget {
                         actions: [
                           ///
                           TextButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.of(context).pop(
+                              false,
+                            ),
                             child: const Text(
                               'إلغاء',
                               style: TextStyle(
@@ -61,6 +69,11 @@ class SignOutButton extends StatelessWidget {
                           ///
                           ElevatedButton(
                             onPressed: () async {
+                              Navigator.of(
+                                context,
+                              ).pop(
+                                true,
+                              );
                               await cubit.signOut(context);
                             },
                             child: const Text(
