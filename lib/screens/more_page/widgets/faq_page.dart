@@ -76,16 +76,15 @@ class FAQPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // centerTitle: true,
+        centerTitle: true,
         leading: const LeadingIcon(),
         title: Text(
           'الأسئلة الشائعة',
           style: TextStyle(
             color: kTextColor,
-            fontSize: 14.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w500,
             height: 1.sp,
-            letterSpacing: 0.14.sp,
           ),
         ),
       ),

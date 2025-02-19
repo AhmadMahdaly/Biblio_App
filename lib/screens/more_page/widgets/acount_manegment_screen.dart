@@ -1,4 +1,4 @@
-import 'package:biblio/cubit/user/fetch_user_data/fetch_user_data_cubit.dart';
+import 'package:biblio/cubit/user/fetch_user_data_cubit.dart';
 import 'package:biblio/screens/more_page/personal_info_settings.dart';
 import 'package:biblio/screens/more_page/widgets/category_for_more.dart';
 import 'package:biblio/screens/more_page/widgets/favorite_location_to_meet.dart';
@@ -25,7 +25,6 @@ class _AcountManegmentScreenState extends State<AcountManegmentScreen> {
 
   Future<void> fetchDate() async {
     await context.read<FetchUserDataCubit>().fetchUserData();
-    setState(() {});
   }
 
   @override
@@ -33,11 +32,12 @@ class _AcountManegmentScreenState extends State<AcountManegmentScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const LeadingIcon(),
+        centerTitle: true,
         title: Text(
           'إدارة الحساب',
           style: TextStyle(
             color: kTextColor,
-            fontSize: 14.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w500,
             height: 1.sp,
           ),

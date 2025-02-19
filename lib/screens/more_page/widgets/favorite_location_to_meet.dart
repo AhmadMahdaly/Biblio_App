@@ -1,5 +1,6 @@
-import 'package:biblio/cubit/user/update_user_favorite_location_cubit/update_user_favorite_location_cubit.dart';
-import 'package:biblio/cubit/user/user_favorite_location_cubit/user_favorite_location_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/user/update_user_favorite_location_cubit.dart';
+import 'package:biblio/cubit/user/user_favorite_location_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
@@ -46,10 +47,9 @@ class _FavoriteLocationToMeetState extends State<FavoriteLocationToMeet> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<UpdateUserFavoriteLocationCubit,
-        UpdateUserFavoriteLocationState>(
+    return BlocConsumer<UpdateUserFavoriteLocationCubit, AppStates>(
       listener: (context, state) {
-        if (state is UpdateUserFavoriteLocationError) {
+        if (state is AppErrorState) {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -57,17 +57,16 @@ class _FavoriteLocationToMeetState extends State<FavoriteLocationToMeet> {
             showSnackBar(context, state.message);
           }
         }
-        if (state is UpdateUserFavoriteLocationSuccess) {
+        if (state is AppSuccessState) {
           showSnackBar(context, 'تم الحفظ');
           Navigator.pop(context);
         }
       },
       builder: (context, state) {
         final updateCubit = context.read<UpdateUserFavoriteLocationCubit>();
-        return BlocConsumer<UserFavoriteLocationCubit,
-            UserFavoriteLocationState>(
+        return BlocConsumer<UserFavoriteLocationCubit, AppStates>(
           listener: (context, state) {
-            if (state is UserFavoriteLocationError) {
+            if (state is AppErrorState) {
               if (state.message == 'Connection refused' ||
                   state.message == 'Connection reset by peer') {
                 showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -75,7 +74,7 @@ class _FavoriteLocationToMeetState extends State<FavoriteLocationToMeet> {
                 showSnackBar(context, state.message);
               }
             }
-            if (state is UserFavoriteLocationSuccess) {
+            if (state is AppSuccessState) {
               Navigator.pop(context);
               // await Navigator.pushNamedAndRemoveUntil(
               //   context,
@@ -90,7 +89,7 @@ class _FavoriteLocationToMeetState extends State<FavoriteLocationToMeet> {
                 backgroundColor: kScaffoldBackgroundColor,
                 leading: const LeadingIcon(),
               ),
-              body: state is UserFavoriteLocationLoading
+              body: state is AppLoadingState
                   ? const AppIndicator()
                   : Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.sp),
@@ -162,6 +161,7 @@ class _FavoriteLocationToMeetState extends State<FavoriteLocationToMeet> {
                       userId: Supabase.instance.client.auth.currentUser!.id,
                       _controller.text,
                       _linkController.text,
+                      context,
                     );
                   },
                 ),
