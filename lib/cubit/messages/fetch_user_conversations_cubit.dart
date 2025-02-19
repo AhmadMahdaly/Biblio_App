@@ -4,21 +4,32 @@ import 'package:biblio/cubit/app_states.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthCubit extends Cubit<AppStates> {
-  AuthCubit() : super(AppInitialState());
-  SupabaseClient user = Supabase.instance.client;
-  Future<void> login({
-    required String email,
-    required String password,
-    required BuildContext context,
-  }) async {
+class FetchUserConversationsCubit extends Cubit<AppStates> {
+  FetchUserConversationsCubit() : super(AppInitialState());
+
+  final supabase = Supabase.instance.client;
+  List<Map<String, dynamic>> sendConversations = [];
+  List<Map<String, dynamic>> receiverConversations = [];
+  Future<void> fetchSendConversations(
+    BuildContext context,
+  ) async {
     emit(AppLoadingState());
     try {
-      await user.auth.signInWithPassword(email: email, password: password);
+      if (Supabase.instance.client.auth.currentUser?.id == null) {
+      } else {
+        final user = Supabase.instance.client.auth.currentUser!.id;
 
+        final response = await supabase
+            .from('conversation_participants')
+            .select(
+              'conversation_id,receiver_id, user_id, book_image, title_book, receiver, sender,is_read_in, is_read_out, conversations(created_at)',
+            )
+            .eq('user_id', user)
+            .order('conversation_id', ascending: false);
+        sendConversations = List<Map<String, dynamic>>.from(response);
+      }
       emit(AppSuccessState());
     } on AuthException catch (e) {
       log(e.toString());
@@ -37,43 +48,24 @@ class AuthCubit extends Cubit<AppStates> {
     }
   }
 
-  Future<void> signUp({
-    required String name,
-    required String email,
-    required String password,
-    required BuildContext context,
-  }) async {
+  Future<void> fetchReceiverConversations(
+    BuildContext context,
+  ) async {
     emit(AppLoadingState());
     try {
-      await user.auth.signUp(
-        email: email,
-        password: password,
-        data: {'Display name': name},
-      );
-      await user.from('users').insert({
-        // ربط المستخدم باستخدام UID
-        'id': user.auth.currentUser!.id,
-        'username': name,
-        'email': email,
-      });
-      emit(AppSuccessState());
-    } on AuthException catch (e) {
-      log(e.toString());
-      if (e.message ==
-          'ClientException: Connection closed before full header was received') {
-        await signOut(context);
-      }
-      emit(AppErrorState(e.message));
-    } catch (e) {
-      log(e.toString());
-      emit(AppErrorState(e.toString()));
-    }
-  }
+      if (Supabase.instance.client.auth.currentUser?.id == null) {
+      } else {
+        final user = Supabase.instance.client.auth.currentUser!.id;
 
-  Future<void> signOut(BuildContext context) async {
-    emit(AppLoadingState());
-    try {
-      await user.auth.signOut();
+        final response = await supabase
+            .from('conversation_participants')
+            .select(
+              'conversation_id, user_id, receiver_id, is_read_in, is_read_out, book_image, title_book, receiver, sender, conversations(created_at)',
+            )
+            .eq('receiver_id', user)
+            .order('conversation_id', ascending: false);
+        receiverConversations = List<Map<String, dynamic>>.from(response);
+      }
       emit(AppSuccessState());
     } on AuthException catch (e) {
       log(e.toString());
