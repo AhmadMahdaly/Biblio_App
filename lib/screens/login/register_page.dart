@@ -1,3 +1,4 @@
+import 'package:biblio/cubit/app_states.dart';
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/screens/login/login_screen.dart';
 import 'package:biblio/screens/more_page/widgets/terms_and_conditions_page.dart';
@@ -35,9 +36,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AuthCubit>();
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocConsumer<AuthCubit, AppStates>(
       listener: (context, state) {
-        if (state is SignUpError) {
+        if (state is AppErrorState) {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -45,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             showSnackBar(context, state.message);
           }
         }
-        if (state is SignUpSuccess) {
+        if (state is AppSuccessState) {
           showSnackBar(
             context,
             'تم التسجيل',
@@ -68,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-          body: state is SignUpLoading
+          body: state is AppLoadingState
               ? const AppIndicator()
               : SingleChildScrollView(
                   child: Center(
@@ -115,9 +116,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ],
                             ),
                             CustomTextformfield(
+                              keyboardType: TextInputType.name,
+                              textInputAction: TextInputAction.next,
+                              autofillHints: const [AutofillHints.name],
                               text: 'الاسم',
                               controller: _userNameController,
-                              keyboardType: TextInputType.name,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'هذا الحقل مطلوب';
@@ -140,9 +143,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ],
                             ),
                             CustomTextformfield(
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              autofillHints: const [AutofillHints.email],
                               controller: _emailController,
                               text: 'البريد الإلكتروني',
-                              keyboardType: TextInputType.emailAddress,
                               validator: (value) {
                                 if (!AppRegex.isEmailValid(
                                   _emailController.text,
@@ -167,6 +172,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ],
                             ),
                             CustomTextformfield(
+                              keyboardType: TextInputType.visiblePassword,
+                              textInputAction: TextInputAction.done,
+                              autofillHints: const [AutofillHints.password],
                               controller: _passwordController,
                               validator: (value) {
                                 if (value == null ||
@@ -240,7 +248,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-          bottomNavigationBar: state is SignUpLoading
+          bottomNavigationBar: state is AppLoadingState
               ? const SizedBox()
               : Column(
                   spacing: 12.sp,

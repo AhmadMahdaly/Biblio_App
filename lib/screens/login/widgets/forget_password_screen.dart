@@ -90,6 +90,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             ],
                           ),
                           CustomTextformfield(
+                            keyboardType: TextInputType.emailAddress,
+                            autofillHints: const [AutofillHints.email],
                             controller: _emailController,
                             text: 'البريد الإلكتروني',
                           ),
