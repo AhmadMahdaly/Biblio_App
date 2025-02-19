@@ -1,4 +1,5 @@
-import 'package:biblio/cubit/user/request_otp_cubit/request_otp_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/user/request_otp_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
@@ -24,9 +25,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RequestOtpCubit, RequestOtpState>(
+    return BlocConsumer<RequestOtpCubit, AppStates>(
       listener: (context, state) {
-        if (state is RequestOtpError) {
+        if (state is AppErrorState) {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -38,7 +39,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       builder: (context, state) {
         final cubit = context.read<RequestOtpCubit>();
         return Scaffold(
-          body: state is RequestOtpLoading
+          body: state is AppLoadingState
               ? const AppIndicator()
               : SingleChildScrollView(
                   child: Center(

@@ -1,4 +1,5 @@
-import 'package:biblio/cubit/books/fetch_located_books_cubit/fetch_located_books_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/books/fetch_located_books_cubit.dart';
 import 'package:biblio/screens/book/book_page/book_page.dart';
 import 'package:biblio/screens/home_page/widgets/no_located_books.dart';
 import 'package:biblio/screens/home_page/widgets/show_book.dart';
@@ -51,9 +52,9 @@ class _NewBooksListviewState extends State<NewBooksListview> {
               const TryToDiscoverCategory(),
             ],
           )
-        : BlocConsumer<FetchLocatedBooksCubit, FetchLocatedBooksState>(
+        : BlocConsumer<FetchLocatedBooksCubit, AppStates>(
             listener: (context, state) {
-              if (state is FetchLocatedBooksError) {
+              if (state is AppErrorState) {
                 if (state.message == 'Connection refused' ||
                     state.message == 'Connection reset by peer') {
                   showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -64,7 +65,7 @@ class _NewBooksListviewState extends State<NewBooksListview> {
             },
             builder: (context, state) {
               final cubit = context.read<FetchLocatedBooksCubit>();
-              return state is FetchLocatedBooksLoading
+              return state is AppLoadingState
                   ? const AppIndicator()
                   : cubit.books.isNotEmpty
                       ? ListView.builder(

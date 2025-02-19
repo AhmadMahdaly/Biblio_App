@@ -1,4 +1,4 @@
-import 'package:biblio/cubit/messages/fetch_user_conversations_cubit/fetch_user_conversations_cubit.dart';
+import 'package:biblio/cubit/messages/fetch_user_conversations_cubit.dart';
 import 'package:biblio/screens/chat/incoming_requests.dart';
 import 'package:biblio/screens/chat/submitted_requests.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';

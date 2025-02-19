@@ -1,49 +1,11 @@
-import 'dart:developer';
-
+import 'package:biblio/cubit/books/delete_book_cubit.dart';
 import 'package:biblio/screens/book/edit_book/edit_my_book.dart';
 import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/utils/components/show_dialog.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
-Future<void> deleteBook(Map<String, dynamic> book) async {
-  try {
-    final response = await Supabase.instance.client
-        .from('books')
-        .select('cover_image_url')
-        .eq('id', book['id'].toString())
-        .single();
-    final oldPhotoUrl = response['cover_image_url'] as String;
-    final oldFileName = oldPhotoUrl.split('/').last;
-    await Supabase.instance.client.storage
-        .from('book_covers')
-        .remove([oldFileName]);
-    final responsed = await Supabase.instance.client
-        .from('books')
-        .select('cover_book_url2')
-        .eq('id', book['id'].toString())
-        .single();
-    final oldPhotoUrlI = responsed['cover_book_url2'] as String;
-    final oldFileNameI = oldPhotoUrlI.split('/').last;
-
-    await Supabase.instance.client.storage
-        .from('book_covers')
-        .remove([oldFileNameI]);
-    await Supabase.instance.client.from('conversations').delete().eq(
-          'book_id',
-          book['id'].toString(),
-        );
-
-    await Supabase.instance.client.from('books').delete().eq(
-          'id',
-          book['id'].toString(),
-        );
-  } catch (e) {
-    log(e.toString());
-  }
-}
 
 PopupMenuButton<String> editAndDeletePopupMenuButton(
   BuildContext context,
@@ -63,9 +25,9 @@ PopupMenuButton<String> editAndDeletePopupMenuButton(
           context,
           'ستقوم بحذف الكتاب؟',
         );
-        // return shouldExit!;
+
         if (shouldExit!) {
-          await deleteBook(book);
+          await context.read<DeleteBookCubit>().deleteBook(book, context);
           await Navigator.pushReplacementNamed(
             context,
             NavigationBarApp.id,

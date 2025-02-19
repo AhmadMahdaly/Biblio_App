@@ -1,7 +1,8 @@
 import 'dart:developer';
 
-import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversation_cubit.dart';
-import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/messages/create_conversation_cubit.dart';
+import 'package:biblio/cubit/messages/send_messages_cubit.dart';
 import 'package:biblio/screens/chat/conversation_room.dart';
 import 'package:biblio/services/fetch_user_name.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
@@ -79,16 +80,11 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
           .single();
 
       setState(() {
-        final nameOther = responseee1['user_name'];
-        final title = response['title'];
-        final bookUserId = responsed['user_id'];
-        final userImg = responseBookImage['cover_image_url'];
-        final sender = senderResponse['username'];
-        titleBook = title.toString();
-        bookUser = bookUserId.toString();
-        bookImage = userImg.toString();
-        otherName = nameOther.toString();
-        uuser = sender.toString();
+        titleBook = response['title'].toString();
+        bookUser = responsed['user_id'].toString();
+        bookImage = responseBookImage['cover_image_url'].toString();
+        otherName = responseee1['user_name'].toString();
+        uuser = senderResponse['username'].toString();
       });
     } catch (e) {
       if (mounted) {
@@ -99,9 +95,9 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SendMessagesCubit, SendMessagesState>(
+    return BlocConsumer<SendMessagesCubit, AppStates>(
       listener: (context, state) {
-        if (state is SendMessagesError) {
+        if (state is AppErrorState) {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -112,9 +108,9 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
       },
       builder: (context, state) {
         final sendMsgCubit = context.read<SendMessagesCubit>();
-        return BlocConsumer<CreateConversationCubit, CreateConversationState>(
+        return BlocConsumer<CreateConversationCubit, AppStates>(
           listener: (context, state) {
-            if (state is CreateConversationError) {
+            if (state is AppErrorState) {
               if (state.message == 'Connection refused' ||
                   state.message == 'Connection reset by peer') {
                 showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -122,7 +118,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                 showSnackBar(context, state.message);
               }
             }
-            if (state is CreateConversationSeccess) {
+            if (state is AppSuccessState) {
               // showSnackBar(context, 'تم ارسال الرسالة بنجاح');
               Navigator.pushReplacement(
                 context,
@@ -135,6 +131,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                     titleBook: titleBook,
                     userName: otherName,
                     otherId: bookUser,
+                    messageType: 'out',
                   ),
                 ),
               );
@@ -157,8 +154,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                 /// Leading
                 leading: const LeadingIcon(),
               ),
-              body: state is CreateConversationLoading ||
-                      state is SendMessagesLoading
+              body: state is AppLoadingState
                   ? const AppIndicator()
                   : Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.sp),
@@ -193,8 +189,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                         ],
                       ),
                     ),
-              bottomNavigationBar: state is CreateConversationLoading ||
-                      state is SendMessagesLoading
+              bottomNavigationBar: state is AppLoadingState
                   ? const SizedBox()
                   : Padding(
                       padding: EdgeInsets.all(16.sp),
@@ -205,6 +200,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                         child: CustomButton(
                           onTap: () async {
                             try {
+                              if (_messageController.text.isEmpty) return;
                               await createConCubit.createConversation(
                                 context,
                                 sender: otherName,
@@ -214,7 +210,7 @@ class _OrderTheBookPageState extends State<OrderTheBookPage> {
                                 bookImg: bookImage,
                                 bookId: bookId.toString(),
                               );
-                              await sendMsgCubit.sendMessage(
+                              await sendMsgCubit.sendIncomeMessage(
                                 context,
                                 content: _messageController.text,
                                 conversationId:

@@ -1,11 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:biblio/cubit/books/fetch_book_category_cubit/fetch_book_category_cubit.dart';
-import 'package:biblio/cubit/books/fetch_order_type_book_cubit/fetch_order_type_book_cubit.dart';
-import 'package:biblio/cubit/books/upload_book_cubit/upload_book_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/books/fetch_book_category_cubit.dart';
+import 'package:biblio/cubit/books/fetch_order_type_book_cubit.dart';
+import 'package:biblio/cubit/books/upload_book_cubit.dart';
 import 'package:biblio/screens/book/add_book_page/widgets/add_book_image.dart';
 import 'package:biblio/screens/book/add_book_page/widgets/title_form_add_book.dart';
+import 'package:biblio/screens/navigation_bar/navigation_bar.dart';
 import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
@@ -111,10 +113,15 @@ class _AddBookState extends State<AddBook> {
           create: (context) => FetchOrderTypeBookCubit(),
         ),
       ],
-      child: BlocConsumer<UploadBookCubit, UploadBookState>(
+      child: BlocConsumer<UploadBookCubit, AppStates>(
         listener: (context, state) {
-          if (state is UploadBookError) {
+          if (state is AppErrorState) {
             showSnackBar(context, state.message);
+          }
+          if (state is AppSuccessState) {
+            FetchBookCategoryCubit().close();
+            FetchOrderTypeBookCubit().close();
+            Navigator.pushReplacementNamed(context, NavigationBarApp.id);
           }
         },
         builder: (context, state) {
@@ -136,9 +143,7 @@ class _AddBookState extends State<AddBook> {
                 ),
               ),
             ),
-            body: state is UploadBookLoading ||
-                    state is FetchBookCategoryLoading ||
-                    state is FetchOrderTypeBookLoading
+            body: state is AppLoadingState
                 ? const AppIndicator()
                 : Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.sp),
@@ -195,10 +200,9 @@ class _AddBookState extends State<AddBook> {
                             },
                           ),
                           const TitleFormAddBook(title: 'فئة الكتاب'),
-                          BlocConsumer<FetchBookCategoryCubit,
-                              FetchBookCategoryState>(
+                          BlocConsumer<FetchBookCategoryCubit, AppStates>(
                             listener: (context, state) {
-                              if (state is FetchBookCategoryError) {
+                              if (state is AppErrorState) {
                                 showSnackBar(context, state.message);
                               }
                             },
@@ -286,10 +290,9 @@ class _AddBookState extends State<AddBook> {
                             controller: _conditionController,
                           ),
                           const TitleFormAddBook(title: 'نوع العرض'),
-                          BlocConsumer<FetchOrderTypeBookCubit,
-                              FetchOrderTypeBookState>(
+                          BlocConsumer<FetchOrderTypeBookCubit, AppStates>(
                             listener: (context, state) {
-                              if (state is FetchOrderTypeBookError) {
+                              if (state is AppErrorState) {
                                 showSnackBar(context, state.message);
                               }
                             },
@@ -379,9 +382,7 @@ class _AddBookState extends State<AddBook> {
                       ),
                     ),
                   ),
-            bottomNavigationBar: state is UploadBookLoading ||
-                    state is FetchBookCategoryLoading ||
-                    state is FetchOrderTypeBookLoading
+            bottomNavigationBar: state is AppLoadingState
                 ? const SizedBox()
                 : Padding(
                     padding: EdgeInsets.all(16.sp),
@@ -400,18 +401,22 @@ class _AddBookState extends State<AddBook> {
                                 text: 'إضافة الكتاب',
                                 onTap: () async {
                                   if (formKey.currentState!.validate()) {
-                                    await uploadCubit.uploadBook(
-                                      context,
-                                      title: _titleController.text,
-                                      author: _authorController.text,
-                                      desc: _descriptionController.text,
-                                      state: _conditionController.text,
-                                      price: _priceController.text,
-                                      selectedCategory: selectedCategory!,
-                                      selectedOffer: selectedOffer!,
-                                      coverFirstImage: coverFirstImage!,
-                                      coverSecondImage: coverSecondImage!,
-                                    );
+                                    try {
+                                      await uploadCubit.uploadBook(
+                                        context,
+                                        title: _titleController.text,
+                                        author: _authorController.text,
+                                        desc: _descriptionController.text,
+                                        state: _conditionController.text,
+                                        price: _priceController.text,
+                                        selectedCategory: selectedCategory!,
+                                        selectedOffer: selectedOffer!,
+                                        coverFirstImage: coverFirstImage!,
+                                        coverSecondImage: coverSecondImage!,
+                                      );
+                                    } catch (e) {
+                                      showSnackBar(context, e.toString());
+                                    }
                                   }
                                 },
                               )
@@ -433,6 +438,7 @@ class _AddBookState extends State<AddBook> {
     _descriptionController.dispose();
     _conditionController.dispose();
     _priceController.dispose();
+
     super.dispose();
   }
 }

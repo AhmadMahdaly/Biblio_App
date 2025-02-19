@@ -25,12 +25,13 @@ class TermsAndConditionsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         leading: const LeadingIcon(),
         title: Text(
           'الشروط والأحكام',
           style: TextStyle(
             color: kTextColor,
-            fontSize: 14.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w500,
             height: 1.sp,
           ),

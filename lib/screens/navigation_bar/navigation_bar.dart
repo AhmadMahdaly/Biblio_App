@@ -1,11 +1,12 @@
 import 'package:biblio/animations/animate_do.dart';
-import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversation_cubit.dart';
-import 'package:biblio/cubit/messages/fetch_unread_message_cubit/fetch_unread_message_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/messages/create_conversation_cubit.dart';
+import 'package:biblio/cubit/messages/fetch_unread_message_cubit.dart';
 import 'package:biblio/screens/book/add_book_page/add_book.dart';
+import 'package:biblio/screens/chat/order_page.dart';
 import 'package:biblio/screens/favorites_page/favorites_page.dart';
 import 'package:biblio/screens/home_page/home_page_screen.dart';
 import 'package:biblio/screens/more_page/more_page.dart';
-import 'package:biblio/screens/chat/order_page.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -126,8 +127,7 @@ class NavigationBarAppState extends State<NavigationBarApp> {
       },
       child: Scaffold(
         body: pages.elementAt(_currentIndex),
-        bottomNavigationBar:
-            BlocConsumer<FetchUnreadMessageCubit, FetchUnreadMessageState>(
+        bottomNavigationBar: BlocConsumer<FetchUnreadMessageCubit, AppStates>(
           listener: (context, state) {},
           builder: (context, state) {
             return CustomFadeInUp(

@@ -1,4 +1,4 @@
-import 'package:biblio/cubit/favorite_function/my_favorite_books_list/my_list_cubit.dart';
+import 'package:biblio/cubit/favorite_function/my_list_cubit.dart';
 import 'package:biblio/screens/book/book_page/book_page.dart';
 import 'package:biblio/utils/components/border_radius.dart';
 import 'package:biblio/utils/components/height.dart';

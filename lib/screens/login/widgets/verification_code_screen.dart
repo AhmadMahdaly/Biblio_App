@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:biblio/cubit/user/request_otp_cubit/request_otp_cubit.dart';
+import 'package:biblio/cubit/user/request_otp_cubit.dart';
 import 'package:biblio/screens/login/widgets/custom_verification_code.dart';
 import 'package:biblio/utils/components/height.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';

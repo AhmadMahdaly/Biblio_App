@@ -1,3 +1,4 @@
+import 'package:biblio/cubit/app_states.dart';
 import 'package:biblio/cubit/auth_cubit/auth_cubit.dart';
 import 'package:biblio/screens/onboard/onboard_screen.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
@@ -15,9 +16,9 @@ class SignOutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AuthCubit>();
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocConsumer<AuthCubit, AppStates>(
       listener: (context, state) {
-        if (state is SignOutError) {
+        if (state is AppErrorState) {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -25,7 +26,7 @@ class SignOutButton extends StatelessWidget {
             showSnackBar(context, state.message);
           }
         }
-        if (state is SignOutSuccess) {
+        if (state is AppSuccessState) {
           Navigator.pushNamedAndRemoveUntil(
             context,
             OnboardScreen.id,
@@ -34,7 +35,7 @@ class SignOutButton extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return state is SignOutLoading
+        return state is AppLoadingState
             ? const AppIndicator()
             : TextButton(
                 onPressed: () async {

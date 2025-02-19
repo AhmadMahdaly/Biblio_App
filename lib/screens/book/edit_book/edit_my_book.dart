@@ -199,8 +199,8 @@ class _EditBookState extends State<EditBook> {
 
         newprice = response['price'] as String;
       }
-      await supabase.from('coversation_participants').update({
-        'book_title': newTitle,
+      await supabase.from('conversation_participants').update({
+        'title_book': newTitle,
       }).eq('book_id', bookId);
       if (mounted) {
         setState(() {
@@ -268,14 +268,15 @@ class _EditBookState extends State<EditBook> {
 
   ///
   Future<void> _uploadImage() async {
-    try {
-      setState(() {
-        isLoading = true;
-      });
+    // try {
+    setState(() {
+      isLoading = true;
+    });
 
-      /// رفع الصورة إلى Supabase Storage
-      final fileName = 'books/${DateTime.now().toIso8601String()}';
-      final fileNameI = 'books/${DateTime.now().toIso8601String()}';
+    /// رفع الصورة إلى Supabase Storage
+    final fileName = 'books/${DateTime.now().toIso8601String()}';
+    final fileNameI = 'books/${DateTime.now().toIso8601String()}';
+    if (_coverImage != null || _coverImageI != null) {
       await supabase.storage.from('book_covers').upload(
             fileName,
             _coverImage!,
@@ -297,24 +298,25 @@ class _EditBookState extends State<EditBook> {
       await supabase.from('books').update({
         'cover_book_url2': imageUrlI,
       }).eq('id', bookId);
-      await supabase.from('coversation_participants').update({
+      await supabase.from('conversation_participants').update({
         'book_image': imageUrl,
       }).eq('book_id', bookId);
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-      if (mounted) {
-        showSnackBar(context, e.toString());
-      }
     }
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+    // } catch (e) {
+    //   if (mounted) {
+    //     setState(() {
+    //       isLoading = false;
+    //     });
+    //   }
+    //   if (mounted) {
+    //     showSnackBar(context, e.toString());
+    //   }
+    // }
   }
 
   @override

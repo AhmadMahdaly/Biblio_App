@@ -1,6 +1,6 @@
-import 'package:biblio/cubit/books/fetch_located_books_cubit/fetch_located_books_cubit.dart';
-import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversation_cubit.dart';
-import 'package:biblio/cubit/messages/fetch_unread_message_cubit/fetch_unread_message_cubit.dart';
+import 'package:biblio/cubit/books/fetch_located_books_cubit.dart';
+import 'package:biblio/cubit/messages/create_conversation_cubit.dart';
+import 'package:biblio/cubit/messages/fetch_unread_message_cubit.dart';
 import 'package:biblio/screens/category_page/widgets/category_listview.dart';
 import 'package:biblio/screens/category_page/widgets/see_all.dart';
 import 'package:biblio/screens/home_page/widgets/home_banner.dart';

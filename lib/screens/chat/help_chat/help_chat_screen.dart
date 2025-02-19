@@ -1,11 +1,11 @@
-import 'package:biblio/cubit/messages/create_conversation_cubit/create_conversation_cubit.dart';
-import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/messages/create_conversation_cubit.dart';
+import 'package:biblio/cubit/messages/send_messages_cubit.dart';
 import 'package:biblio/screens/chat/help_chat/widgets/help_chat.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_button.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/height.dart';
-import 'package:biblio/utils/components/leading_icon.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
 import 'package:biblio/utils/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
@@ -66,9 +66,9 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateConversationCubit, CreateConversationState>(
+    return BlocConsumer<CreateConversationCubit, AppStates>(
       listener: (context, state) {
-        if (state is CreateConversationError) {
+        if (state is AppErrorState) {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -79,9 +79,9 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
       },
       builder: (context, state) {
         final createConCubit = context.read<CreateConversationCubit>();
-        return BlocConsumer<SendMessagesCubit, SendMessagesState>(
+        return BlocConsumer<SendMessagesCubit, AppStates>(
           listener: (context, state) {
-            if (state is SendMessagesError) {
+            if (state is AppErrorState) {
               if (state.message == 'Connection refused' ||
                   state.message == 'Connection reset by peer') {
                 showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -106,10 +106,18 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                leading: const LeadingIcon(),
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context); // إزالة جميع الصفحات
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 22.sp,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-              body: state is SendMessagesLoading ||
-                      state is CreateConversationLoading
+              body: state is AppLoadingState
                   ? const AppIndicator()
                   : Padding(
                       padding: EdgeInsets.all(16.sp),
@@ -141,7 +149,7 @@ class _HelpChatScreenState extends State<HelpChatScreen> {
                                   bookImg: image,
                                   bookId: 1.toString(),
                                 );
-                                await sendMsgCubit.sendMessage(
+                                await sendMsgCubit.sendIncomeMessage(
                                   context,
                                   content: _messageController.text,
                                   conversationId:

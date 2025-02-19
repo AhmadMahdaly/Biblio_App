@@ -1,4 +1,5 @@
-import 'package:biblio/cubit/favorite_function/my_favorite_books_list/my_list_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/favorite_function/my_list_cubit.dart';
 import 'package:biblio/screens/favorites_page/widgets/empty_favorite_books.dart';
 import 'package:biblio/screens/favorites_page/widgets/favorite_grid_books.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
@@ -34,9 +35,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<MyListCubit>();
-    return BlocConsumer<MyListCubit, MyListState>(
+    return BlocConsumer<MyListCubit, AppStates>(
       listener: (context, state) {
-        if (state is MyListError) {
+        if (state is AppErrorState) {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -65,7 +66,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 ),
               ),
             ),
-            body: state is MyListLoading
+            body: state is AppLoadingState
                 ? const AppIndicator()
                 : context.read<MyListCubit>().supabase.auth.currentUser == null
                     ? const LoginUserNotFound()

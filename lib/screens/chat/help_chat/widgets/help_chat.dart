@@ -1,5 +1,6 @@
-import 'package:biblio/cubit/messages/fetch_messages_cubit/fetch_messages_cubit.dart';
-import 'package:biblio/cubit/messages/send_message_cubit/send_messages_cubit.dart';
+import 'package:biblio/cubit/app_states.dart';
+import 'package:biblio/cubit/messages/fetch_messages_cubit.dart';
+import 'package:biblio/cubit/messages/send_messages_cubit.dart';
 import 'package:biblio/utils/components/app_indicator.dart';
 import 'package:biblio/utils/components/custom_textformfield.dart';
 import 'package:biblio/utils/components/show_snackbar.dart';
@@ -33,9 +34,10 @@ class _HelpChatState extends State<HelpChat> {
   }
 
   Future<void> fetchDate() async {
-    await context
-        .read<FetchMessagesCubit>()
-        .fetchMessages(conversationId: widget.conversationId);
+    await context.read<FetchMessagesCubit>().fetchMessages(
+          conversationId: widget.conversationId,
+          context: context,
+        );
     if (message['user_id'] != null) {
       await context
           .read<FetchMessagesCubit>()
@@ -68,9 +70,9 @@ class _HelpChatState extends State<HelpChat> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FetchMessagesCubit, FetchMessagesState>(
+    return BlocConsumer<FetchMessagesCubit, AppStates>(
       listener: (context, state) {
-        if (state is FetchMessagesError) {
+        if (state is AppErrorState) {
           if (state.message == 'Connection refused' ||
               state.message == 'Connection reset by peer') {
             showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -80,13 +82,14 @@ class _HelpChatState extends State<HelpChat> {
         }
       },
       builder: (context, state) {
-        context
-            .read<FetchMessagesCubit>()
-            .fetchMessages(conversationId: widget.conversationId);
+        context.read<FetchMessagesCubit>().fetchMessages(
+              conversationId: widget.conversationId,
+              context: context,
+            );
         final cubit = context.read<FetchMessagesCubit>();
-        return BlocConsumer<SendMessagesCubit, SendMessagesState>(
+        return BlocConsumer<SendMessagesCubit, AppStates>(
           listener: (context, state) {
-            if (state is SendMessagesError) {
+            if (state is AppErrorState) {
               if (state.message == 'Connection refused' ||
                   state.message == 'Connection reset by peer') {
                 showSnackBar(context, 'لا يوجد اتصال بالانترنت');
@@ -130,8 +133,7 @@ class _HelpChatState extends State<HelpChat> {
                   ),
                 ),
               ),
-              body: state is FetchMessagesLoading ||
-                      state is SendMessagesLoading
+              body: state is AppLoadingState
                   ? const AppIndicator()
                   : ListView.builder(
                       physics: const BouncingScrollPhysics(),
@@ -274,13 +276,14 @@ class _HelpChatState extends State<HelpChat> {
                         ),
                         onPressed: () {
                           if (_messageController.text.isEmpty) return;
-                          sendMessageCubit.sendMessage(
+                          sendMessageCubit.sendOutgoingMessage(
                             context,
                             content: _messageController.text,
                             conversationId: widget.conversationId,
                           );
                           cubit.fetchMessages(
                             conversationId: widget.conversationId,
+                            context: context,
                           );
                           _messageController.clear();
                         },
